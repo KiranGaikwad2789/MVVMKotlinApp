@@ -17,7 +17,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var binding: LoginFragmentBinding
 
     var loginViewModel = LoginViewModel()
-    var count=0
+    //var count=0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         //binding.viewModel = loginViewModel
-        count=1
+        //count=1
     }
 
 }
