@@ -17,7 +17,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var binding: LoginFragmentBinding
 
     var loginViewModel = LoginViewModel()
-    //var count=0
+    //var count=0-test
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
