@@ -1,11 +1,15 @@
 package com.example.mvvmkotlinapp.model
 
 import android.util.Patterns
+import androidx.databinding.BindingAdapter
+import androidx.databinding.ObservableArrayList
+import com.google.android.material.textfield.TextInputLayout
 
 public class LoginInfo(val eMailID: String, val password: String) {
 
     private var strEmailAddress: String? = null
     private var strPassword: String? = null
+    public var status:String?=null
 
     fun LoginUser(EmailAddress: String, Password: String) {
         strEmailAddress = EmailAddress
@@ -28,6 +32,7 @@ public class LoginInfo(val eMailID: String, val password: String) {
     fun isPasswordLengthGreaterThan5(): Boolean {
         return getStrPassword().length > 5
     }
+
 
 
 }
