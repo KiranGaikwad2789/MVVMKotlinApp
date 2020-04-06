@@ -1,4 +1,4 @@
-package com.example.mvvmkotlinapp
+package com.example.mvvmkotlinapp.interfaces
 
 import com.example.mvvmkotlinapp.model.LoginInfo
 import retrofit2.Call

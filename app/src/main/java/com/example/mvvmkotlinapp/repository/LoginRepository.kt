@@ -1,7 +1,7 @@
 package com.example.mvvmkotlinapp.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.example.mvvmkotlinapp.APIInterface
+import com.example.mvvmkotlinapp.interfaces.APIInterface
 import com.example.mvvmkotlinapp.model.LoginInfo
 import com.example.mvvmkotlinapp.repository.retrofit.RetrofitInstance
 import retrofit2.Call
@@ -25,7 +25,8 @@ public class LoginRepository {
 
         val loginData: MutableLiveData<LoginInfo> = MutableLiveData()
 
-        val apiInterface: APIInterface = RetrofitInstance.getClient()!!.create(APIInterface::class.java)
+        val apiInterface: APIInterface = RetrofitInstance.getClient()!!.create(
+            APIInterface::class.java)
 
         val call: Call<LoginInfo>? = apiInterface.doLogin(username, password)
 
