@@ -5,10 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(User::class), version = 1)
+
+@Database(entities = arrayOf(User::class,CurrentLocation::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
+
+    abstract fun locationDao(): CurrentLocationDao
     abstract fun userDao(): UserDao
+    abstract fun cityDao(): CityDao
+    //abstract fun featureDao(): FeatureDao
+
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

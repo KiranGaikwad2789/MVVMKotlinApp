@@ -1,37 +1,34 @@
 package com.example.mvvmkotlinapp.view.activities
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.location.Location
 import android.os.Bundle
-import android.view.Menu
+import android.os.SystemClock
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.mvvmkotlinapp.R
+import com.example.mvvmkotlinapp.common.LocationUtils
+import com.example.mvvmkotlinapp.receiver.AlarmReceive
 import com.example.mvvmkotlinapp.view.fragmets.AlarmSettingFragment
 import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
 import com.example.mvvmkotlinapp.view.fragmets.MyProfileFragment
 import com.example.mvvmkotlinapp.view.fragmets.ReviewOrderFragment
-import kotlinx.android.synthetic.main.activity_home_page.*
+import com.google.android.material.navigation.NavigationView
+
 
 class HomePageActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSelectedListener{
 
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +46,7 @@ class HomePageActivity : AppCompatActivity() ,NavigationView.OnNavigationItemSel
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         navView.setNavigationItemSelectedListener(this)
-
+        loadFragment(HomePageFragment())
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

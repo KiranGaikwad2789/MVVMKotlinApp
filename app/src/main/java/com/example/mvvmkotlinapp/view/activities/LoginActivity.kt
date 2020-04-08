@@ -13,6 +13,7 @@ import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.ActivityLoginBinding
 import com.example.mvvmkotlinapp.model.LoginInfo
 import com.example.mvvmkotlinapp.repository.room.AppDatabase
+import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.User
 import com.example.mvvmkotlinapp.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_register.*
@@ -29,6 +30,8 @@ class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
     private lateinit var mDb:AppDatabase
 
+    private var arryListFeatures: ArrayList<Features>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,8 +47,13 @@ class LoginActivity : AppCompatActivity() {
 
         mDb = AppDatabase.getDatabase(applicationContext)
         userSession=UserSession(this)
+        arryListFeatures= ArrayList<Features>()
 
         binding.btnLogin.setOnClickListener {
+
+            //var intent=Intent(this, HomePageActivity::class.java)
+            //startActivity(intent)
+
 
             if (!binding.txtEmailAddress.text.toString().isEmpty() && !binding.txtPassword.text.toString().isEmpty()) {
                 val chapterObj = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString())
@@ -108,5 +116,45 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             })
+    }
+
+    fun insertFeatureData(){
+
+        var features: Features? =null
+        features?.featureId ="1"
+        features?.featureName ="Capture Outlet"
+        arryListFeatures?.add(features!!)
+
+        features?.featureId ="2"
+        features?.featureName ="Create Lead"
+        arryListFeatures?.add(features!!)
+
+        features?.featureId ="3"
+        features?.featureName ="Customer Profile"
+        arryListFeatures?.add(features!!)
+
+        features?.featureId ="4"
+        features?.featureName ="New Order"
+        arryListFeatures?.add(features!!)
+
+
+        /*doAsync {
+            // Get the student list from database
+            val list = mDb.featureDao().insertAll(arryListFeatures)
+
+            uiThread {
+                toast("${list.size} records found.")
+                if (list.size==1){
+                    userSession!!.setUserId(list.get(0).uid.toString())
+                    //userSession!!.setUsername(list.get(0).email.toString())
+                    userSession!!.setEmail(list.get(0).email.toString())
+                    var intent=Intent(this@LoginActivity,HomePageActivity::class.java)
+                    startActivity(intent)
+                }else if (list.size==0){
+                    toast("User not registred.")
+                }
+            }
+        }*/
+
     }
 }

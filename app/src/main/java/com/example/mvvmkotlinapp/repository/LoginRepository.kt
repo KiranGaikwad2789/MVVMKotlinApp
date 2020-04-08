@@ -18,7 +18,6 @@ public class LoginRepository {
             }
             return mInstance
         }
-
     }
 
     fun loginRequest(username: String, password: String): MutableLiveData<LoginInfo> {
