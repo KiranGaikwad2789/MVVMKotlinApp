@@ -6,11 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = arrayOf(User::class,CurrentLocation::class), version = 1)
+@Database(entities = arrayOf(User::class,CurrentLocation::class,StartDutyStatus::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
 
     abstract fun locationDao(): CurrentLocationDao
+    abstract fun startDutyStatusDao(): StartDutyStatusDao
     abstract fun userDao(): UserDao
     abstract fun cityDao(): CityDao
     //abstract fun featureDao(): FeatureDao

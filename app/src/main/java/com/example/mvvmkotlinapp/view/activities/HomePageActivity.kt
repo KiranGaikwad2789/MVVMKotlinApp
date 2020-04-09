@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.LocationUtils
 import com.example.mvvmkotlinapp.receiver.AlarmReceive
+import com.example.mvvmkotlinapp.repository.room.CurrentLocation
 import com.example.mvvmkotlinapp.view.fragmets.AlarmSettingFragment
 import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
 import com.example.mvvmkotlinapp.view.fragmets.MyProfileFragment

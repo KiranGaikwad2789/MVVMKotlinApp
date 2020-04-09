@@ -2,6 +2,7 @@ package com.example.mvvmkotlinapp.view.fragmets
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -9,24 +10,38 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.mvvmkotlinapp.BuildConfig
 import com.example.mvvmkotlinapp.R
+import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.databinding.FragmentHomePageBinding
 import com.example.mvvmkotlinapp.receiver.AlarmReceive
+import com.example.mvvmkotlinapp.repository.CurrentLocationRepository
+import com.example.mvvmkotlinapp.repository.StartDutyRepository
+import com.example.mvvmkotlinapp.repository.room.CurrentLocation
+import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
+import com.example.mvvmkotlinapp.services.ForegroundService.Companion.stopService
+import com.example.mvvmkotlinapp.services.LocationTrackingService
+import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.viewmodel.HomePageViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
 
 
 class HomePageFragment : Fragment() {
@@ -38,31 +53,84 @@ class HomePageFragment : Fragment() {
     protected var mLastLocation: Location? = null
 
     private var alarmMgr: AlarmManager? = null
-    private lateinit var alarmIntent: PendingIntent
-    var pendingIntent : PendingIntent? =null
+    private var pendingIntent: PendingIntent? =null
+    private var currentDate: DateTime? =null
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         homePageBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_home_page, container, false)
         val view: View = homePageBinding.getRoot()
 
-        //initalizeCurrentLocationInstance()
+        initalizeCurrentLocationInstance()
+        currentDate= DateTime()
+        alarmMgr = activity!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(activity, AlarmReceive::class.java)
+        pendingIntent = PendingIntent.getBroadcast(activity, 1, alarmIntent, 0)
 
-        homePageBinding.switchStartDuty.setOnCheckedChangeListener({ _ , isChecked ->
+        getStartDutyStatus()
+
+        homePageBinding.switchStartDuty.setOnCheckedChangeListener({ view , isChecked ->
+
             if (isChecked){
-                if (alarmMgr == null) {
-                    val manager = activity!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                    val alarmIntent = Intent(activity, AlarmReceive::class.java)
-                    pendingIntent = PendingIntent.getBroadcast(activity, 0, alarmIntent, 0)
-                    val interval = 10000
-                    manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval.toLong(), pendingIntent
-                    )
+                var startDutyStatus=StartDutyStatus(0,"ON", currentDate!!.getDateTime())
+                StartDutyRepository.getmInstance()!!.insertStatus(context,startDutyStatus)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmMgr!!.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    alarmMgr!!.setExact(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
+                } else {
+                    alarmMgr!!.set(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
                 }
+
+                getStartDutyStatus()
+
             }else{
-                alarmMgr!!.cancel(pendingIntent)
+
+                var startDutyStatus=StartDutyStatus(0,"OFF", currentDate!!.getDateTime())
+                StartDutyRepository.getmInstance()!!.insertStatus(context,startDutyStatus)
+                    Log.e("Alaram stop","stop")
+                    alarmMgr?.cancel(pendingIntent)
+
+                val intent = Intent(context, LocationTrackingService::class.java)
+                context?.stopService(intent)
+
+                getStartDutyStatus()
+
+                /*if (isServiceRunning(LocationTrackingService::class.java)) {
+                    // Stop the service
+                    val intent = Intent(context, LocationTrackingService::class.java)
+                    context?.stopService(intent)
+                } else {
+                    Log.e("Service already stop","stop")
+                }*/
             }
         })
         return view
     }
+
+    private fun getStartDutyStatus() {
+
+        doAsync {
+
+            var startDutyStatus:StartDutyStatus?=StartDutyRepository.getmInstance()!!.getStatus(activity)
+            Log.e("status", startDutyStatus?.status)
+
+            uiThread {
+                if (startDutyStatus != null) {
+                    if (!startDutyStatus.equals(startDutyStatus) || !TextUtils.isEmpty(startDutyStatus.toString()) || startDutyStatus!=null){
+                        if (startDutyStatus.status.equals("ON")){
+                            homePageBinding.switchStartDuty.isChecked=true
+                        }else if (startDutyStatus.status.equals("OFF")){
+                            homePageBinding.switchStartDuty.isChecked=false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun initalizeCurrentLocationInstance() {
         mFusedLocationClient = this!!.activity?.let {
@@ -75,17 +143,13 @@ class HomePageFragment : Fragment() {
 
     public override fun onStart() {
         super.onStart()
+        if (!checkPermissions()) {
+            requestPermissions()
+        }else{
+            getLastLocation()
+        }
     }
 
-    /**
-     * Provides a simple way of getting a device's location and is well suited for
-     * applications that do not require a fine-grained location and that do not need location
-     * updates. Gets the best and most recent location currently available, which may be null
-     * in rare cases when a location is not available.
-     *
-     *
-     * Note: this method should be called after location permission has been granted.
-     */
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         this!!.activity?.let {
@@ -94,7 +158,7 @@ class HomePageFragment : Fragment() {
                     if (task.isSuccessful && task.result != null) {
                         mLastLocation = task.result
 
-                        Log.d("fragment latLng ", "--->>>>"+ mLastLocation!!.latitude)
+                        Log.e("fragment latLng ", "--->>>>"+ mLastLocation!!.latitude)
 
                     } else {
                         Log.w(TAG, "getLastLocation:exception", task.exception)
@@ -104,33 +168,13 @@ class HomePageFragment : Fragment() {
         }
     }
 
-    /**
-     * Shows a [] using `text`.
 
-     * @param text The Snackbar text.
-     */
-    private fun showMessage(text: String) {
-
-    }
-
-    /**
-     * Shows a [].
-
-     * @param mainTextStringId The id for the string resource for the Snackbar text.
-     * *
-     * @param actionStringId   The text of the action item.
-     * *
-     * @param listener         The listener associated with the Snackbar action.
-     */
     private fun showSnackbar(mainTextStringId: Int, actionStringId: Int,
                              listener: View.OnClickListener) {
 
         Toast.makeText(activity, getString(mainTextStringId), Toast.LENGTH_LONG).show()
     }
 
-    /**
-     * Return the current state of the permissions needed.
-     */
     private fun checkPermissions(): Boolean {
         val permissionState = activity?.let {
             ActivityCompat.checkSelfPermission(

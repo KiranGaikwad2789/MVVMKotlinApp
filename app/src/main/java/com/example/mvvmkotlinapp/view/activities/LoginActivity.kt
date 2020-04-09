@@ -34,17 +34,13 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.setLifecycleOwner(this)
         binding.setLoginViewModel(loginViewModel)
         loginViewModel!!.init()
 
         setSupportActionBar(toolbar)
-
         mDb = AppDatabase.getDatabase(applicationContext)
         userSession=UserSession(this)
         arryListFeatures= ArrayList<Features>()
