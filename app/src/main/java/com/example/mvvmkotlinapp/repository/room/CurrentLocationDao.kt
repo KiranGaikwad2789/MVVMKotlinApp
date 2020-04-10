@@ -7,7 +7,7 @@ import androidx.room.*
 interface CurrentLocationDao {
 
     @Query("SELECT * FROM CurrentLocation")
-    fun getAll(): List<CurrentLocation>
+    fun getAllLocation(): List<CurrentLocation>
 
     @Query("SELECT * FROM CurrentLocation WHERE uid IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<CurrentLocation>

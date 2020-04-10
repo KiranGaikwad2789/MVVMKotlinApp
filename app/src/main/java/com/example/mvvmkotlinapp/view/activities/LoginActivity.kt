@@ -45,13 +45,17 @@ class LoginActivity : AppCompatActivity() {
         userSession=UserSession(this)
         arryListFeatures= ArrayList<Features>()
 
+
+
+
+
         binding.btnLogin.setOnClickListener {
 
-            //var intent=Intent(this, HomePageActivity::class.java)
-            //startActivity(intent)
+            var intent=Intent(this, HomePageActivity::class.java)
+            startActivity(intent)
 
 
-            if (!binding.txtEmailAddress.text.toString().isEmpty() && !binding.txtPassword.text.toString().isEmpty()) {
+            /*if (!binding.txtEmailAddress.text.toString().isEmpty() && !binding.txtPassword.text.toString().isEmpty()) {
                 val chapterObj = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString())
                 //InsertUser(this, chapterObj).execute()
 
@@ -72,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
+            }*/
 
             //Login with Retrofit API
             //doLogin(binding.txtEmailAddress.text!!,binding.txtPassword.text)
@@ -80,10 +84,24 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnRegister.setOnClickListener {
 
-            var intent=Intent(this, RegisterActivity::class.java)
+            doAsync {
+                // Get the student list from database
+                val list = mDb.locationDao().getAllLocation();
+
+                uiThread {
+                    toast("${list.size} records found.")
+                }
+            }
+
+            var intent=Intent(this, Main2Activity::class.java)
             startActivity(intent)
         }
     }
+
+
+
+
+
 
     private fun doLogin(text: Editable, text1: Editable) {
 
@@ -153,4 +171,7 @@ class LoginActivity : AppCompatActivity() {
         }*/
 
     }
+
+
+
 }

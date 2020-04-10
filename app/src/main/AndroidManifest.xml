@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-
     <application
         android:name=".app.AppController"
         android:allowBackup="true"
@@ -19,6 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".view.activities.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".view.activities.HomePageActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -36,8 +39,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--<receiver
+        <!--
+<receiver
             android:name="com.example.mvvmkotlinapp.javacode.MyBroadCastReceiver"
             android:directBootAware="true"
             android:enabled="true"
@@ -52,15 +55,14 @@
             android:name="com.example.mvvmkotlinapp.javacode.MyService"
             android:enabled="true"
             android:exported="false"
-            android:process=":remote" />-->
-
-
+            android:process=":remote" />
+        -->
         <service
-            android:name="com.example.mvvmkotlinapp.services.LocationTrackingService"
+            android:name=".services.LocationTrackingService"
             android:enabled="true" />
 
         <receiver
-            android:name="com.example.mvvmkotlinapp.receiver.AlarmReceive"
+            android:name=".receiver.AlarmReceive"
             android:directBootAware="true"
             android:enabled="true"
             android:exported="true">

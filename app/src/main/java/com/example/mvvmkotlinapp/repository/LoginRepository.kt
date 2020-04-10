@@ -24,8 +24,7 @@ public class LoginRepository {
 
         val loginData: MutableLiveData<LoginInfo> = MutableLiveData()
 
-        val apiInterface: APIInterface = RetrofitInstance.getClient()!!.create(
-            APIInterface::class.java)
+        val apiInterface: APIInterface = RetrofitInstance.getClient()!!.create(APIInterface::class.java)
 
         val call: Call<LoginInfo>? = apiInterface.doLogin(username, password)
 
