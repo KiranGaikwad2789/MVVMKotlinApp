@@ -34,9 +34,7 @@ class LoginViewModel: ViewModel() {
     }
 
     fun doLogin() {
-        loginLiveData = LoginRepository.getmInstance()!!.loginRequest(username!!.value!!,
-            password!!.value!!
-        )
+        loginLiveData = LoginRepository.getmInstance()!!.loginRequest(username!!.value!!, password!!.value!!)
     }
 
     fun getLoginData(): LiveData<LoginInfo?>? {

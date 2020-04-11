@@ -3,17 +3,16 @@ package com.example.mvvmkotlinapp.view.activities
 import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.room.Room
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.databinding.ContentRegisterBinding
+import com.example.mvvmkotlinapp.model.RegisterUserModel
 import com.example.mvvmkotlinapp.repository.room.AppDatabase
 import com.example.mvvmkotlinapp.repository.room.User
-import com.example.mvvmkotlinapp.viewmodel.LoginViewModel
-
+import com.example.mvvmkotlinapp.viewmodel.RegisterViewModel
 import kotlinx.android.synthetic.main.activity_register.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
@@ -21,30 +20,52 @@ import org.jetbrains.anko.uiThread
 
 class RegisterActivity : AppCompatActivity() {
 
-    private var loginViewModel: LoginViewModel? = null
-
+    private var registerModel: RegisterViewModel? = null
     lateinit var binding: ContentRegisterBinding
     private lateinit var mDb:AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
+        registerModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.content_register)
-        binding.setLifecycleOwner(this)
-        binding.setLoginViewModel(loginViewModel)
-        loginViewModel!!.init()
+        binding.lifecycleOwner = this
+        binding.registerViewModel=registerModel
 
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar()!!.setDisplayShowHomeEnabled(true);
 
         mDb = AppDatabase.getDatabase(applicationContext)
+        registerModel!!.registerViewModel(this)
 
-        binding.btnRegister.setOnClickListener {
+        /*registerModel!!.getUserDetails()!!.observe(this,
+            Observer<RegisterUserModel?> { register ->
+                if (register != null) {
 
-            if (!binding.txtEmailAddress.text.toString().isEmpty() && !binding.txtPassword.text.toString().isEmpty()) {
-                val user = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString())
+                    if (register.equals("1")) {
+                        //userSession.setJWTToken(loginModel.getToken())
+                        try {
+                            //val json: String = JWTUtils.decoded(loginModel.getToken())
+                            //val jsonObject = JSONObject(json)
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                        //(context as InitialBaseActivity).commonMethodForActivity()
+                    } else {
+                        // Toast.makeText(context, loginModel.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })*/
+
+
+
+        binding.btnRegisterUser.setOnClickListener {
+
+            if (!binding.edtuserName.text.toString().isEmpty() && !binding.edtMobileNumber.text.toString().isEmpty()) {
+                val user = User(0,binding.edtuserName.text.toString(),binding.edtMobileNumber.text.toString(),binding.edtAddress.text.toString(),
+                    binding.edtEmail.text.toString(),binding.edtPassword.text.toString())
 
                 doAsync {
                     // Put the student in database
@@ -52,25 +73,13 @@ class RegisterActivity : AppCompatActivity() {
 
                     uiThread {
                         toast("One record inserted.")
+                        finish()
                     }
                 }
-                //InsertUser(this, chapterObj).execute()
             }
 
         }
 
-    }
-
-    private class InsertUser(var context: RegisterActivity, var user: User) : AsyncTask<Void, Void, Boolean>() {
-        override fun doInBackground(vararg params: Void?): Boolean {
-            context.mDb!!.userDao().insertAll(user)
-            return true
-        }
-        override fun onPostExecute(bool: Boolean?) {
-            if (bool!!) {
-                Toast.makeText(context, "Added to Database", Toast.LENGTH_LONG).show()
-            }
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -1,6 +1,8 @@
 package com.example.mvvmkotlinapp.view.activities
 
+import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmkotlinapp.R
+import com.example.mvvmkotlinapp.common.ManagePermissions
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.ActivityLoginBinding
 import com.example.mvvmkotlinapp.model.LoginInfo
@@ -23,6 +26,10 @@ import org.jetbrains.anko.uiThread
 
 
 class LoginActivity : AppCompatActivity() {
+
+    private val PermissionsRequestCode = 123
+    private lateinit var managePermissions: ManagePermissions
+
 
     private var loginViewModel: LoginViewModel? = null
     private var userSession: UserSession? = null
@@ -45,18 +52,12 @@ class LoginActivity : AppCompatActivity() {
         userSession=UserSession(this)
         arryListFeatures= ArrayList<Features>()
 
-
-
-
+        setUpPermissions()
 
         binding.btnLogin.setOnClickListener {
 
-            var intent=Intent(this, HomePageActivity::class.java)
-            startActivity(intent)
-
-
-            /*if (!binding.txtEmailAddress.text.toString().isEmpty() && !binding.txtPassword.text.toString().isEmpty()) {
-                val chapterObj = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString())
+            if (!binding.txtEmailAddress.text.toString().isEmpty() && !binding.txtPassword.text.toString().isEmpty()) {
+                val chapterObj = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString(),"","","")
                 //InsertUser(this, chapterObj).execute()
 
                 doAsync {
@@ -64,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                     val list = mDb.userDao().findByName(binding.txtEmailAddress.text.toString()!!,binding.txtPassword.text.toString())
 
                     uiThread {
-                        toast("${list.size} records found.")
+                       // toast("${list.size} records found.")
                         if (list.size==1){
                             userSession!!.setUserId(list.get(0).uid.toString())
                             //userSession!!.setUsername(list.get(0).email.toString())
@@ -76,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }*/
+            }
 
             //Login with Retrofit API
             //doLogin(binding.txtEmailAddress.text!!,binding.txtPassword.text)
@@ -93,14 +94,25 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            var intent=Intent(this, Main2Activity::class.java)
+            var intent=Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
     }
 
+    private fun setUpPermissions() {
 
+        val list = listOf<String>(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
 
+        // Initialize a new instance of ManagePermissions class
+        managePermissions = ManagePermissions(this,list,PermissionsRequestCode)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            managePermissions.checkPermissions()
+
+    }
 
 
     private fun doLogin(text: Editable, text1: Editable) {
@@ -132,46 +144,24 @@ class LoginActivity : AppCompatActivity() {
             })
     }
 
-    fun insertFeatureData(){
+    // Receive the permissions request result
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        when (requestCode) {
+            PermissionsRequestCode ->{
+                val isPermissionsGranted = managePermissions
+                    .processPermissionsResult(requestCode,permissions,grantResults)
 
-        var features: Features? =null
-        features?.featureId ="1"
-        features?.featureName ="Capture Outlet"
-        arryListFeatures?.add(features!!)
-
-        features?.featureId ="2"
-        features?.featureName ="Create Lead"
-        arryListFeatures?.add(features!!)
-
-        features?.featureId ="3"
-        features?.featureName ="Customer Profile"
-        arryListFeatures?.add(features!!)
-
-        features?.featureId ="4"
-        features?.featureName ="New Order"
-        arryListFeatures?.add(features!!)
-
-
-        /*doAsync {
-            // Get the student list from database
-            val list = mDb.featureDao().insertAll(arryListFeatures)
-
-            uiThread {
-                toast("${list.size} records found.")
-                if (list.size==1){
-                    userSession!!.setUserId(list.get(0).uid.toString())
-                    //userSession!!.setUsername(list.get(0).email.toString())
-                    userSession!!.setEmail(list.get(0).email.toString())
-                    var intent=Intent(this@LoginActivity,HomePageActivity::class.java)
-                    startActivity(intent)
-                }else if (list.size==0){
-                    toast("User not registred.")
+                if(isPermissionsGranted){
+                    // Do the task now
+                    toast("Permissions granted.")
+                }else{
+                    toast("Permissions denied.")
                 }
+                return
             }
-        }*/
-
+        }
     }
-
 
 
 }

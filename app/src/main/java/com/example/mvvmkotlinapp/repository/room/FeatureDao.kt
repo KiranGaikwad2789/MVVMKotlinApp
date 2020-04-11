@@ -1,12 +1,15 @@
 package com.example.mvvmkotlinapp.repository.room
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
+
+
 
 @Dao
 interface FeatureDao {
 
     @Query("SELECT * FROM Features")
-    fun getAll(): List<Features>
+    fun getFeatureList(): LiveData<List<Features>>
 
     @Query("SELECT * FROM Features WHERE uid IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<Features>
@@ -19,5 +22,8 @@ interface FeatureDao {
 
     @Delete
     fun delete(user: Features)
+
+    @Query("DELETE FROM Features")
+    fun deleteTableAllEntry()
 
 }

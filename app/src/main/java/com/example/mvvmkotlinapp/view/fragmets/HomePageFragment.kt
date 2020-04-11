@@ -1,46 +1,33 @@
 package com.example.mvvmkotlinapp.view.fragmets
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.example.mvvmkotlinapp.BuildConfig
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.databinding.FragmentHomePageBinding
 import com.example.mvvmkotlinapp.receiver.AlarmReceive
-import com.example.mvvmkotlinapp.repository.CurrentLocationRepository
 import com.example.mvvmkotlinapp.repository.StartDutyRepository
-import com.example.mvvmkotlinapp.repository.room.CurrentLocation
+import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
-import com.example.mvvmkotlinapp.services.ForegroundService.Companion.stopService
 import com.example.mvvmkotlinapp.services.LocationTrackingService
-import com.example.mvvmkotlinapp.view.activities.HomePageActivity
+import com.example.mvvmkotlinapp.view.adapter.HomePageAdapter
 import com.example.mvvmkotlinapp.viewmodel.HomePageViewModel
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 
@@ -53,14 +40,29 @@ class HomePageFragment : Fragment() {
     private var pendingIntent: PendingIntent? =null
     private var currentDate: DateTime? =null
 
+    lateinit var adapter:HomePageAdapter
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        homePageViewModel = ViewModelProviders.of(this).get(HomePageViewModel::class.java)
         homePageBinding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_home_page, container, false)
         val view: View = homePageBinding.getRoot()
+        homePageBinding.lifecycleOwner = this
+        homePageBinding.homePageViewModel=homePageViewModel
+
+
+        activity?.let {
+            homePageViewModel?.getFeatureList()?.observe(it, Observer<List<Features>> {
+                this.setFeatureList(it)
+            })
+        }
+
 
         initViews()
         getStartDutyStatus()
+
 
         homePageBinding.switchStartDuty.setOnCheckedChangeListener({ view , isChecked ->
 
@@ -95,6 +97,17 @@ class HomePageFragment : Fragment() {
             }
         })
         return view
+    }
+
+    private fun setFeatureList(arryListFeatures: List<Features>?) {
+        Log.e("FeatyreList size : ",""+ arryListFeatures!!.size)
+        adapter = activity?.let { HomePageAdapter(it,arryListFeatures) }!!
+        val layoutManager = LinearLayoutManager(activity)
+        layoutManager.stackFromEnd = true
+        homePageBinding.recyclerViewFeatureList.layoutManager = layoutManager
+        homePageBinding.recyclerViewFeatureList.adapter = adapter
+
+
     }
 
     private fun initViews() {

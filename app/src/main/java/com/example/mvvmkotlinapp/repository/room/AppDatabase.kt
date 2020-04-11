@@ -4,17 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 
-@Database(entities = arrayOf(User::class,CurrentLocation::class,StartDutyStatus::class), version = 1)
+@Database(entities = arrayOf(User::class,CurrentLocation::class,StartDutyStatus::class,Features::class), version = 1)
+@TypeConverters(DataConverter::class)
 abstract class AppDatabase : RoomDatabase() {
-
 
     abstract fun locationDao(): CurrentLocationDao
     abstract fun startDutyStatusDao(): StartDutyStatusDao
     abstract fun userDao(): UserDao
     abstract fun cityDao(): CityDao
-    //abstract fun featureDao(): FeatureDao
+    abstract fun featureDao(): FeatureDao
 
 
     companion object {
