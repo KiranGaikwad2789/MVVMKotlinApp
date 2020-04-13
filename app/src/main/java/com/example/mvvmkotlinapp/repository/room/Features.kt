@@ -14,5 +14,5 @@ data class Features(
 ){
 
     constructor() : this(0, featureId = 0, featureName = "null")
-    constructor(i: Int, s: String) : this()
+    //constructor(i: Int, s: String) : this()
 }

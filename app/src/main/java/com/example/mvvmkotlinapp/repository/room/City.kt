@@ -8,6 +8,15 @@ import androidx.room.PrimaryKey
 class City (
 
     @PrimaryKey(autoGenerate = true) val uid: Int,
-    @ColumnInfo(name = "cityId") val cityId: String?,
+    @ColumnInfo(name = "cityId") val cityId: Int?,
     @ColumnInfo(name = "cityName") val cityName: String?
-)
+){
+
+    constructor() : this(0, cityId = 0, cityName = "null")
+    //constructor(i: Int, s: String) : this()
+
+
+    override fun toString(): String {
+        return cityName.toString()
+    }
+}

@@ -68,8 +68,11 @@ class LoginActivity : AppCompatActivity() {
                        // toast("${list.size} records found.")
                         if (list.size==1){
                             userSession!!.setUserId(list.get(0).uid.toString())
-                            //userSession!!.setUsername(list.get(0).email.toString())
+                            userSession!!.setUsername(list.get(0).username.toString())
                             userSession!!.setEmail(list.get(0).email.toString())
+                            userSession!!.setMobile(list.get(0).mobilenumber.toString())
+                            userSession!!.setCurrentCity(list.get(0).username.toString())
+
                             var intent=Intent(this@LoginActivity,HomePageActivity::class.java)
                             startActivity(intent)
                         }else if (list.size==0){

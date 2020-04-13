@@ -18,6 +18,8 @@ class UserSession {
     val KEY_USERNAME = "username"
     val KEY_EMAIL = "useremail"
     val KEY_MOBILE = "usermobile"
+    val KEY_CITY = "city"
+
     private val KEY_JWT_TOKEN = "jwtToken"
     private val KEY_SELECTED_CATEGORY_LIST = "selectedCategoryList"
     private val KEY_SOURCING_CATEGORY_LIST = "SourcingCategoryList"
@@ -67,6 +69,14 @@ class UserSession {
         return pref!!.getString(KEY_MOBILE, null)
     }
 
+    fun setCurrentCity(mobile: String?) {
+        editor!!.putString(KEY_CITY, mobile)
+        editor!!.commit()
+    }
+
+    fun getCurrentCity(): String? {
+        return pref!!.getString(KEY_CITY, null)
+    }
 
     fun clearUserSession() {
         setUserId(null)

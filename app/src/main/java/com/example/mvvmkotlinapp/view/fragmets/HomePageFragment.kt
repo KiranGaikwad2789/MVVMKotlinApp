@@ -11,17 +11,24 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.DateTime
+import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
 import com.example.mvvmkotlinapp.databinding.FragmentHomePageBinding
 import com.example.mvvmkotlinapp.receiver.AlarmReceive
+import com.example.mvvmkotlinapp.repository.HomePageRepository
 import com.example.mvvmkotlinapp.repository.StartDutyRepository
+import com.example.mvvmkotlinapp.repository.room.City
 import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
 import com.example.mvvmkotlinapp.services.LocationTrackingService
@@ -40,8 +47,8 @@ class HomePageFragment : Fragment() {
     private var pendingIntent: PendingIntent? =null
     private var currentDate: DateTime? =null
 
-    lateinit var adapter:HomePageAdapter
-
+    private var adapter: HomePageAdapter? =null
+    private var arryListFeatures: ArrayList<Features>? = null
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -52,16 +59,39 @@ class HomePageFragment : Fragment() {
         homePageBinding.lifecycleOwner = this
         homePageBinding.homePageViewModel=homePageViewModel
 
+        insertFeatures()
 
         activity?.let {
             homePageViewModel?.getFeatureList()?.observe(it, Observer<List<Features>> {
                 this.setFeatureList(it)
+                arryListFeatures= it as ArrayList<Features>?
             })
         }
 
+        homePageBinding.txtLocation.setOnClickListener {
+            activity?.let {
+                homePageViewModel?.getCityList()?.observe(it, Observer<List<City>> {
+                    this.setCityList(it)
+                })
+            }
+        }
 
         initViews()
         getStartDutyStatus()
+
+
+        homePageBinding.recyclerViewFeatureList.addOnItemTouchListener(RecyclerItemClickListenr(this!!.activity!!, homePageBinding.recyclerViewFeatureList, object : RecyclerItemClickListenr.OnItemClickListener {
+
+            override fun onItemClick(view: View, position: Int) {
+
+                var featureName= arryListFeatures!!.get(position);
+                Toast.makeText(context,""+featureName.featureName,Toast.LENGTH_SHORT).show()
+                //do your work here..
+            }
+            override fun onItemLongClick(view: View?, position: Int) {
+                TODO("do nothing")
+            }
+        }))
 
 
         homePageBinding.switchStartDuty.setOnCheckedChangeListener({ view , isChecked ->
@@ -99,15 +129,24 @@ class HomePageFragment : Fragment() {
         return view
     }
 
+    private fun dialogCityList(arryListCity: ArrayList<City>?) {
+
+
+
+    }
+
     private fun setFeatureList(arryListFeatures: List<Features>?) {
         Log.e("FeatyreList size : ",""+ arryListFeatures!!.size)
         adapter = activity?.let { HomePageAdapter(it,arryListFeatures) }!!
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.stackFromEnd = true
-        homePageBinding.recyclerViewFeatureList.layoutManager = layoutManager
         homePageBinding.recyclerViewFeatureList.adapter = adapter
+        homePageBinding.recyclerViewFeatureList.layoutManager = GridLayoutManager(context, 3)
+    }
 
-
+    private fun setCityList(arryListCity: List<City>?) {
+        Log.e("city size : ",""+ arryListCity!!.size)
+        loadFragment(arryListCity)
     }
 
     private fun initViews() {
@@ -136,5 +175,73 @@ class HomePageFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun loadFragment(arryListCity: List<City>){
+        val transaction = activity!!.supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, CityListFragment(arryListCity))
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun insertFeatures() {
+
+        val feature1 = Features(0,1, "Capture Outlet")
+        val feature2 = Features(0,2, "New Lead")
+        val feature3 = Features(0,3, "Customer Profile")
+        val feature4 = Features(0,4, "New order")
+        val feature5 = Features(0,5, "Order Delivery")
+        val feature6 = Features(0,6, "My Dashboard")
+        val feature7 = Features(0,7, "Weekly Stock")
+        val feature8 = Features(0,8, "Product menu")
+        val feature9 = Features(0,9, "My DSR")
+        val feature10 = Features(0,10, "My TimeSheet")
+        val feature11 = Features(0,11, "My Claims")
+        val feature12 = Features(0,12, "Manage Leave")
+        val feature13 = Features(0,13, "Customer Support")
+
+        var arrayListFeaturesInfo= ArrayList<Features>()
+
+        if (arrayListFeaturesInfo != null) {
+            arrayListFeaturesInfo!!.add(feature1)
+            arrayListFeaturesInfo!!.add(feature2)
+            arrayListFeaturesInfo!!.add(feature3)
+            arrayListFeaturesInfo!!.add(feature4)
+            arrayListFeaturesInfo!!.add(feature5)
+            arrayListFeaturesInfo!!.add(feature6)
+            arrayListFeaturesInfo!!.add(feature7)
+            arrayListFeaturesInfo!!.add(feature8)
+            arrayListFeaturesInfo!!.add(feature9)
+            arrayListFeaturesInfo!!.add(feature10)
+            arrayListFeaturesInfo!!.add(feature11)
+            arrayListFeaturesInfo!!.add(feature12)
+            arrayListFeaturesInfo!!.add(feature13)
+        }
+        homePageViewModel.deleteTable()
+        homePageViewModel.insertFeatureList(arrayListFeaturesInfo)
+
+        val c1 = City(0,1, "Pune")
+        val c2 = City(0,2, "Mumbai")
+        val c3 = City(0,3, "Nashik")
+        val c4 = City(0,4, "Dhule")
+        val c5 = City(0,5, "Nandurbar")
+        val c6 = City(0,6, "Nagpur")
+        val c7 = City(0,7, "Jalgaon")
+        var arrayListCity= ArrayList<City>()
+
+        if (arrayListCity != null) {
+            arrayListCity!!.add(c1)
+            arrayListCity!!.add(c2)
+            arrayListCity!!.add(c3)
+            arrayListCity!!.add(c4)
+            arrayListCity!!.add(c5)
+            arrayListCity!!.add(c6)
+            arrayListCity!!.add(c7)
+        }
+
+        homePageViewModel.deleteCityTable()
+        homePageViewModel.insertCityList(arrayListCity)
+
     }
 }

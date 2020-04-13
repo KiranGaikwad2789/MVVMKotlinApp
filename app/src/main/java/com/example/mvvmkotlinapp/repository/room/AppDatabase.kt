@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 
-@Database(entities = arrayOf(User::class,CurrentLocation::class,StartDutyStatus::class,Features::class), version = 1)
+@Database(entities = arrayOf(User::class,CurrentLocation::class,StartDutyStatus::class,Features::class,City::class), version = 1)
 @TypeConverters(DataConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
