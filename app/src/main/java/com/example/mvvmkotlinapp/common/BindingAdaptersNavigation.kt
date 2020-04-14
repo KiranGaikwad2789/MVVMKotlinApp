@@ -7,8 +7,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 
-@BindingMethods(value = [BindingMethod(type = BindingAdaptersNavigation::class, attribute = "app:onNavigationItemSelected", method = "setOnNavigationItemSelectedListener")])
+@BindingMethods(value = [BindingMethod(type = BindingAdaptersNavigation::class,
+    attribute = "app:onNavigationItemSelected", method = "setOnNavigationItemSelectedListener")])
 object BindingAdaptersNavigation {
+
+    //                app:onNavigationItemSelected="@{homeModel::onNavigationItemSelected}"
 
     @BindingAdapter("onNavigationItemSelected")
     @JvmStatic

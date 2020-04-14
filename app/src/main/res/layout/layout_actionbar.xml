@@ -5,25 +5,29 @@
     android:layout_height="50dp"
     android:layout_gravity="top"
     android:gravity="top"
+    android:padding="@dimen/_4sdp"
     android:weightSum="3">
 
     <ImageView
+        android:id="@+id/imgDownLoadData"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_dashboard_black_24dp"/>
+        android:src="@drawable/ic_file_download"/>
 
     <ImageView
+        android:id="@+id/imgSyncData"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_dashboard_black_24dp"/>
+        android:src="@drawable/ic_sync"/>
 
     <ImageView
+        android:id="@+id/imgNotifications"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_dashboard_black_24dp"/>
+        android:src="@drawable/ic_notifications"/>
 
 
 </LinearLayout>

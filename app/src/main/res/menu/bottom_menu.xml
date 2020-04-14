@@ -11,4 +11,28 @@
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/menu_uncapture_outlet" />
 
+    <item
+        android:id="@+id/nav_outlet"
+        android:visible="false"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/menu_uncapture_outlet" />
+
+    <item
+        android:id="@+id/nav_new_lead"
+        android:visible="false"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/menu_uncapture_outlet" />
+
+    <item
+        android:id="@+id/nav_take_order"
+        android:visible="false"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/menu_uncapture_outlet" />
+
+    <item
+        android:id="@+id/nav_offer_detail"
+        android:visible="false"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/menu_uncapture_outlet" />
+
 </menu>

@@ -3,12 +3,15 @@ package com.example.mvvmkotlinapp.common
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mvvmkotlinapp.repository.room.Features
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 
 @BindingMethods(value = [BindingMethod(type = BindingAdapters::class, attribute = "app:onNavigationItemSelected", method = "setOnNavigationItemSelectedListener")])
 object BindingAdapters {
+
 
     @BindingAdapter("onNavigationItemSelected")
     @JvmStatic

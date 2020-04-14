@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -26,19 +25,21 @@ import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
 import com.example.mvvmkotlinapp.databinding.FragmentHomePageBinding
 import com.example.mvvmkotlinapp.receiver.AlarmReceive
-import com.example.mvvmkotlinapp.repository.HomePageRepository
 import com.example.mvvmkotlinapp.repository.StartDutyRepository
 import com.example.mvvmkotlinapp.repository.room.City
 import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
 import com.example.mvvmkotlinapp.services.LocationTrackingService
 import com.example.mvvmkotlinapp.view.adapter.HomePageAdapter
+import com.example.mvvmkotlinapp.view.fragmets.homefragments.CaptureOutletFragment
 import com.example.mvvmkotlinapp.viewmodel.HomePageViewModel
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 
 class HomePageFragment : Fragment() {
+
+    //https://labs.ribot.co.uk/approaching-android-with-mvvm-8ceec02d5442
 
     lateinit var homePageViewModel:HomePageViewModel
     lateinit var homePageBinding : FragmentHomePageBinding
@@ -59,6 +60,8 @@ class HomePageFragment : Fragment() {
         homePageBinding.lifecycleOwner = this
         homePageBinding.homePageViewModel=homePageViewModel
 
+        homePageViewModel!!.anotherClass(this)
+
         insertFeatures()
 
         activity?.let {
@@ -66,14 +69,6 @@ class HomePageFragment : Fragment() {
                 this.setFeatureList(it)
                 arryListFeatures= it as ArrayList<Features>?
             })
-        }
-
-        homePageBinding.txtLocation.setOnClickListener {
-            activity?.let {
-                homePageViewModel?.getCityList()?.observe(it, Observer<List<City>> {
-                    this.setCityList(it)
-                })
-            }
         }
 
         initViews()
@@ -84,9 +79,13 @@ class HomePageFragment : Fragment() {
 
             override fun onItemClick(view: View, position: Int) {
 
-                var featureName= arryListFeatures!!.get(position);
-                Toast.makeText(context,""+featureName.featureName,Toast.LENGTH_SHORT).show()
+                var feature= arryListFeatures!!.get(position);
+                Toast.makeText(context,""+feature.featureId, Toast.LENGTH_SHORT).show()
                 //do your work here..
+
+                if (feature.featureId==1){
+                    loadFragment(CaptureOutletFragment())
+                }
             }
             override fun onItemLongClick(view: View?, position: Int) {
                 TODO("do nothing")
@@ -129,11 +128,6 @@ class HomePageFragment : Fragment() {
         return view
     }
 
-    private fun dialogCityList(arryListCity: ArrayList<City>?) {
-
-
-
-    }
 
     private fun setFeatureList(arryListFeatures: List<Features>?) {
         Log.e("FeatyreList size : ",""+ arryListFeatures!!.size)
@@ -142,12 +136,9 @@ class HomePageFragment : Fragment() {
         layoutManager.stackFromEnd = true
         homePageBinding.recyclerViewFeatureList.adapter = adapter
         homePageBinding.recyclerViewFeatureList.layoutManager = GridLayoutManager(context, 3)
+
     }
 
-    private fun setCityList(arryListCity: List<City>?) {
-        Log.e("city size : ",""+ arryListCity!!.size)
-        loadFragment(arryListCity)
-    }
 
     private fun initViews() {
         currentDate= DateTime()
@@ -177,13 +168,6 @@ class HomePageFragment : Fragment() {
         }
     }
 
-    fun loadFragment(arryListCity: List<City>){
-        val transaction = activity!!.supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, CityListFragment(arryListCity))
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
 
     private fun insertFeatures() {
 
@@ -243,5 +227,13 @@ class HomePageFragment : Fragment() {
         homePageViewModel.deleteCityTable()
         homePageViewModel.insertCityList(arrayListCity)
 
+    }
+
+    fun loadFragment(fragment: Fragment){
+        val transaction = activity!!.supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
