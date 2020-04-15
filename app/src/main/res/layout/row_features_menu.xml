@@ -6,16 +6,22 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="features"
             type="com.example.mvvmkotlinapp.repository.room.Features" />
 
+        <variable
+            name="featuresModel"
+            type="com.example.mvvmkotlinapp.viewmodel.FeatureViewModel" />
     </data>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{() -> featuresModel.buttonClicked(features)}"
         android:adjustViewBounds="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout

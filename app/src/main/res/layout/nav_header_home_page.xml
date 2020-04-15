@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
+    android:background="@color/colorPrimary3"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -20,30 +20,51 @@
         android:contentDescription="@string/app_name"
         app:srcCompat="@mipmap/ic_launcher_round" />
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/_20sdp"
-        android:layout_gravity="center_horizontal">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
 
         <TextView
             android:id="@+id/txtAppVersion"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/nav_header_title"
-            android:gravity="left"
-            android:layout_gravity="left"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:padding="4dp"
+            android:text="Name"
+            android:textSize="@dimen/_20sdp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/txtUserName"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtUserName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="right"
-            android:layout_gravity="right"
-            android:text="@string/nav_header_subtitle" />
+            android:padding="4dp"
+            android:text="Name"
+            android:textSize="@dimen/_20sdp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

@@ -1,36 +1,44 @@
 package com.example.mvvmkotlinapp.repository
 
 import android.app.Application
-import android.os.AsyncTask
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mvvmkotlinapp.interfaces.APIInterface
 import com.example.mvvmkotlinapp.model.LoginInfo
-import com.example.mvvmkotlinapp.model.RegisterUserModel
 import com.example.mvvmkotlinapp.repository.retrofit.RetrofitInstance
 import com.example.mvvmkotlinapp.repository.room.AppDatabase
 import com.example.mvvmkotlinapp.repository.room.User
 import com.example.mvvmkotlinapp.repository.room.UserDao
+import org.jetbrains.anko.doAsync
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-public class LoginRepository {
+public class LoginRepository (application: Application){
 
+    private var userDao: UserDao?=null
     var appDatabase: AppDatabase? =null
+    private var insertResult: LiveData<Integer>? = null
 
-    companion object{
-        var mInstance: LoginRepository? = null
-        public fun getmInstance(): LoginRepository? {
-            if (mInstance == null) {
-                mInstance = LoginRepository()
-            }
-            return mInstance
+    init {
+        appDatabase = AppDatabase.getDatabase(application)
+        userDao = appDatabase?.userDao()
+    }
+
+    //Register user inser
+    fun insertUser(user: User) {
+
+        doAsync {
+            insertResult=userDao!!.insertAll(user)
         }
     }
 
-    fun LoginRepository(application: Application?) {
-        appDatabase = AppDatabase.getDatabase(application!!)
+    fun getInsertResult(): LiveData<Integer>? {
+        return insertResult
     }
+
+
+    fun getUserRecord():LiveData<User> = userDao!!.getAll()
 
     fun loginRequest(username: String, password: String): MutableLiveData<LoginInfo> {
 
@@ -55,16 +63,7 @@ public class LoginRepository {
     }
 
 
-    private class InsertUserAsyncTask(userDao: UserDao) : AsyncTask<User, Unit, Unit>() {
-        lateinit var userDao: UserDao
-        override fun doInBackground(vararg p0: User?) {
-            userDao.insertAll(p0[0]!!)
-        }
-    }
 
-    fun insert(user: User?) {
-        lateinit var userDao: UserDao
-        InsertUserAsyncTask(userDao).execute(user)
-    }
+
 
 }

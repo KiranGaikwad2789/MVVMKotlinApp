@@ -3,28 +3,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home_page"
             android:icon="@drawable/ic_menu_camera"
+            android:checkableBehavior="none"
             android:title="@string/menu_home" />
+    </group>
+
+
+    <group
+        android:id="@+id/menu_top1"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_my_profile"
             android:icon="@drawable/ic_menu_gallery"
+            android:checkableBehavior="single"
             android:title="@string/menu_my_profile" />
+    </group>
+
+    <group
+        android:id="@+id/menu_top2"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_alarm_setting"
             android:icon="@drawable/ic_menu_slideshow"
+            android:checkableBehavior="single"
             android:title="@string/menu_alarm_setting" />
 
+    </group>
+
+
+    <group
+        android:id="@+id/menu_top3"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_backup"
             android:icon="@drawable/ic_menu_slideshow"
+            android:checkableBehavior="single"
             android:title="@string/menu_backup" />
+
+    </group>
+
+
+    <group
+        android:id="@+id/menu_top4"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_fetch_data"
             android:icon="@drawable/ic_menu_slideshow"
+            android:checkableBehavior="single"
             android:title="@string/menu_fetch_data" />
     </group>
+
+
+
+
 </menu>

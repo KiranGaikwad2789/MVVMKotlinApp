@@ -57,6 +57,18 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
                 activity1!!.loadFragment(HomePageFragment())
                 return true
             }
+            R.id.nav_new_lead -> {
+                activity1!!.loadFragment(HomePageFragment())
+                return true
+            }
+            R.id.nav_take_order -> {
+                activity1!!.loadFragment(HomePageFragment())
+                return true
+            }
+            R.id.nav_offer_details -> {
+                activity1!!.loadFragment(HomePageFragment())
+                return true
+            }
         }
         return false
     }

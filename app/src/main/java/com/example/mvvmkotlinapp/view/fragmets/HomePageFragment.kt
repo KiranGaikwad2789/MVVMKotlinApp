@@ -52,6 +52,9 @@ class HomePageFragment : Fragment() {
     private var arryListFeatures: ArrayList<Features>? = null
 
 
+
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         homePageViewModel = ViewModelProviders.of(this).get(HomePageViewModel::class.java)
@@ -75,7 +78,7 @@ class HomePageFragment : Fragment() {
         getStartDutyStatus()
 
 
-        homePageBinding.recyclerViewFeatureList.addOnItemTouchListener(RecyclerItemClickListenr(this!!.activity!!, homePageBinding.recyclerViewFeatureList, object : RecyclerItemClickListenr.OnItemClickListener {
+       /* homePageBinding.recyclerViewFeatureList.addOnItemTouchListener(RecyclerItemClickListenr(this!!.activity!!, homePageBinding.recyclerViewFeatureList, object : RecyclerItemClickListenr.OnItemClickListener {
 
             override fun onItemClick(view: View, position: Int) {
 
@@ -90,7 +93,7 @@ class HomePageFragment : Fragment() {
             override fun onItemLongClick(view: View?, position: Int) {
                 TODO("do nothing")
             }
-        }))
+        }))*/
 
 
         homePageBinding.switchStartDuty.setOnCheckedChangeListener({ view , isChecked ->
@@ -130,10 +133,7 @@ class HomePageFragment : Fragment() {
 
 
     private fun setFeatureList(arryListFeatures: List<Features>?) {
-        Log.e("FeatyreList size : ",""+ arryListFeatures!!.size)
         adapter = activity?.let { HomePageAdapter(it,arryListFeatures) }!!
-        val layoutManager = LinearLayoutManager(activity)
-        layoutManager.stackFromEnd = true
         homePageBinding.recyclerViewFeatureList.adapter = adapter
         homePageBinding.recyclerViewFeatureList.layoutManager = GridLayoutManager(context, 3)
 

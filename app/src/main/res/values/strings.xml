@@ -12,6 +12,12 @@
     <string name="menu_fetch_data">Fetch Setting Data</string>
     <string name="menu_review_order">Review Order</string>
     <string name="menu_uncapture_outlet">Un capture outlet</string>
+
+    <string name="menu_outlet">Outlet</string>
+    <string name="menu_new_lead">New Lead</string>
+    <string name="menu_take_order">Take Order</string>
+    <string name="menu_offer_details">Offer Detail</string>
+
     <string name="register">Register User</string>
 
 

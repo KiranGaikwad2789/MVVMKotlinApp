@@ -1,23 +1,22 @@
 package com.example.mvvmkotlinapp.viewmodel
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.mvvmkotlinapp.model.RegisterUserModel
-import com.example.mvvmkotlinapp.repository.room.AppDatabase
+import com.example.mvvmkotlinapp.repository.LoginRepository
 import com.example.mvvmkotlinapp.repository.room.User
-import com.example.mvvmkotlinapp.view.activities.RegisterActivity
 
-class RegisterViewModel: ViewModel() {
-    var appDatabase: AppDatabase? =null
+
+class RegisterViewModel(application: Application) : AndroidViewModel(application) {
 
     val errorUserName: MutableLiveData<String> = MutableLiveData()
     val erroMobileNumber: MutableLiveData<String> = MutableLiveData()
     val errorUserAddress: MutableLiveData<String> = MutableLiveData()
     val errorUserEmail: MutableLiveData<String> = MutableLiveData()
     val errorUserPassword: MutableLiveData<String> = MutableLiveData()
-
 
     val userName: MutableLiveData<String> = MutableLiveData()
     val userMobileNumber: MutableLiveData<String?> = MutableLiveData()
@@ -27,19 +26,11 @@ class RegisterViewModel: ViewModel() {
 
     private var registerUserModelLiveData: MutableLiveData<RegisterUserModel>? = null
 
-    fun getUserDetails(): LiveData<RegisterUserModel?> {
-        if (registerUserModelLiveData == null) {
-            registerUserModelLiveData = MutableLiveData()
-        }
-        return registerUserModelLiveData as MutableLiveData<RegisterUserModel>
-    }
+    private var repository: LoginRepository = LoginRepository(application)
 
-    fun registerViewModel(application: RegisterActivity) {
-        appDatabase = AppDatabase.getDatabase(application!!)
-    }
 
     fun onLoginClicked() {
-        Log.e("Viewmodel Enter","enter")
+        Log.e("register Viewmodel","enter")
         val addressListModel = RegisterUserModel(userName.value, userMobileNumber.value, userAddress.value,userEmail.value,userPassword.value)
 
         if (addressListModel.userName.toString().equals("null")) {
@@ -79,6 +70,7 @@ class RegisterViewModel: ViewModel() {
 
         if (registerUserModelLiveData != null) {
             registerUserModelLiveData!!.setValue(addressListModel)
+
             var user: User? =null
             user?.username =addressListModel.userName
             user?.mobilenumber =addressListModel.userMobileNumber
@@ -86,8 +78,24 @@ class RegisterViewModel: ViewModel() {
             user?.email =addressListModel.userEmail
             user?.password =addressListModel.userPassword
 
-            val list = appDatabase!!.userDao().insertAll(user!!)
+            user?.let { insertUserRecord(it) }
 
         }
     }
+
+    //User Record insert
+    fun insertUserRecord(user:User){
+        repository.insertUser(user)
+    }
+
+    fun getInsertResult(): LiveData<Integer>? {
+        return repository.getInsertResult()
+    }
+
+
+
+
+    fun getUserRecord(): LiveData<User> = repository.getUserRecord()
+
+    //fun deleteCityTable()=repository.deleteCityble()
 }
