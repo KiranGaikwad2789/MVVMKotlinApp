@@ -25,7 +25,7 @@ class CityListAdapter(ctx: Context, private var arrayListCity: List<City>?) :
     init {
         inflater = LayoutInflater.from(ctx)
         this.arraylist = ArrayList<City>()
-        this.arraylist.addAll(CityListFragment.cityArrayList)
+        CityListFragment.cityArrayList?.let { this.arraylist.addAll(it) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityListAdapter.MyViewHolder {

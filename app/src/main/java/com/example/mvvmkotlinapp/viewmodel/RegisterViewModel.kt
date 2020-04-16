@@ -8,6 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.mvvmkotlinapp.model.RegisterUserModel
 import com.example.mvvmkotlinapp.repository.LoginRepository
 import com.example.mvvmkotlinapp.repository.room.User
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
@@ -27,6 +31,35 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     private var registerUserModelLiveData: MutableLiveData<RegisterUserModel>? = null
 
     private var repository: LoginRepository = LoginRepository(application)
+
+    var status = MutableLiveData<Boolean?>()
+    private val disposable = CompositeDisposable()
+
+
+
+    /*fun insertStudent(student: User) {
+
+        disposable.add(
+            repository.insertStudent(student)
+                ?.subscribeOn(Schedulers.newThread())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribeWith(object : DisposableSingleObserver<Long>() {
+                    override fun onSuccess(t: Long) {
+                        Log.e("ViewModel Insert", t.toString())
+                        status.postValue(true)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e("ViewModel error", e.message)
+                        status.postValue(false)
+                    }
+
+                })!!
+        )
+
+
+    }*/
+
 
 
     fun onLoginClicked() {
@@ -78,6 +111,8 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
             user?.email =addressListModel.userEmail
             user?.password =addressListModel.userPassword
 
+            //user?.let { insertStudent(it) }
+
             user?.let { insertUserRecord(it) }
 
         }
@@ -88,14 +123,13 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
         repository.insertUser(user)
     }
 
-    fun getInsertResult(): LiveData<Integer>? {
+    fun getInsertResult(): Long? {
         return repository.getInsertResult()
     }
 
 
+    suspend fun addRecipesDetails(cookingRecipes: User): Long {
+        return repository.addRecipesData(cookingRecipes)
+    }
 
-
-    fun getUserRecord(): LiveData<User> = repository.getUserRecord()
-
-    //fun deleteCityTable()=repository.deleteCityble()
 }

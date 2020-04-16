@@ -15,4 +15,13 @@ public class DateTime {
         val formatted = current.format(formatter)
         return  formatted
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    public fun getDateFormater():String{
+
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss")
+        val formatted = current.format(formatter)
+        return  formatted
+    }
 }

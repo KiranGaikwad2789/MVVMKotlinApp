@@ -56,13 +56,13 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
 
-            if (!binding.txtEmailAddress.text.toString().isEmpty() && !binding.txtPassword.text.toString().isEmpty()) {
-                val chapterObj = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString(),"","","")
+            if (!binding.edtMobileNumber.text.toString().isEmpty() && !binding.edtPassword.text.toString().isEmpty()) {
+                //val chapterObj = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString(),"","","")
                 //InsertUser(this, chapterObj).execute()
 
                 doAsync {
                     // Get the student list from database
-                    val list = mDb.userDao().findByName(binding.txtEmailAddress.text.toString()!!,binding.txtPassword.text.toString())
+                    val list = mDb.userDao().findByName(binding.edtMobileNumber.text.toString()!!,binding.edtPassword.text.toString())
 
                     uiThread {
                        // toast("${list.size} records found.")
@@ -87,16 +87,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnRegister.setOnClickListener {
-
-            doAsync {
-                // Get the student list from database
-                val list = mDb.locationDao().getAllLocation();
-
-                uiThread {
-                    toast("${list.size} records found.")
-                }
-            }
-
             var intent=Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }

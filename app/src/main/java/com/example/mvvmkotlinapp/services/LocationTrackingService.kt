@@ -1,7 +1,10 @@
 package com.example.mvvmkotlinapp.services
 
 import android.Manifest
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,15 +19,18 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.mvvmkotlinapp.R
+import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.repository.CurrentLocationRepository
 import com.example.mvvmkotlinapp.repository.room.CurrentLocation
-import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import java.util.*
 
 
 class LocationTrackingService : Service(),LocationListener {
+
+    companion object{
+        private val NOTIF_ID = 1
+    }
 
     private var mTimer: Timer? = null
     private var notify_interval: Long = 10000
@@ -38,7 +44,7 @@ class LocationTrackingService : Service(),LocationListener {
     var locationManager: LocationManager? = null
     var location: Location? = null
     var intent: Intent? = null
-
+    private var currentDate: DateTime? =null
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -49,8 +55,9 @@ class LocationTrackingService : Service(),LocationListener {
         super.onCreate()
         this.context = this;
         mTimer = Timer()
+        currentDate= DateTime()
         mTimer!!.schedule(monitor, 0, notify_interval)
-        startForeGroundService()
+        startForeGroundService(currentDate!!.getDateFormater())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -69,10 +76,10 @@ class LocationTrackingService : Service(),LocationListener {
     }
 
     val monitor = object : TimerTask() {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun run() {
             mHandler.post {
                 fn_getlocation()
-
             }
         }
     }
@@ -160,19 +167,20 @@ class LocationTrackingService : Service(),LocationListener {
     override fun onProviderDisabled(provider: String?) {
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun startForeGroundService(): Notification? {
 
-        val input = intent?.getStringExtra("inputExtra")
-        val channel = NotificationChannel("channel_01", "My Channel", NotificationManager.IMPORTANCE_DEFAULT)
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun startForeGroundService(dateFormater: String): Notification {
+
+        //val input = intent?.getStringExtra("inputExtra")
+        val channel = NotificationChannel(1.toString(), "My Channel", NotificationManager.IMPORTANCE_DEFAULT)
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
 
         //val notificationIntent = Intent(this, HomePageActivity::class.java)
         //val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
-        val notification = NotificationCompat.Builder(this, "channel_01")
-            .setContentTitle("Start Duty starts")
-            .setContentText(input)
+        val notification = NotificationCompat.Builder(this, 1.toString())
+            .setContentTitle("Skygge start duty on..")
+            .setContentText(dateFormater)
             .setSmallIcon(R.drawable.ic_home_black_24dp)
            // .setContentIntent(pendingIntent)
             .build()
@@ -180,5 +188,6 @@ class LocationTrackingService : Service(),LocationListener {
         val builder: Notification.Builder = Notification.Builder(applicationContext, "channel_01").setAutoCancel(false)
         return builder.build()
     }
+
 }
 //https://android--code.blogspot.com/2018/03/android-kotlin-service-example.html

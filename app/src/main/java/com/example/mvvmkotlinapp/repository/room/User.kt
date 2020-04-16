@@ -7,7 +7,7 @@ import com.google.gson.internal.LinkedTreeMap
 
 @Entity(tableName = "User")
 data class User(
-    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @PrimaryKey(autoGenerate = true) val uid: Int=0,
     @ColumnInfo(name = "username") var username: String?,
     @ColumnInfo(name = "mobilenumber") var mobilenumber: String?,
     @ColumnInfo(name = "address") var address: String?,

@@ -14,11 +14,11 @@ interface UserDao {
     @Query("SELECT * FROM User WHERE uid IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<User>
 
-    @Query("SELECT * FROM User WHERE username LIKE :username AND " + "password LIKE :password LIMIT 1")
-    fun findByName(username: String, password: String): List<User>
+    @Query("SELECT * FROM User WHERE mobilenumber LIKE :mobilenumber AND " + "password LIKE :password LIMIT 1")
+    fun findByName(mobilenumber: String, password: String): List<User>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(users: User): LiveData<Integer>? = null
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    fun insertAll(users: User): Long
 
     @Delete
     fun delete(user: User)

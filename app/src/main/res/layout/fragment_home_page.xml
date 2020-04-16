@@ -33,12 +33,13 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginLeft="@dimen/_4sdp"
                 android:onClick="@{() -> homePageViewModel.onCityClick()}"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_my_location"/>
 
@@ -46,7 +47,8 @@
                     android:id="@+id/txtLocation"
                     android:layout_width="match_parent"
                     android:textStyle="bold"
-                    android:textSize="@dimen/_12sdp"
+                    android:gravity="center"
+                    android:textSize="@dimen/_10sdp"
                     android:textColor="@color/colorPrimary3"
                     android:layout_height="wrap_content"/>
 
@@ -57,6 +59,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginLeft="@dimen/_4sdp"
                 android:orientation="vertical">
 
                 <TextView
@@ -72,7 +75,7 @@
                     android:id="@+id/txtDutyTime"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_8sdp"
                     android:textColor="@color/colorPrimary3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

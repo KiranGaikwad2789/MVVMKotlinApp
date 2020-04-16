@@ -2,10 +2,13 @@ package com.example.mvvmkotlinapp.view.fragmets
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,11 +21,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.DateTime
-import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
+import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentHomePageBinding
 import com.example.mvvmkotlinapp.receiver.AlarmReceive
 import com.example.mvvmkotlinapp.repository.StartDutyRepository
@@ -30,8 +33,8 @@ import com.example.mvvmkotlinapp.repository.room.City
 import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
 import com.example.mvvmkotlinapp.services.LocationTrackingService
+import com.example.mvvmkotlinapp.utils.AlertDialog
 import com.example.mvvmkotlinapp.view.adapter.HomePageAdapter
-import com.example.mvvmkotlinapp.view.fragmets.homefragments.CaptureOutletFragment
 import com.example.mvvmkotlinapp.viewmodel.HomePageViewModel
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -50,9 +53,12 @@ class HomePageFragment : Fragment() {
 
     private var adapter: HomePageAdapter? =null
     private var arryListFeatures: ArrayList<Features>? = null
+    private var userSession: UserSession? =null
 
-
-
+    //update interval for widget
+    val UPDATE_INTERVAL = 1000L
+    //Handler to repeat update
+    private val updateWidgetHandler = Handler()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -62,9 +68,9 @@ class HomePageFragment : Fragment() {
         val view: View = homePageBinding.getRoot()
         homePageBinding.lifecycleOwner = this
         homePageBinding.homePageViewModel=homePageViewModel
-
         homePageViewModel!!.anotherClass(this)
 
+        initViews()
         insertFeatures()
 
         activity?.let {
@@ -74,31 +80,16 @@ class HomePageFragment : Fragment() {
             })
         }
 
-        initViews()
+        homePageBinding.txtLocation.text= userSession!!.getCurrentCity()
         getStartDutyStatus()
-
-
-       /* homePageBinding.recyclerViewFeatureList.addOnItemTouchListener(RecyclerItemClickListenr(this!!.activity!!, homePageBinding.recyclerViewFeatureList, object : RecyclerItemClickListenr.OnItemClickListener {
-
-            override fun onItemClick(view: View, position: Int) {
-
-                var feature= arryListFeatures!!.get(position);
-                Toast.makeText(context,""+feature.featureId, Toast.LENGTH_SHORT).show()
-                //do your work here..
-
-                if (feature.featureId==1){
-                    loadFragment(CaptureOutletFragment())
-                }
-            }
-            override fun onItemLongClick(view: View?, position: Int) {
-                TODO("do nothing")
-            }
-        }))*/
 
 
         homePageBinding.switchStartDuty.setOnCheckedChangeListener({ view , isChecked ->
 
             if (isChecked){
+
+                updateWidgetHandler.postDelayed(updateWidgetRunnable, UPDATE_INTERVAL)
+
                 var startDutyStatus=StartDutyStatus(1,"ON", currentDate!!.getDateTime())
                 StartDutyRepository.getmInstance()!!.insertStatus(context,startDutyStatus)
 
@@ -110,6 +101,8 @@ class HomePageFragment : Fragment() {
                     alarmMgr!!.set(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
                 }
             }else{
+
+                updateWidgetHandler.removeCallbacks(updateWidgetRunnable);
 
                 var startDutyStatus=StartDutyStatus(1,"OFF", currentDate!!.getDateTime())
                 StartDutyRepository.getmInstance()!!.insertStatus(context,startDutyStatus)
@@ -132,6 +125,17 @@ class HomePageFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private var updateWidgetRunnable: Runnable = Runnable {
+        run {
+            //Update UI
+            homePageBinding.txtDutyTime.text=currentDate!!.getDateFormater()
+            // Re-run it after the update interval
+            updateWidgetHandler.postDelayed(updateWidgetRunnable, UPDATE_INTERVAL)
+        }
+
+    }
+
     private fun setFeatureList(arryListFeatures: List<Features>?) {
         adapter = activity?.let { HomePageAdapter(it,arryListFeatures) }!!
         homePageBinding.recyclerViewFeatureList.adapter = adapter
@@ -141,11 +145,21 @@ class HomePageFragment : Fragment() {
 
 
     private fun initViews() {
+        userSession=UserSession(activity)
         currentDate= DateTime()
         alarmMgr = activity!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(activity, AlarmReceive::class.java)
         pendingIntent = PendingIntent.getBroadcast(activity, 1, alarmIntent, 0)
+
+        LocalBroadcastManager.getInstance(activity!!).registerReceiver(myBroadcastReceiver, IntentFilter("thisIsForMyFragment"));
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity?.let { LocalBroadcastManager.getInstance(it).unregisterReceiver(myBroadcastReceiver) };
+
+    }
+
 
     private fun getStartDutyStatus() {
 
@@ -229,11 +243,35 @@ class HomePageFragment : Fragment() {
 
     }
 
-    fun loadFragment(fragment: Fragment){
-        val transaction = activity!!.supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-        transaction.addToBackStack(null)
-        transaction.commit()
+    fun loadFragment(fragment: Fragment, s: String){
+
+        if(s.equals("dialog")){
+            val newFragment: CityListFragment? = CityListFragment.Companion.newInstance()
+            if (newFragment != null) {
+                newFragment.show(activity!!.supportFragmentManager, "dialog")
+            }
+        }else{
+            val transaction = activity!!.supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.container, fragment)
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
     }
+
+
+    private val myBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent != null) {
+                Log.e("City name ",""+ intent.getExtras()!!.getString("city"))
+            }
+            if (intent != null) {
+                homePageBinding.txtLocation.text=intent.getStringExtra("city")
+            }
+            Toast.makeText(activity, "Broadcast received!", Toast.LENGTH_SHORT).show() //Do what you want when the broadcast is received...
+        }
+    }
+
+
 }

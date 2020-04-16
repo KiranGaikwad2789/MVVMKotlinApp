@@ -58,6 +58,7 @@ dependencies {
     implementation 'androidx.core:core:1.0.2'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.appcompat:appcompat-resources:1.1.0"
 
     //Databinding libs
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
@@ -75,10 +76,15 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "org.jetbrains.anko:anko-commons:0.10.5"// Used for ROOM UI thread
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0'
 
     //Google API libs
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     //implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    //RXJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
 
 
 }

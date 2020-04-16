@@ -40,4 +40,7 @@
     <string name="apartment_suite_unit_etc">Email ID</string>
     <string name="state_province">Password</string>
     <string name="city">City</string>
+    <string name="fg_notitifcation_title_stopping">Start duty off</string>
+    <string name="fg_notitifcation_title_starting">Start duty on</string>
+
 </resources>
