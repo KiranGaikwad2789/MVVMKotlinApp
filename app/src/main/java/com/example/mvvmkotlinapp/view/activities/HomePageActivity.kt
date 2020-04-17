@@ -1,9 +1,6 @@
 package com.example.mvvmkotlinapp.view.activities
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -19,8 +16,6 @@ import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
 import com.example.mvvmkotlinapp.viewmodel.HomeMainViewModel
 import com.google.android.material.bottomnavigation.LabelVisibilityMode.LABEL_VISIBILITY_LABELED
 import kotlinx.android.synthetic.main.app_bar_home_page.*
-import kotlinx.android.synthetic.main.app_bar_home_page.view.*
-import kotlinx.android.synthetic.main.layout_actionbar.view.*
 import kotlinx.android.synthetic.main.nav_header_home_page.view.*
 
 
@@ -55,10 +50,6 @@ class HomePageActivity : AppCompatActivity() {
         headerView.txtAppVersion.text = userSession!!.getEmail()
 
         loadFragment(HomePageFragment())
-
-        binding!!.actionBarLayout.action_bar_id.imgDownLoadData.setOnClickListener {
-            Toast.makeText(this,"data",Toast.LENGTH_SHORT).show()
-        }
     }
 
 

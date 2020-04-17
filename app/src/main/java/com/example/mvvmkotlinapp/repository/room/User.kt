@@ -13,4 +13,5 @@ data class User(
     @ColumnInfo(name = "address") var address: String?,
     @ColumnInfo(name = "email") var email: String?,
     @ColumnInfo(name = "password") var password: String?){
+        constructor() : this(0, username = "null", mobilenumber = "null",address = "null",email = "null",password = "null")
 }

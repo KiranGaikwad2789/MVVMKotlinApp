@@ -1,11 +1,15 @@
 package com.example.mvvmkotlinapp.viewmodel
 
 import android.app.Application
+import android.content.res.Resources
+import android.os.Build
 import android.util.Log
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.repository.HomePageRepository
+import com.example.mvvmkotlinapp.utils.AlertDialog
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.fragmets.AlarmSettingFragment
 import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
@@ -25,9 +29,9 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-
 
             R.id.nav_home_page -> {
                 activity1!!.loadFragment(HomePageFragment())
@@ -42,11 +46,11 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
                 return true
             }
             R.id.nav_backup -> {
-                activity1!!.loadFragment(HomePageFragment())
+                activity1?.let { AlertDialog.basicAlert(it, activity1!!.getString(R.string.backup_title),activity1!!.getString(R.string.backup_message),"1") }
                 return true
             }
             R.id.nav_fetch_data -> {
-                activity1!!.loadFragment(HomePageFragment())
+                activity1?.let { AlertDialog.basicAlert(it, activity1!!.getString(R.string.fetchdata_title),activity1!!.getString(R.string.fetchdata_message),"1") }
                 return true
             }
             R.id.nav_review_order -> {
@@ -54,23 +58,37 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
                 return true
             }
             R.id.nav_uncapture_outlet -> {
-                activity1!!.loadFragment(HomePageFragment())
+                activity1!!.loadFragment(ReviewOrderFragment())
                 return true
             }
             R.id.nav_new_lead -> {
-                activity1!!.loadFragment(HomePageFragment())
+                activity1!!.loadFragment(ReviewOrderFragment())
                 return true
             }
             R.id.nav_take_order -> {
-                activity1!!.loadFragment(HomePageFragment())
+                activity1!!.loadFragment(ReviewOrderFragment())
                 return true
             }
             R.id.nav_offer_details -> {
-                activity1!!.loadFragment(HomePageFragment())
+                activity1?.let { AlertDialog.basicAlert(it, activity1!!.getString(R.string.fetchlatestdata_title),activity1!!.getString(R.string.fetchlatestdata_message),"1") }
                 return true
             }
         }
         return false
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun onFetchServerDataClicked(){
+        activity1?.let { AlertDialog.basicAlert(it, activity1!!.getString(R.string.fetchlatestdata_title),activity1!!.getString(R.string.fetchlatestdata_message),"1") }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun onSyncDataClicked(){
+        activity1?.let { AlertDialog.basicAlert(it, activity1!!.getString(R.string.syncdata_title),activity1!!.getString(R.string.syncdata_message),"1") }
+    }
+
+    fun onNotificationClicked(){
+
     }
 
 }

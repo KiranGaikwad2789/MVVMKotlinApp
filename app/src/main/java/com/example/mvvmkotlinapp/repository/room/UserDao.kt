@@ -17,7 +17,7 @@ interface UserDao {
     @Query("SELECT * FROM User WHERE mobilenumber LIKE :mobilenumber AND " + "password LIKE :password LIMIT 1")
     fun findByName(mobilenumber: String, password: String): List<User>
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(users: User): Long
 
     @Delete

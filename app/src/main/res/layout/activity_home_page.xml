@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import
-            type="com.example.mvvmkotlinapp.R"/>
+        <import type="com.example.mvvmkotlinapp.R"/>
         <variable
             name="homeModel"
             type="com.example.mvvmkotlinapp.viewmodel.HomeMainViewModel" />
@@ -22,11 +22,13 @@
             android:layout_height="match_parent"
             tools:openDrawer="start">
 
-            <include
-                android:id="@+id/action_bar_layout"
+
+            <include android:id="@+id/action_bar_layout"
                 layout="@layout/app_bar_home_page"
+                bind:secondaryUser="@{homeModel}"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
+
 
             <com.google.android.material.navigation.NavigationView
                 android:id="@+id/nav_view"

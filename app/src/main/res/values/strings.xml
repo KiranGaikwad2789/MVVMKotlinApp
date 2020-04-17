@@ -43,4 +43,16 @@
     <string name="fg_notitifcation_title_stopping">Start duty off</string>
     <string name="fg_notitifcation_title_starting">Start duty on</string>
 
+    <string name="backup_title">DB Exported Under Skygge Folder!</string>
+    <string name="backup_message">Would you like send backup via email?</string>
+
+    <string name="fetchdata_title"></string>
+    <string name="fetchdata_message">Are you sure,do you want to fetch settings data?</string>
+
+    <string name="fetchlatestdata_title">Attention</string>
+    <string name="fetchlatestdata_message">This activity will fetch all latest data from server.Are you sure want to proceed?</string>
+
+    <string name="syncdata_title"></string>
+    <string name="syncdata_message">Are you sure you want to sync data?</string>
+
 </resources>
