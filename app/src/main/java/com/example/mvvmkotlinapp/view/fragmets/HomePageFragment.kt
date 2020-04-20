@@ -81,9 +81,7 @@ class HomePageFragment : Fragment() {
 
 
     private fun setFeatureList(arryListFeatures: List<Features>?) {
-        if (arryListFeatures != null) {
-            Log.e("Feature list : ",""+arryListFeatures.size)
-        }
+
         adapter = activity?.let { HomePageAdapter(it,arryListFeatures) }!!
         homePageBinding.recyclerViewFeatureList.adapter = adapter
         homePageBinding.recyclerViewFeatureList.layoutManager = GridLayoutManager(context, 3)
