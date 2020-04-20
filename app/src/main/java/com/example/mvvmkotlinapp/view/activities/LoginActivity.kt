@@ -4,9 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,15 +13,12 @@ import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.ManagePermissions
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.ActivityLoginBinding
-import com.example.mvvmkotlinapp.model.LoginInfo
-import com.example.mvvmkotlinapp.repository.room.AppDatabase
+import com.example.mvvmkotlinapp.repository.room.City
 import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.User
 import com.example.mvvmkotlinapp.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_register.*
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 
 
 class LoginActivity : AppCompatActivity() {
@@ -30,66 +26,111 @@ class LoginActivity : AppCompatActivity() {
     private val PermissionsRequestCode = 123
     private lateinit var managePermissions: ManagePermissions
 
-
     private var loginViewModel: LoginViewModel? = null
+    lateinit var bindingLogin: ActivityLoginBinding
     private var userSession: UserSession? = null
 
-    lateinit var binding: ActivityLoginBinding
-    private lateinit var mDb:AppDatabase
-
-    private var arryListFeatures: ArrayList<Features>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        binding.setLifecycleOwner(this)
-        binding.setLoginViewModel(loginViewModel)
-        loginViewModel!!.init()
-
-        setSupportActionBar(toolbar)
-        mDb = AppDatabase.getDatabase(applicationContext)
-        userSession=UserSession(this)
-        arryListFeatures= ArrayList<Features>()
-
+        initializeBindingView()
+        initializeObjects()
+        insertCityList()
         setUpPermissions()
 
-        binding.btnLogin.setOnClickListener {
+        loginViewModel!!.getUser.observe(this, Observer { status ->
+            status?.let {
+                if(it.success=="1"){
 
-            if (!binding.edtMobileNumber.text.toString().isEmpty() && !binding.edtPassword.text.toString().isEmpty()) {
-                //val chapterObj = User(0,binding.txtEmailAddress.text.toString(),binding.txtPassword.text.toString(),"","","")
-                //InsertUser(this, chapterObj).execute()
+                    userSession!!.setUserId(it.uid.toString())
+                    userSession!!.setUsername(it.username.toString())
+                    userSession!!.setEmail(it.email.toString())
+                    userSession!!.setMobile(it.mobilenumber.toString())
+                    userSession!!.setCurrentCity(it.city.toString())
 
-                doAsync {
-                    // Get the student list from database
-                    val list = mDb.userDao().findByName(binding.edtMobileNumber.text.toString()!!,binding.edtPassword.text.toString())
-
-                    uiThread {
-                       // toast("${list.size} records found.")
-                        if (list.size==1){
-                            userSession!!.setUserId(list.get(0).uid.toString())
-                            userSession!!.setUsername(list.get(0).username.toString())
-                            userSession!!.setEmail(list.get(0).email.toString())
-                            userSession!!.setMobile(list.get(0).mobilenumber.toString())
-                            userSession!!.setCurrentCity(list.get(0).username.toString())
-
-                            var intent=Intent(this@LoginActivity,HomePageActivity::class.java)
-                            startActivity(intent)
-                        }else if (list.size==0){
-                            toast("User not registred.")
-                        }
-                    }
+                    var intent=Intent(this@LoginActivity,HomePageActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else{
+                    Toast.makeText(this , "Error occured: "+it , Toast.LENGTH_LONG).show()
+                    loginViewModel!!.getUser.value = null
                 }
             }
+        })
+    }
 
-            //Login with Retrofit API
-            //doLogin(binding.txtEmailAddress.text!!,binding.txtPassword.text)
+    private fun initializeObjects() {
+        setSupportActionBar(toolbar)
+        userSession=UserSession(this)
+    }
+
+    private fun initializeBindingView() {
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        bindingLogin = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        bindingLogin.lifecycleOwner=this
+        bindingLogin.loginViewModel=loginViewModel
+
+        var user = User(username ="", mobilenumber =bindingLogin.edtMobileNumber.text.toString(), address ="", email ="", password =bindingLogin.edtPassword.text.toString())
+        bindingLogin.user=user
+    }
+
+    private fun insertCityList() {
+
+        val feature1 = Features(0,1, "Capture Outlet")
+        val feature2 = Features(0,2, "New Lead")
+        val feature3 = Features(0,3, "Customer Profile")
+        val feature4 = Features(0,4, "New order")
+        val feature5 = Features(0,5, "Order Delivery")
+        val feature6 = Features(0,6, "My Dashboard")
+        val feature7 = Features(0,7, "Weekly Stock")
+        val feature8 = Features(0,8, "Product menu")
+        val feature9 = Features(0,9, "My DSR")
+        val feature10 = Features(0,10, "My TimeSheet")
+        val feature11 = Features(0,11, "My Claims")
+        val feature12 = Features(0,12, "Manage Leave")
+        val feature13 = Features(0,13, "Customer Support")
+
+        var arrayListFeaturesInfo= ArrayList<Features>()
+
+        if (arrayListFeaturesInfo != null) {
+            arrayListFeaturesInfo!!.add(feature1)
+            arrayListFeaturesInfo!!.add(feature2)
+            arrayListFeaturesInfo!!.add(feature3)
+            arrayListFeaturesInfo!!.add(feature4)
+            arrayListFeaturesInfo!!.add(feature5)
+            arrayListFeaturesInfo!!.add(feature6)
+            arrayListFeaturesInfo!!.add(feature7)
+            arrayListFeaturesInfo!!.add(feature8)
+            arrayListFeaturesInfo!!.add(feature9)
+            arrayListFeaturesInfo!!.add(feature10)
+            arrayListFeaturesInfo!!.add(feature11)
+            arrayListFeaturesInfo!!.add(feature12)
+            arrayListFeaturesInfo!!.add(feature13)
         }
 
-        binding.btnRegister.setOnClickListener {
-            var intent=Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+
+        val c1 = City(0,1, "Pune")
+        val c2 = City(0,2, "Mumbai")
+        val c3 = City(0,3, "Nashik")
+        val c4 = City(0,4, "Dhule")
+        val c5 = City(0,5, "Nandurbar")
+        val c6 = City(0,6, "Nagpur")
+        val c7 = City(0,7, "Jalgaon")
+        var arrayListCity= ArrayList<City>()
+
+        if (arrayListCity != null) {
+            arrayListCity!!.add(c1)
+            arrayListCity!!.add(c2)
+            arrayListCity!!.add(c3)
+            arrayListCity!!.add(c4)
+            arrayListCity!!.add(c5)
+            arrayListCity!!.add(c6)
+            arrayListCity!!.add(c7)
         }
+
+        loginViewModel?.deleteFeatureTable()
+        loginViewModel?.deleteCityTable()
+        loginViewModel?.insertCityList(arrayListCity,arrayListFeaturesInfo)
     }
 
     private fun setUpPermissions() {
@@ -107,35 +148,6 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-
-    private fun doLogin(text: Editable, text1: Editable) {
-
-        val username: String = text.toString()
-        val password: String = text1.toString()
-
-        loginViewModel!!.setUsername(text, text1)
-
-        loginViewModel!!.doLogin()
-
-        loginViewModel!!.getLoginData()!!.observe(this,
-            Observer<LoginInfo?> { loginModel ->
-                if (loginModel != null) {
-                    if (loginModel.status.equals("1")) {
-                        //userSession.setJWTToken(loginModel.getToken())
-                        try {
-                            //val json: String = JWTUtils.decoded(loginModel.getToken())
-                            //val jsonObject = JSONObject(json)
-
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                        //(context as InitialBaseActivity).commonMethodForActivity()
-                    } else {
-                       // Toast.makeText(context, loginModel.message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
-    }
 
     // Receive the permissions request result
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
@@ -155,6 +167,4 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

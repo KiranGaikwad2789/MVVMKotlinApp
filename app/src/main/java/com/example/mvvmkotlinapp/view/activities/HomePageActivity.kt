@@ -25,17 +25,20 @@ class HomePageActivity : AppCompatActivity() {
     private var homeMainViewModel: HomeMainViewModel? = null
     private var userSession: UserSession? =null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initializeBindingView()
+        initializeObjects()
 
-        homeMainViewModel = ViewModelProviders.of(this).get(HomeMainViewModel::class.java)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_home_page)
-        binding?.lifecycleOwner = this
-        binding?.homeModel=homeMainViewModel
+        loadFragment(HomePageFragment())
+    }
+
+    private fun initializeObjects() {
+
         setSupportActionBar(toolbar)
         homeMainViewModel!!.anotherClass(this)
         userSession=UserSession(this)
-
 
         val toggle = ActionBarDrawerToggle(this, binding?.drawerLayout, toolbar, 0, 0)
         binding?.drawerLayout!!.addDrawerListener(toggle)
@@ -44,12 +47,17 @@ class HomePageActivity : AppCompatActivity() {
         binding!!.navigation!!.isItemHorizontalTranslationEnabled = true
         binding!!.navigation.labelVisibilityMode= LABEL_VISIBILITY_LABELED
 
-
         val headerView = binding!!.navView.getHeaderView(0)
         headerView.txtUserName.text = userSession!!.getUsername()
         headerView.txtAppVersion.text = userSession!!.getEmail()
+    }
 
-        loadFragment(HomePageFragment())
+    private fun initializeBindingView() {
+
+        homeMainViewModel = ViewModelProviders.of(this).get(HomeMainViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home_page)
+        binding?.lifecycleOwner = this
+        binding?.homeModel=homeMainViewModel
     }
 
 
@@ -57,7 +65,8 @@ class HomePageActivity : AppCompatActivity() {
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment,fragment.javaClass.simpleName)
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        //transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         transaction.addToBackStack(null)
         transaction.commit()
 

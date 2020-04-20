@@ -54,5 +54,6 @@
 
     <string name="syncdata_title"></string>
     <string name="syncdata_message">Are you sure you want to sync data?</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
 </resources>

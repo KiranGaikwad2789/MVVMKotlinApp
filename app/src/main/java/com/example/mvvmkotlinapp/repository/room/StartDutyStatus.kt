@@ -9,4 +9,11 @@ data class StartDutyStatus(
     @PrimaryKey val uid: Int,
     @ColumnInfo(name = "status") val status: String?,
     @ColumnInfo(name = "time") val time: String?
-)
+){
+
+    override fun toString(): String {
+        return status.toString()
+    }
+
+
+}

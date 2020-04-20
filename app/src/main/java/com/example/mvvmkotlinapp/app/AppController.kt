@@ -1,18 +1,29 @@
 package com.example.mvvmkotlinapp.app
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 
-class AppController : Application() {
+open class AppController : Application() {
 
-    private var mInstance: AppController? = null
+    init {
+        instance = this
+    }
 
-    fun getmInstance(): AppController? {
-        return mInstance
+    companion object {
+        private var instance: AppController? = null
+
+        fun applicationContext() : Context {
+            return instance!!.applicationContext
+        }
     }
 
     override fun onCreate() {
         super.onCreate()
-        mInstance = this
+        // initialize for any
+
+        // Use ApplicationContext.
+        // example: SharedPreferences etc...
+        val context: Context = AppController.applicationContext()
     }
 }

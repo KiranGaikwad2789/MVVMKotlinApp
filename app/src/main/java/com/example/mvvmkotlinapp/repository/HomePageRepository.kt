@@ -18,7 +18,7 @@ class HomePageRepository (application: Application){
         cityDao = database?.cityDao()
     }
 
-    //Feature Module
+    //Feature list
     fun getFeatureList() = featureDao?.getFeatureList()
 
     fun insertFeatures(arrayListFeaturesInfo: ArrayList<Features>) {
@@ -31,31 +31,6 @@ class HomePageRepository (application: Application){
         }
     }
 
-    fun deleteFeatureTable(){
-        doAsync {
-            featureDao!!.deleteTableAllEntry()
-        }
-    }
-
-
-//City module
-    fun insertCity(arrayListCity: ArrayList<City>) {
-        doAsync {
-            if (arrayListCity != null) {
-                for (city in arrayListCity!!) {
-                    cityDao!!.insertAll(city)
-                }
-            }
-        }
-    }
-
     fun getCityList() = cityDao?.getCityList()
-
-    fun deleteCityble(){
-        doAsync {
-            cityDao!!.deleteTableAllEntry()
-        }
-    }
-
 
 }

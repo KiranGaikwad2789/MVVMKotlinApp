@@ -18,12 +18,14 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:background="@color/colorPrimary"
+                android:layout_height="wrap_content">
 
                 <include android:id="@+id/action_bar_id"
                     layout="@layout/layout_actionbar"
@@ -32,6 +34,7 @@
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+
 
         <include layout="@layout/content_home_page" />
 

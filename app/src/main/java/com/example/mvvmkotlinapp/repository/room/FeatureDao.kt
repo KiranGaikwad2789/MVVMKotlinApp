@@ -20,9 +20,6 @@ interface FeatureDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg users: Features)
 
-    @Delete
-    fun delete(user: Features)
-
     @Query("DELETE FROM Features")
     fun deleteTableAllEntry()
 

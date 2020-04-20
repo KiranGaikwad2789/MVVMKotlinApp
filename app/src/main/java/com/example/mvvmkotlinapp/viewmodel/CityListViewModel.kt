@@ -10,12 +10,7 @@ class CityListViewModel(application: Application) : AndroidViewModel(application
 
     private var repository: HomePageRepository = HomePageRepository(application)
 
-    //city
-    fun insertCityList(arrayList: ArrayList<City>){
-        repository.insertCity(arrayList)
-    }
 
     fun getCityList() = repository.getCityList()
 
-    fun deleteCityTable()=repository.deleteCityble()
 }

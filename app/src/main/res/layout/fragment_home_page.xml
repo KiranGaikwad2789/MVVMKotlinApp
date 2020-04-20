@@ -15,6 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/bk_white"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -34,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginLeft="@dimen/_4sdp"
-                android:onClick="@{() -> homePageViewModel.onCityClick()}"
+                android:onClick="@{() -> homePageViewModel.onCityClick(txtLocation)}"
                 android:orientation="vertical">
 
                 <ImageView
@@ -104,6 +105,7 @@
                     android:id="@+id/switchStartDuty"
                     android:layout_width="match_parent"
                     android:gravity="center"
+                    android:onCheckedChanged="@{(switch, checked) -> homePageViewModel.onCheckedChanged(checked,switchStartDuty,txtDutyTime)}"
                     android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"/>
 

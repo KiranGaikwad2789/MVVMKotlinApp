@@ -7,9 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.mvvmkotlinapp.interfaces.APIInterface
 import com.example.mvvmkotlinapp.model.LoginInfo
 import com.example.mvvmkotlinapp.repository.retrofit.RetrofitInstance
-import com.example.mvvmkotlinapp.repository.room.AppDatabase
-import com.example.mvvmkotlinapp.repository.room.User
-import com.example.mvvmkotlinapp.repository.room.UserDao
+import com.example.mvvmkotlinapp.repository.room.*
 import io.reactivex.Single
 import org.jetbrains.anko.doAsync
 import retrofit2.Call
@@ -23,25 +21,29 @@ import java.util.concurrent.Future
 public class LoginRepository (application: Application){
 
     private var userDao: UserDao?=null
+    private var cityDao: CityDao? = null
+    private var featureDao: FeatureDao? = null
     var appDatabase: AppDatabase? =null
-
-    private var insertResult: Long? = null
-    private val executorService: ExecutorService? = null
 
     init {
         appDatabase = AppDatabase.getDatabase(application)
         userDao = appDatabase?.userDao()
+        cityDao = appDatabase?.cityDao()
+        featureDao = appDatabase?.featureDao()
     }
 
 
     fun insertNewUser(student: User): Single<Long>? {
         return Single.fromCallable(
-            Callable<Long> { userDao!!.insertAll(student) }
+            Callable<Long> { userDao!!.insertNewUser(student) }
         )
     }
 
-
-    fun getUserRecord():LiveData<User> = userDao!!.getAll()
+    fun getUserRecord(user: User): Single<User>? {
+        return Single.fromCallable(
+            Callable<User> { userDao!!.findByMobileNo(user.mobilenumber!!, user.password!!) }
+        )
+    }
 
     fun loginRequest(username: String, password: String): MutableLiveData<LoginInfo> {
 
@@ -63,6 +65,47 @@ public class LoginRepository (application: Application){
         })
 
         return loginData
+    }
+
+    fun insertFeatures(arrayListFeaturesInfo: ArrayList<Features>) {
+        doAsync {
+            if (arrayListFeaturesInfo != null) {
+                for (features in arrayListFeaturesInfo!!) {
+                    featureDao!!.insertAll(features)
+                }
+            }
+        }
+    }
+
+    fun deleteFeatureTable(){
+        doAsync {
+            featureDao!!.deleteTableAllEntry()
+        }
+    }
+
+
+    //City and feature module
+    fun insertCity(arrayListCity: ArrayList<City>, arrayListFeaturesInfo: ArrayList<Features>) {
+        doAsync {
+            if (arrayListCity != null) {
+                for (city in arrayListCity!!) {
+                    cityDao!!.insertAll(city)
+                }
+            }
+            if (arrayListFeaturesInfo != null) {
+                for (features in arrayListFeaturesInfo!!) {
+                    featureDao!!.insertAll(features)
+                }
+            }
+        }
+    }
+
+    fun getCityList() = cityDao?.getCityList()
+
+    fun deleteCityble(){
+        doAsync {
+            cityDao!!.deleteTableAllEntry()
+        }
     }
 
 

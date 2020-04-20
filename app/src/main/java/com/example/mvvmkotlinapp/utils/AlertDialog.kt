@@ -23,7 +23,7 @@ class AlertDialog {
         fun basicAlert(context: Context, title:String, message:String, alertType:String) {
 
             val builder = AlertDialog.Builder(context)
-            val alertDialog: AlertDialog = builder.create()
+
             //set title for alert dialog
             builder.setTitle(title)
             //set message for alert dialog
@@ -44,12 +44,13 @@ class AlertDialog {
                 Toast.makeText(context, "clicked No", Toast.LENGTH_LONG).show()
             }
 
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getColor(R.color.colorPrimary3))
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.colorPrimary3))
 
             // Create the AlertDialog
-
+            val alertDialog: AlertDialog = builder.create()
             // Set other dialog properties
+             //alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getColor(R.color.colorPrimary3))
+             //alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.colorPrimary3))
+
             alertDialog.setCancelable(false)
             alertDialog.show()
         }

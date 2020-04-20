@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:onClick="@{() -> thirdUser.onFetchServerDataClicked()}"
             android:layout_height="match_parent"
+            android:padding="@dimen/_6sdp"
             android:src="@drawable/ic_file_download"/>
 
         <ImageView
@@ -33,12 +34,14 @@
             android:layout_weight="1"
             android:onClick="@{() -> thirdUser.onSyncDataClicked()}"
             android:layout_height="match_parent"
+            android:padding="@dimen/_6sdp"
             android:src="@drawable/ic_sync"/>
 
         <ImageView
             android:id="@+id/imgNotifications"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:padding="@dimen/_6sdp"
             android:onClick="@{() -> thirdUser.onNotificationClicked()}"
             android:layout_height="match_parent"
             android:src="@drawable/ic_notifications"/>
