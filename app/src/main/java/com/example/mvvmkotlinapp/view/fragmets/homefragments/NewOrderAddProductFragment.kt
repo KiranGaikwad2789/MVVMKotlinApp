@@ -8,9 +8,6 @@ import android.view.ViewGroup
 
 import com.example.mvvmkotlinapp.R
 
-/**
- * A simple [Fragment] subclass.
- */
 class NewOrderAddProductFragment : Fragment() {
 
     override fun onCreateView(
