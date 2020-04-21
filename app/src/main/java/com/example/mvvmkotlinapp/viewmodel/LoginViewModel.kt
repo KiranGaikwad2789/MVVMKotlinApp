@@ -5,11 +5,8 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.mvvmkotlinapp.repository.HomePageRepository
 import com.example.mvvmkotlinapp.repository.LoginRepository
-import com.example.mvvmkotlinapp.repository.room.City
-import com.example.mvvmkotlinapp.repository.room.Features
-import com.example.mvvmkotlinapp.repository.room.User
+import com.example.mvvmkotlinapp.repository.room.*
 import com.example.mvvmkotlinapp.view.activities.RegisterActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -96,12 +93,32 @@ class LoginViewModel(application: Application) : AndroidViewModel(application){
     fun deleteFeatureTable()=repository.deleteFeatureTable()
 
     //city and Feature Insert
-    fun insertCityList(arrayList: ArrayList<City>, arrayListFeaturesInfo: ArrayList<Features>){
-        repository.insertCity(arrayList,arrayListFeaturesInfo)
+    fun insertCityList(
+        arrayList: ArrayList<City>,
+        arrayListFeaturesInfo: ArrayList<Features>,
+        arrayListRoute: ArrayList<Route>,
+        arrayListOutlet: ArrayList<Outlet>,
+        arrayListDistributor: ArrayList<Distributor>
+    ){
+        repository.insertCity(arrayList,arrayListFeaturesInfo,arrayListRoute,arrayListOutlet,arrayListDistributor)
     }
 
     fun getCityList() = repository.getCityList()
 
     fun deleteCityTable()=repository.deleteCityble()
+
+    // Route
+    fun deleteRouteTable()=repository.deleteRouteTable()
+
+    // Outlet
+    fun deleteOutletTable()=repository.deleteOutletTable()
+
+    // Dist
+    fun deleteDistTable()=repository.deleteDistTable()
+
+    // Dist
+    fun deleteProductCatTable()=repository.deleteProductCatTable()
+
+
 
 }

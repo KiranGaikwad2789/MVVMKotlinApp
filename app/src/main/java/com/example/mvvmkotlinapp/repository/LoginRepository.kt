@@ -2,27 +2,32 @@ package com.example.mvvmkotlinapp.repository
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mvvmkotlinapp.interfaces.APIInterface
 import com.example.mvvmkotlinapp.model.LoginInfo
 import com.example.mvvmkotlinapp.repository.retrofit.RetrofitInstance
 import com.example.mvvmkotlinapp.repository.room.*
+import com.example.mvvmkotlinapp.repository.room.dao.*
 import io.reactivex.Single
 import org.jetbrains.anko.doAsync
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.Callable
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Future
 
 public class LoginRepository (application: Application){
 
     private var userDao: UserDao?=null
     private var cityDao: CityDao? = null
     private var featureDao: FeatureDao? = null
+    private var routeDao: RouteDao? = null
+    private var outletDao: OutletDao? = null
+    private var distributorDao: DistributorDao? = null
+    private var productCategoryDao: ProductCategoryDao? = null
+    private var productDao: ProductDao? = null
+
+
+
     var appDatabase: AppDatabase? =null
 
     init {
@@ -30,6 +35,12 @@ public class LoginRepository (application: Application){
         userDao = appDatabase?.userDao()
         cityDao = appDatabase?.cityDao()
         featureDao = appDatabase?.featureDao()
+        routeDao = appDatabase!!.routeDao()
+        outletDao = appDatabase!!.outletDao()
+        distributorDao = appDatabase!!.distributorDao()
+        productCategoryDao = appDatabase!!.productCatDao()
+        productDao = appDatabase!!.productDao()
+
     }
 
 
@@ -85,7 +96,14 @@ public class LoginRepository (application: Application){
 
 
     //City and feature module
-    fun insertCity(arrayListCity: ArrayList<City>, arrayListFeaturesInfo: ArrayList<Features>) {
+    fun insertCity(
+        arrayListCity: ArrayList<City>,
+        arrayListFeaturesInfo: ArrayList<Features>,
+        arrayListRoute: ArrayList<Route>,
+        arrayListOutlet: ArrayList<Outlet>,
+        arrayListDistributor: ArrayList<Distributor>
+    ) {
+        Log.e("Route insert ",""+ arrayListRoute!!.size)
         doAsync {
             if (arrayListCity != null) {
                 for (city in arrayListCity!!) {
@@ -97,7 +115,25 @@ public class LoginRepository (application: Application){
                     featureDao!!.insertAll(features)
                 }
             }
+            if (arrayListRoute != null) {
+                for (route in arrayListRoute!!) {
+                    routeDao!!.insertAllRoutes(route)
+                }
+            }
+
+            if (arrayListOutlet != null) {
+                for (outlet in arrayListOutlet!!) {
+                    outletDao!!.insertAllOutlets(outlet)
+                }
+            }
+
+            if (arrayListDistributor != null) {
+                for (dist in arrayListDistributor!!) {
+                    distributorDao!!.insertAllDist(dist)
+                }
+            }
         }
+
     }
 
     fun getCityList() = cityDao?.getCityList()
@@ -108,6 +144,34 @@ public class LoginRepository (application: Application){
         }
     }
 
+
+// Route
+    fun deleteRouteTable(){
+        doAsync {
+            routeDao!!.deleteRouteTable()
+        }
+    }
+
+    // Outlet
+    fun deleteOutletTable(){
+        doAsync {
+            outletDao!!.deleteOutletTable()
+        }
+    }
+
+    // Dist
+    fun deleteDistTable(){
+        doAsync {
+            distributorDao!!.deleteDistTable()
+        }
+    }
+
+    // Dist
+    fun deleteProductCatTable(){
+        doAsync {
+            productCategoryDao!!.deleteProductCategoryTable()
+        }
+    }
 
 
 

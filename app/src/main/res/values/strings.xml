@@ -56,4 +56,23 @@
     <string name="syncdata_message">Are you sure you want to sync data?</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
+
+    <string name="route">Enter Route</string>
+    <string name="outlet">Enter outlet name</string>
+
+    <string name="dist">Enter distributor name</string>
+
+
+    <string-array name="countries_array">
+        <item>India</item>
+        <item>Albania</item>
+        <item>Algeria</item>
+        <item>American Samoa</item>
+        <item>Andorra</item>
+        <item>Angola</item>
+        <item>Anguilla</item>
+        <item>Antarctica</item>
+    </string-array>
+
+
 </resources>

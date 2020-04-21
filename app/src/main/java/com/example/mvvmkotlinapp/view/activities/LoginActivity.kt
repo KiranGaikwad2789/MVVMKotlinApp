@@ -13,9 +13,9 @@ import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.ManagePermissions
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.ActivityLoginBinding
-import com.example.mvvmkotlinapp.repository.room.City
-import com.example.mvvmkotlinapp.repository.room.Features
-import com.example.mvvmkotlinapp.repository.room.User
+import com.example.mvvmkotlinapp.repository.room.*
+import com.example.mvvmkotlinapp.repository.room.tables.Product
+import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 import com.example.mvvmkotlinapp.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_register.*
 import org.jetbrains.anko.toast
@@ -35,14 +35,16 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initializeBindingView()
         initializeObjects()
-        insertCityList()
+
         setUpPermissions()
 
         loginViewModel!!.getUser.observe(this, Observer { status ->
             status?.let {
                 if(it.success=="1"){
 
-                    userSession!!.setUserId(it.uid.toString())
+                    insertCityList()
+
+                    userSession!!.setUserId(it.user_id.toString())
                     userSession!!.setUsername(it.username.toString())
                     userSession!!.setEmail(it.email.toString())
                     userSession!!.setMobile(it.mobilenumber.toString())
@@ -127,10 +129,114 @@ class LoginActivity : AppCompatActivity() {
             arrayListCity!!.add(c6)
             arrayListCity!!.add(c7)
         }
+        val r1 = Route(1,"Kharadi Bypass", "1",18.1890,73.122,1)
+        val r2 = Route(2,"Chandan Nagar road", "1",18.1890,73.122,1)
+        val r3 = Route(3,"VimanNagar Chowk", "1",18.1890,73.122,1)
+        val r4 = Route(4,"Wagholi", "1",18.1890,73.122,1)
+        var arrayListRoute= ArrayList<Route>()
 
+        if (arrayListRoute != null) {
+            arrayListRoute!!.add(r1)
+            arrayListRoute!!.add(r2)
+            arrayListRoute!!.add(r3)
+            arrayListRoute!!.add(r4)
+        }
+
+
+        val o1 = Outlet(1,"Sai stores", 1,"1",18.1890,73.122)
+        val o2 = Outlet(2,"OM shoppe", 1,"1",18.1890,73.122)
+        val o3 = Outlet(3,"Jay Ganesh genaral shoppy", 1,"1",18.1890,73.122)
+        val o4 = Outlet(4,"Balaji kirana shoppy", 2,"1",18.1890,73.122)
+        val o5 = Outlet(5,"KK Shoppy", 2,"1",18.1890,73.122)
+
+        var arrayListOutlet= ArrayList<Outlet>()
+
+        if (arrayListOutlet != null) {
+            arrayListOutlet!!.add(o1)
+            arrayListOutlet!!.add(o2)
+            arrayListOutlet!!.add(o3)
+            arrayListOutlet!!.add(o4)
+            arrayListOutlet!!.add(o5)
+        }
+
+        val d1 = Distributor(1,"Sai stores D", 1,"1",18.1890,73.122)
+        val d2 = Distributor(2,"OM shoppe D", 1,"1",18.1890,73.122)
+        val d3 = Distributor(3,"Jay Ganesh genaral shoppy D", 1,"1",18.1890,73.122)
+        val d4 = Distributor(4,"Balaji kirana shoppy D", 2,"1",18.1890,73.122)
+        val d5 = Distributor(5,"KK Shoppy D", 2,"1",18.1890,73.122)
+
+        var arrayListDistributor= ArrayList<Distributor>()
+
+        if (arrayListDistributor != null) {
+            arrayListDistributor!!.add(d1)
+            arrayListDistributor!!.add(d2)
+            arrayListDistributor!!.add(d3)
+            arrayListDistributor!!.add(d4)
+            arrayListDistributor!!.add(d5)
+        }
+
+        val ct1 = ProductCategory(1,"Benfeed", 1,1,1,"1")
+        val ct2 = ProductCategory(2,"125 ml tube", 1,1,1,"1")
+        val ct3 = ProductCategory(3,"500 ml tube", 2,1,1,"1")
+        val ct4 = ProductCategory(4,"Double Dhamaka", 2,2,2,"1")
+        val ct5 = ProductCategory(5,"Cones", 3,3,2,"1")
+        val ct6 = ProductCategory(6,"Bar and Sticks", 3,2,2,"1")
+
+        var arrayListProductCat= ArrayList<ProductCategory>()
+
+        if (arrayListProductCat != null) {
+            arrayListProductCat!!.add(ct1)
+            arrayListProductCat!!.add(ct2)
+            arrayListProductCat!!.add(ct3)
+            arrayListProductCat!!.add(ct4)
+            arrayListProductCat!!.add(ct5)
+            arrayListProductCat!!.add(ct6)
+        }
+
+
+        val ctc1 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc2 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc3 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc4 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc5 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc6 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc7 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc8 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc9 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+
+        var arrayListProduct= ArrayList<Product>()
+
+        if (arrayListProduct != null) {
+            arrayListProduct!!.add(ctc1)
+            arrayListProduct!!.add(ctc2)
+            arrayListProduct!!.add(ctc3)
+            arrayListProduct!!.add(ctc4)
+            arrayListProduct!!.add(ctc5)
+            arrayListProduct!!.add(ctc6)
+            arrayListProduct!!.add(ctc7)
+            arrayListProduct!!.add(ctc8)
+            arrayListProduct!!.add(ctc9)
+        }
+
+
+
+
+
+
+
+
+
+
+
+ //Insert data to tables
+        loginViewModel?.deleteProductCatTable()
+        loginViewModel?.deleteDistTable()
+        loginViewModel?.deleteOutletTable()
+        loginViewModel?.deleteRouteTable()
         loginViewModel?.deleteFeatureTable()
         loginViewModel?.deleteCityTable()
-        loginViewModel?.insertCityList(arrayListCity,arrayListFeaturesInfo)
+
+        loginViewModel?.insertCityList(arrayListCity,arrayListFeaturesInfo,arrayListRoute,arrayListOutlet,arrayListDistributor)
     }
 
     private fun setUpPermissions() {
