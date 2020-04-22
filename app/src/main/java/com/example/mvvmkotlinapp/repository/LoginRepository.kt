@@ -8,6 +8,8 @@ import com.example.mvvmkotlinapp.model.LoginInfo
 import com.example.mvvmkotlinapp.repository.retrofit.RetrofitInstance
 import com.example.mvvmkotlinapp.repository.room.*
 import com.example.mvvmkotlinapp.repository.room.dao.*
+import com.example.mvvmkotlinapp.repository.room.tables.Product
+import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 import io.reactivex.Single
 import org.jetbrains.anko.doAsync
 import retrofit2.Call
@@ -94,6 +96,16 @@ public class LoginRepository (application: Application){
         }
     }
 
+    fun insertCityOnly(arrayListCity: ArrayList<City>) {
+        doAsync {
+            if (arrayListCity != null) {
+                for (city in arrayListCity!!) {
+                    cityDao!!.insertAll(city)
+                }
+            }
+        }
+    }
+
 
     //City and feature module
     fun insertCity(
@@ -101,7 +113,9 @@ public class LoginRepository (application: Application){
         arrayListFeaturesInfo: ArrayList<Features>,
         arrayListRoute: ArrayList<Route>,
         arrayListOutlet: ArrayList<Outlet>,
-        arrayListDistributor: ArrayList<Distributor>
+        arrayListDistributor: ArrayList<Distributor>,
+        arrayListProductCat: ArrayList<ProductCategory>,
+        arrayListProduct: ArrayList<Product>
     ) {
         Log.e("Route insert ",""+ arrayListRoute!!.size)
         doAsync {
@@ -130,6 +144,18 @@ public class LoginRepository (application: Application){
             if (arrayListDistributor != null) {
                 for (dist in arrayListDistributor!!) {
                     distributorDao!!.insertAllDist(dist)
+                }
+            }
+
+            if (arrayListProductCat != null) {
+                for (productCat in arrayListProductCat!!) {
+                    productCategoryDao!!.insertAllProductCategory(productCat)
+                }
+            }
+
+            if (arrayListProduct != null) {
+                for (product in arrayListProduct!!) {
+                    productDao!!.insertAllProducts(product)
                 }
             }
         }
@@ -166,10 +192,17 @@ public class LoginRepository (application: Application){
         }
     }
 
-    // Dist
+    // Product Cat
     fun deleteProductCatTable(){
         doAsync {
             productCategoryDao!!.deleteProductCategoryTable()
+        }
+    }
+
+    // Product
+    fun deleteProductTable(){
+        doAsync {
+            productDao!!.deleteProductTable()
         }
     }
 

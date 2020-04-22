@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initializeBindingView()
         initializeObjects()
-
+        insertCityOnly()
         setUpPermissions()
 
         loginViewModel!!.getUser.observe(this, Observer { status ->
@@ -59,6 +59,31 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun insertCityOnly() {
+
+        val c1 = City(0,1, "Pune")
+        val c2 = City(0,2, "Mumbai")
+        val c3 = City(0,3, "Nashik")
+        val c4 = City(0,4, "Dhule")
+        val c5 = City(0,5, "Nandurbar")
+        val c6 = City(0,6, "Nagpur")
+        val c7 = City(0,7, "Jalgaon")
+        var arrayListCity= ArrayList<City>()
+
+        if (arrayListCity != null) {
+            arrayListCity!!.add(c1)
+            arrayListCity!!.add(c2)
+            arrayListCity!!.add(c3)
+            arrayListCity!!.add(c4)
+            arrayListCity!!.add(c5)
+            arrayListCity!!.add(c6)
+            arrayListCity!!.add(c7)
+        }
+        //Insert data to tables
+        loginViewModel?.deleteCityTable()
+        loginViewModel?.insertCityListOnly(arrayListCity)
     }
 
     private fun initializeObjects() {
@@ -135,6 +160,7 @@ class LoginActivity : AppCompatActivity() {
         val r4 = Route(4,"Wagholi", "1",18.1890,73.122,1)
         var arrayListRoute= ArrayList<Route>()
 
+
         if (arrayListRoute != null) {
             arrayListRoute!!.add(r1)
             arrayListRoute!!.add(r2)
@@ -194,15 +220,19 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        val ctc1 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc2 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc3 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc4 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc5 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc6 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc7 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc8 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
-        val ctc9 = Product(1,"Pasta Sauce", 1,1,1,1,200.00,"Parle-G","1")
+        val ctc1 = Product(1,"Pasta Sauce", 1,1,1,1,96.00,"Parle-G","1")
+        val ctc2 = Product(2,"Salsa", 1,1,1,1,96.00,"Parle-G","1")
+        val ctc3 = Product(3,"Facial tissue", 1,1,1,1,240.00,"Parle-G","1")
+
+        val ctc4 = Product(4,"Peanut Buttor 125 ML", 2,1,1,1,224.00,"Parle-G","1")
+        val ctc5 = Product(5,"Shrikhand 125Ml", 2,1,1,1,224.00,"Parle-G","1")
+
+
+        val ctc6 = Product(6,"Lotion", 4,1,1,1,128.00,"Parle-G","1")
+        val ctc7 = Product(7,"Baby wash", 4,1,1,1,128.00,"Parle-G","1")
+
+        val ctc8 = Product(8,"mini cone buttor scotch", 5,1,1,1,144.00,"Parle-G","1")
+        val ctc9 = Product(9,"Big cone black currant", 5,1,1,1,384.00,"Parle-G","1")
 
         var arrayListProduct= ArrayList<Product>()
 
@@ -219,16 +249,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-
-
-
-
-
-
-
-
-
  //Insert data to tables
+        loginViewModel?.deleteProductTable()
         loginViewModel?.deleteProductCatTable()
         loginViewModel?.deleteDistTable()
         loginViewModel?.deleteOutletTable()
@@ -236,7 +258,8 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel?.deleteFeatureTable()
         loginViewModel?.deleteCityTable()
 
-        loginViewModel?.insertCityList(arrayListCity,arrayListFeaturesInfo,arrayListRoute,arrayListOutlet,arrayListDistributor)
+        loginViewModel?.insertCityList(arrayListCity,arrayListFeaturesInfo,arrayListRoute,arrayListOutlet,
+            arrayListDistributor,arrayListProductCat,arrayListProduct)
     }
 
     private fun setUpPermissions() {

@@ -34,6 +34,13 @@ class HomePageActivity : AppCompatActivity() {
         loadFragment(HomePageFragment())
     }
 
+    private fun initializeBindingView() {
+        homeMainViewModel = ViewModelProviders.of(this).get(HomeMainViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home_page)
+        binding?.lifecycleOwner = this
+        binding?.homeModel=homeMainViewModel
+    }
+
     private fun initializeObjects() {
 
         setSupportActionBar(toolbar)
@@ -52,13 +59,7 @@ class HomePageActivity : AppCompatActivity() {
         headerView.txtAppVersion.text = userSession!!.getEmail()
     }
 
-    private fun initializeBindingView() {
 
-        homeMainViewModel = ViewModelProviders.of(this).get(HomeMainViewModel::class.java)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_home_page)
-        binding?.lifecycleOwner = this
-        binding?.homeModel=homeMainViewModel
-    }
 
 
     fun loadFragment(fragment: Fragment){
