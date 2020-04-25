@@ -19,9 +19,7 @@ import com.example.mvvmkotlinapp.view.adapter.ProductCartListAdapter
 import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
 import kotlinx.android.synthetic.main.activity_product_select.view.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class ProductCartFragment : Fragment() {
 
     lateinit var productListViewModel: ProductListViewModel
