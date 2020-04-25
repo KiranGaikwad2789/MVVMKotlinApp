@@ -39,7 +39,6 @@ class NewOrderAddProductFragment : Fragment() {
     var productPOJO: Product? =null
 
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         productListViewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java)
         bindingAddProduct = DataBindingUtil.inflate(inflater!!, R.layout.fragment_new_order_add_product, container, false)
@@ -115,8 +114,6 @@ class NewOrderAddProductFragment : Fragment() {
         txtSaveProductQuantity.setOnClickListener {
             //dialog?.dismiss()
             selectProduct(productPOJO,dialog,edtProductQuantity.text.toString().toInt())
-
-
         }
         txtCancelDialog.setOnClickListener { dialog .dismiss() }
         dialog?.show()
