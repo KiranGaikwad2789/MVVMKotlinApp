@@ -1,6 +1,7 @@
 package com.example.mvvmkotlinapp.view.fragmets.homefragments
 
 import android.app.Dialog
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
 import com.example.mvvmkotlinapp.databinding.FragmentNewOrderAddProductBinding
+
 import com.example.mvvmkotlinapp.model.ProductOrderModel
 import com.example.mvvmkotlinapp.repository.room.tables.Product
 import com.example.mvvmkotlinapp.view.adapter.NewOrderProductListAdapter
@@ -46,6 +48,9 @@ class NewOrderAddProductFragment : Fragment() {
         bindingAddProduct.productList=productListViewModel
         arryListproductSelected= ArrayList<ProductOrderModel>()
 
+        val viewProductNav = activity!!.findViewById<View>(R.id.navigationProduct)
+        viewProductNav.visibility=View.GONE
+
         activity?.let {
             productListViewModel?.getProductList()?.observe(it, Observer<List<Product>> {
                 Log.e("Product list ",""+it.size)
@@ -59,14 +64,10 @@ class NewOrderAddProductFragment : Fragment() {
     }
 
     private fun addProductToCart() {
-        Log.e("Product selected: ",""+ arryListproductSelected)
+        Log.e("Product add to cart: ",""+ arryListproductSelected)
         //Insert data to tables
         productListViewModel?.deleteProductTable()
-        arryListproductSelected?.let { productListViewModel?.insertProductTable(it) }
-
-        onDestroy()
-        onDestroyView()
-        onDetach()
+        arryListproductSelected?.let { productListViewModel?.insertSelectedProducts(it) }
     }
 
     private fun setDataToAdapter(arryListCity: List<Product>) {
@@ -113,7 +114,7 @@ class NewOrderAddProductFragment : Fragment() {
         val txtCancelDialog = dialog?.findViewById(R.id.txtCancelDialog) as TextView
         txtSaveProductQuantity.setOnClickListener {
             //dialog?.dismiss()
-            selectProduct(productPOJO,dialog,edtProductQuantity.text.toString())
+            selectProduct(productPOJO,dialog,edtProductQuantity.text.toString().toInt())
 
 
         }
@@ -121,13 +122,13 @@ class NewOrderAddProductFragment : Fragment() {
         dialog?.show()
     }
 
-    private fun selectProduct(productPOJO: Product?, dialog: Dialog,productQuantity:String) {
+    private fun selectProduct(productPOJO: Product?, dialog: Dialog,productQuantity:Int) {
 
         var productSelected= ProductOrderModel(0,productPOJO?.product_id,
             productPOJO?.product_name,productPOJO?.prod_cat_id,productPOJO?.route_id,productPOJO?.outlet_id,
-            productPOJO?.dist_id, productPOJO?.product_price?.toDouble(),productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status)
+            productPOJO?.dist_id, productPOJO?.product_price?.toDouble()!!,productQuantity* productPOJO?.product_price?.toDouble()!!,productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status)
         arryListproductSelected!!.add(productSelected!!)
-        Log.e("Product selected: ",""+ arryListproductSelected!!.size)
+        Log.e("Product dialog: ",""+ arryListproductSelected!!.size)
         dialog.dismiss()
     }
 

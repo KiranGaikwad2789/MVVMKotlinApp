@@ -18,6 +18,11 @@
     <string name="menu_take_order">Take Order</string>
     <string name="menu_offer_details">Offer Detail</string>
 
+    <string name="menu_apply_offer">Apply Offer</string>
+    <string name="menu_confirm">Confirm</string>
+    <string name="menu_discard">Discard</string>
+    <string name="menu_prod_offer_details">Offer Detail</string>
+
     <string name="register">Register User</string>
 
 
@@ -55,6 +60,9 @@
     <string name="syncdata_title"></string>
     <string name="syncdata_message">Are you sure you want to sync data?</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
+
+    <string name="removeproduct_message">Are you sure you want remove this from order?</string>
+
 
 
     <string name="route">Enter Route</string>

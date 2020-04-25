@@ -50,11 +50,4 @@ class HomePageAdapter (private val context: Context, private val features: List<
         }
     }
 
-    fun loadFragment(fragment: Fragment){
-        val transaction = (context as HomePageActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
 }

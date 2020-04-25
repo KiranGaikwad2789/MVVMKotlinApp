@@ -2,14 +2,13 @@ package com.example.mvvmkotlinapp.repository
 
 import android.app.Application
 import com.example.mvvmkotlinapp.model.ProductOrderModel
-import com.example.mvvmkotlinapp.repository.room.AppDatabase
-import com.example.mvvmkotlinapp.repository.room.City
-import com.example.mvvmkotlinapp.repository.room.CityDao
-import com.example.mvvmkotlinapp.repository.room.FeatureDao
+import com.example.mvvmkotlinapp.repository.room.*
 import com.example.mvvmkotlinapp.repository.room.dao.ProductCategoryDao
 import com.example.mvvmkotlinapp.repository.room.dao.ProductDao
 import com.example.mvvmkotlinapp.repository.room.dao.ProductOrderDao
+import io.reactivex.Single
 import org.jetbrains.anko.doAsync
+import java.util.concurrent.Callable
 
 class ProductListRepository (application: Application){
 
@@ -31,6 +30,23 @@ class ProductListRepository (application: Application){
 
     fun getProductList() = productDao?.getAllProducts()
 
+    fun getSelectedProductList() = productOrderDao?.getAllProductOrders()
+
+    //fun updateProductCart(productSelected: ProductOrderModel) = productOrderDao?.updateProductCart(productSelected)
+
+    fun updateProductCart(productSelected: ProductOrderModel){
+        doAsync {
+            productOrderDao?.updateProductCart(productSelected)
+        }
+    }
+
+    fun removeProductCart(productCartId: Int){
+        doAsync {
+            productOrderDao?.removeProductCart(productCartId)
+        }
+    }
+
+
     // Product
     fun deleteProductOrderTable(){
         doAsync {
@@ -38,13 +54,24 @@ class ProductListRepository (application: Application){
         }
     }
 
-    fun insertProductTable(arrayListOrder: ArrayList<ProductOrderModel>) {
+    /*fun insertSelectedProducts(arrayListOrder: ArrayList<ProductOrderModel>): Single<Long>?  {
+
         doAsync {
             if (arrayListOrder != null) {
-                for (product in arrayListOrder!!) {
-                    productOrderDao!!.insertAllProductsOrders(product)
+                for (product in arrayListOrder) {
+                    //insertNewUser(product)
+                    Log.e("Product cart add loop: ",""+product.product_name)
+                    var result: Single<Long>? =insertNewUser(product)
+                    Log.e("Product result: ",""+result.toString())
                 }
             }
         }
+
+    }*/
+
+    fun insertNewUser(arrayListOrder: ProductOrderModel): Single<Long>? {
+        return Single.fromCallable(
+            Callable<Long> { productOrderDao!!.insertAllProductsOrders(arrayListOrder) }
+        )
     }
 }

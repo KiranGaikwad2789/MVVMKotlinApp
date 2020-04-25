@@ -14,7 +14,7 @@ import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 @Database(entities = arrayOf(User::class,CurrentLocation::class,StartDutyStatus::class,Features::class,
     City::class,Route::class,Outlet::class,Distributor::class,ProductCategory::class,Product::class,
     ProductOrderModel::class), version = 1)
-@TypeConverters(DataConverter::class,RouteListConverter::class)
+@TypeConverters(DataConverter::class,RouteListConverter::class,ProductListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun locationDao(): CurrentLocationDao

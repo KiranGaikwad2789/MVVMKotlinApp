@@ -1,16 +1,11 @@
 package com.example.mvvmkotlinapp.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
-import com.example.mvvmkotlinapp.repository.room.Distributor
-import com.example.mvvmkotlinapp.repository.room.Outlet
-import com.example.mvvmkotlinapp.repository.room.Route
+import androidx.room.*
+import com.example.mvvmkotlinapp.repository.room.*
 import com.example.mvvmkotlinapp.repository.room.tables.Product
 import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 
-@Entity(foreignKeys = arrayOf(
+@Entity(tableName = "ProductOrderModel",foreignKeys = arrayOf(
     ForeignKey(entity = Route::class,
         parentColumns = arrayOf("route_id"),
         childColumns = arrayOf("route_id"),
@@ -32,7 +27,8 @@ import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
         childColumns = arrayOf("product_id"),
         onDelete = ForeignKey.CASCADE)
 ))
-data class ProductOrderModel(@PrimaryKey(autoGenerate = true) @ColumnInfo(name = "product_order_id") var product_order_id: Int?,
+@TypeConverters(ProductListConverter::class)
+data class ProductOrderModel(@PrimaryKey(autoGenerate = true) val uid: Int,
                         @ColumnInfo(name = "product_id") var product_id: Int? =0,
                         @ColumnInfo(name = "product_name") var product_name: String? =null,
                         @ColumnInfo(name = "prod_cat_id") var prod_cat_id: Int? =0,
@@ -40,9 +36,13 @@ data class ProductOrderModel(@PrimaryKey(autoGenerate = true) @ColumnInfo(name =
                         @ColumnInfo(name = "outlet_id") var outlet_id: Int? =0,
                         @ColumnInfo(name = "dist_id") var dist_id: Int? =0,
                         @ColumnInfo(name = "product_price") var product_price: Double? =0.0,
+                        @ColumnInfo(name = "product_total_price") var product_total_price: Double? =0.0,
                         @ColumnInfo(name = "product_quantity") var product_quantity: Int? =0,
                         @ColumnInfo(name = "product_compony") var product_compony: String? =null,
                         @ColumnInfo(name = "status") var status: String? =null) {
 
-
+    constructor() : this(0,product_id=0,product_name = null,prod_cat_id=0,route_id=0,outlet_id=0,dist_id=0, product_price = 0.0,product_total_price=0.0,
+        product_quantity = 0,
+        product_compony = null,
+        status = null)
 }

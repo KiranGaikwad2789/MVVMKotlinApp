@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_apply_product_offer"
+        android:icon="@drawable/ic_local_offer"
+        android:title="@string/menu_apply_offer" />
+
+    <item
+        android:id="@+id/nav_confirm_product_order"
+        android:icon="@drawable/ic_check_cinfirm"
+        android:title="@string/menu_confirm" />
+
+    <item
+        android:id="@+id/nav_discard_product_offer"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/menu_discard" />
+
+    <item
+        android:id="@+id/nav_prod_offer_detail"
+        android:icon="@drawable/ic_offer"
+        android:title="@string/menu_prod_offer_details" />
+
+</menu>

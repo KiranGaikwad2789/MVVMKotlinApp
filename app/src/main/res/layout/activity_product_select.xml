@@ -38,6 +38,22 @@
 
         </androidx.drawerlayout.widget.DrawerLayout>
 
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            style="@style/Widget.BottomNavigationView"
+            android:id="@+id/navigationProduct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:elevation="4dp"
+            app:itemIconTint="@color/colorWhite"
+            app:itemTextColor="@color/colorWhite"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_menu_product" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -21,7 +21,9 @@ import com.example.mvvmkotlinapp.repository.room.City
 import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 import com.example.mvvmkotlinapp.view.adapter.ProductCatListAdapter
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.NewOrderAddProductFragment
+import com.example.mvvmkotlinapp.view.fragmets.homefragments.ProductCartFragment
 import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
+import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import kotlinx.android.synthetic.main.app_bar_product_list.*
 import kotlinx.android.synthetic.main.nav_header_product_list.view.*
 import java.util.*
@@ -49,11 +51,15 @@ class ProductListActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
+        activityProductListBinding!!.navigationProduct!!.isItemHorizontalTranslationEnabled = true
+        activityProductListBinding!!.navigationProduct.labelVisibilityMode= LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+
+
         val toggle = ActionBarDrawerToggle(this, activityProductListBinding.drawerLayout, toolbar, 0, 0)
         activityProductListBinding.drawerLayout!!.addDrawerListener(toggle)
         toggle.syncState()
 
-        val headerView = activityProductListBinding!!.navView.getHeaderView(0)
+        activityProductListBinding.navigationProduct.visibility=View.VISIBLE
 
         productCatArrayList = ArrayList<ProductCategory>()
 
@@ -68,6 +74,7 @@ class ProductListActivity : AppCompatActivity() {
             })
         }
 
+        loadFragment(ProductCartFragment())
 
         /*activityProductListBinding.navView.edtSearchCategory!!.addTextChangedListener(object : TextWatcher {
 
