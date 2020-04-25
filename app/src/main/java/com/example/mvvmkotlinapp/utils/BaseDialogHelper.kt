@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 
 abstract open class BaseDialogHelper {
 
+
+
     public fun dialogYesOrNo(
         activity: Activity,
         title: String,

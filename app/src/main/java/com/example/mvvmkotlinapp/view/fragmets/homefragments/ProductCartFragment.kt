@@ -22,6 +22,8 @@ import kotlinx.android.synthetic.main.activity_product_select.view.*
 
 class ProductCartFragment : Fragment() {
 
+
+
     lateinit var productListViewModel: ProductListViewModel
     lateinit var bindingProductCart: FragmentProductCartBinding
     private var adapter: ProductCartListAdapter? = null

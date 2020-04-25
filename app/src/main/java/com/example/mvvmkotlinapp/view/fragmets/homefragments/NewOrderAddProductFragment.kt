@@ -80,6 +80,10 @@ class NewOrderAddProductFragment : Fragment() {
         bindingAddProduct.recyclerViewProductCatList.setNestedScrollingEnabled(false);
 
 
+
+
+
+
         activity?.let {
             RecyclerItemClickListenr(it, bindingAddProduct.recyclerViewProductCatList, object : RecyclerItemClickListenr.OnItemClickListener {
 
@@ -100,7 +104,6 @@ class NewOrderAddProductFragment : Fragment() {
             )
         }
     }
-
 
     private fun showProductQuantityDialog(productPOJO: Product?) {
         val dialog = activity?.let { Dialog(it, R.style.Theme_Dialog) }
