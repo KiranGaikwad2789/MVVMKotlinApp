@@ -26,14 +26,12 @@ class ProductCartFragment : Fragment() {
     lateinit var bindingProductCart: FragmentProductCartBinding
     private var adapter: ProductCartListAdapter? = null
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         productListViewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java)
         bindingProductCart = DataBindingUtil.inflate(inflater!!, R.layout.fragment_product_cart, container, false)
         val view: View = bindingProductCart.getRoot()
         bindingProductCart.lifecycleOwner = this
         bindingProductCart.productList=productListViewModel
-        // Inflate the layout for this fragment
 
         val viewProductNav = activity!!.findViewById<View>(R.id.navigationProduct)
         viewProductNav.visibility=View.VISIBLE
