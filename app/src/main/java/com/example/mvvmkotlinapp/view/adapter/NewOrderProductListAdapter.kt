@@ -68,37 +68,4 @@ class NewOrderProductListAdapter (ctx: Context, private var arrayListProductCat:
             chkProductSelect = itemView.findViewById(R.id.chkProductSelect) as CheckBox
         }
     }
-
-    private fun showProductQuantityDialog(
-        productPOJO: Product?,
-        holder: MyViewHolder,
-        position: Int
-    ) {
-        val dialog = context?.let { Dialog(it, R.style.Theme_Dialog) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.dialog_product_quantity)
-        val edtProductQuantity = dialog?.findViewById(R.id.edtProductQuantity) as TextInputEditText
-
-        val txtSaveProductQuantity = dialog?.findViewById(R.id.txtSaveProductQuantity) as TextView
-        val txtCancelDialog = dialog?.findViewById(R.id.txtCancelDialog) as TextView
-        txtSaveProductQuantity.setOnClickListener {
-            //dialog?.dismiss()
-            selectProduct(productPOJO,dialog,edtProductQuantity.text.toString(),holder,position)
-        }
-        txtCancelDialog.setOnClickListener { dialog .dismiss() }
-        dialog?.show()
-    }
-
-    private fun selectProduct(productPOJO: Product?, dialog: Dialog, productQuantity:String,
-                              holder: MyViewHolder,position: Int) {
-
-        /*var productSelected= ProductOrderModel(productPOJO?.product_id,
-            productPOJO?.product_name, productPOJO?.product_price?.toDouble(),productQuantity.toInt())
-        NewOrderAddProductFragment.arryListproductSelected!!.add(productSelected!!)
-        holder.chkProductSelect!!.setChecked(true)
-        notifyDataSetChanged()
-        Log.e("Product selected: ",""+ NewOrderAddProductFragment.arryListproductSelected!!.size)
-        dialog.dismiss()*/
-    }
 }

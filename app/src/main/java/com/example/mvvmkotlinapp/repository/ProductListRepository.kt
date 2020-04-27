@@ -3,9 +3,11 @@ package com.example.mvvmkotlinapp.repository
 import android.app.Application
 import com.example.mvvmkotlinapp.model.ProductOrderModel
 import com.example.mvvmkotlinapp.repository.room.*
+import com.example.mvvmkotlinapp.repository.room.dao.MasterProductOrderDao
 import com.example.mvvmkotlinapp.repository.room.dao.ProductCategoryDao
 import com.example.mvvmkotlinapp.repository.room.dao.ProductDao
 import com.example.mvvmkotlinapp.repository.room.dao.ProductOrderDao
+import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
 import io.reactivex.Single
 import org.jetbrains.anko.doAsync
 import java.util.concurrent.Callable
@@ -15,6 +17,8 @@ class ProductListRepository (application: Application){
     private var productCategoryDao: ProductCategoryDao? = null
     private var productDao: ProductDao? = null
     private var productOrderDao: ProductOrderDao? = null
+    private var masterProductOrderDao: MasterProductOrderDao? = null
+
 
 
     var database: AppDatabase? =null
@@ -24,6 +28,7 @@ class ProductListRepository (application: Application){
         productCategoryDao = database?.productCatDao()
         productDao = database?.productDao()
         productOrderDao = database?.productOrderDao()
+        masterProductOrderDao = database?.masterProductOrderDao()
     }
 
     fun getProductCatList() = productCategoryDao?.getAllProductCategory()
@@ -37,6 +42,12 @@ class ProductListRepository (application: Application){
     fun updateProductCart(productSelected: ProductOrderModel){
         doAsync {
             productOrderDao?.updateProductCart(productSelected)
+        }
+    }
+
+    fun updateProductMasterProductID(uid: Int, masterOrderID: Long){
+        doAsync {
+            productOrderDao?.updateProductMasterProductID(uid,masterOrderID)
         }
     }
 
@@ -74,4 +85,17 @@ class ProductListRepository (application: Application){
             Callable<Long> { productOrderDao!!.insertAllProductsOrders(arrayListOrder) }
         )
     }
+
+    fun addNewMasterProductOrder(masterProductOrder: MasterProductOrder): Single<Long>? {
+        return Single.fromCallable(
+            Callable<Long> {  masterProductOrderDao?.insertMasterProductsOrders(masterProductOrder) }
+        )
+    }
+/*
+    fun addNewMasterProductOrder(masterProductOrder: MasterProductOrder){
+        doAsync {
+            masterProductOrderDao?.insertMasterProductsOrders(masterProductOrder):Long
+        }
+    }*/
+
 }

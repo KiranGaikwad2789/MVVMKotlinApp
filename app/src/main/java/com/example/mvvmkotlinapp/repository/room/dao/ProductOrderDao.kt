@@ -25,4 +25,7 @@ interface ProductOrderDao {
     @Query("UPDATE ProductOrderModel SET status=0 WHERE uid = :id")
     fun removeProductCart(id: Int)
 
+    @Query("UPDATE ProductOrderModel SET master_product_orderid=:masterOrderID WHERE uid = :uid")
+    fun updateProductMasterProductID(uid: Int, masterOrderID: Long)
+
 }

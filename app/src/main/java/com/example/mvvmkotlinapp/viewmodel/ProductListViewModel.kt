@@ -7,14 +7,9 @@ import android.view.MenuItem
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.model.ProductOrderModel
 import com.example.mvvmkotlinapp.repository.ProductListRepository
-import com.example.mvvmkotlinapp.utils.AlertDialog
-import com.example.mvvmkotlinapp.view.fragmets.AlarmSettingFragment
-import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
-import com.example.mvvmkotlinapp.view.fragmets.MyProfileFragment
-import com.example.mvvmkotlinapp.view.fragmets.ReviewOrderFragment
+import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -26,6 +21,8 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
 
     private var repository: ProductListRepository = ProductListRepository(application)
     private val disposable = CompositeDisposable()
+    public var resultMasterProductOrder = MutableLiveData<String?>()
+
 
 
 
@@ -45,6 +42,37 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
             insertSelectedProducts1(product)
         }
     }
+
+    //fun addNewMasterProductOrder(masterProductOrder: MasterProductOrder) = repository.addNewMasterProductOrder(masterProductOrder)
+
+
+
+    fun addNewMasterProductOrder(
+        masterProductOrder: MasterProductOrder,
+        arryListProductCart: ArrayList<ProductOrderModel>?
+    ):MutableLiveData<String?> {
+        disposable.add(
+            repository.addNewMasterProductOrder(masterProductOrder)
+                ?.subscribeOn(Schedulers.newThread())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribeWith(object : DisposableSingleObserver<Long>() {
+                    override fun onSuccess(masterOrderID: Long) {
+                        Log.e("master Product order insert", masterOrderID.toString())
+                        resultMasterProductOrder.setValue("1")
+                        /*for (product in arryListProductCart!!) {
+                            repository.updateProductMasterProductID(product.uid,masterOrderID)
+                        }*/
+                    }
+                    override fun onError(e: Throwable) {
+                        resultMasterProductOrder.setValue("0")
+                        Log.e("ViewModel product error", e.message)
+                    }
+
+                })!!
+        )
+        return resultMasterProductOrder
+    }
+
 
     public var status = MutableLiveData<String?>()
 

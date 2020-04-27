@@ -1,6 +1,7 @@
 package com.example.mvvmkotlinapp.repository.room.dao
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.example.mvvmkotlinapp.repository.room.Outlet
 import com.example.mvvmkotlinapp.repository.room.Route
@@ -12,8 +13,8 @@ interface OutletDao {
     @Query("SELECT * FROM Outlet")
     fun getAllOutlets():LiveData<List<Outlet>>
 
-    @Query("SELECT * FROM Outlet WHERE route_id LIKE :route_id")
-    fun getAllOutlets(route_id: String): List<Outlet>
+    @Query("SELECT outlet_name FROM Outlet WHERE outlet_id LIKE :outeletId")
+    fun getOutletNameFromID(outeletId:String):LiveData<String>
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

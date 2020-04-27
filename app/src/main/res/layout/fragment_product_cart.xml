@@ -11,189 +11,200 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
         type="com.example.mvvmkotlinapp.viewmodel.ProductListViewModel" />
 </data>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".view.fragmets.homefragments.ProductCartFragment">
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:layout_marginBottom="@dimen/_60sdp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
-            android:elevation="@dimen/_10sdp"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".view.fragmets.homefragments.ProductCartFragment">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp"
-                android:layout_margin="@dimen/_5sdp">
+                android:layout_margin="@dimen/_5sdp"
+                android:elevation="@dimen/_10sdp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorDarkGrey"
-                    android:text="Distributor Name : "/>
+                    android:padding="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_5sdp">
 
-                <TextView
-                    android:id="@+id/txtDistributorName"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorDarkGrey"
+                        android:text="Distributor Name : "/>
+
+                    <TextView
+                        android:id="@+id/txtDistributorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_weight="5"
+                        android:textColor="@color/colorGrey"
+                        android:text="Distributor Name : "/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="5"
-                    android:textColor="@color/colorGrey"
-                    android:text="Distributor Name : "/>
+                    android:padding="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_5sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorDarkGrey"
+                        android:text="Distributor Name : "/>
+
+                    <TextView
+                        android:id="@+id/txtOutletName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_weight="5"
+                        android:textColor="@color/colorGrey"
+                        android:text="Distributor Name : "/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_5sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorDarkGrey"
+                        android:text="Distributor Name : "/>
+
+                    <TextView
+                        android:id="@+id/txtOrderDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_weight="5"
+                        android:textColor="@color/colorGrey"
+                        android:text="Distributor Name : "/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp"
-                android:layout_margin="@dimen/_5sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorDarkGrey"
-                    android:text="Distributor Name : "/>
-
-                <TextView
-                    android:id="@+id/txtOutletName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="5"
-                    android:textColor="@color/colorGrey"
-                    android:text="Distributor Name : "/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp"
-                android:layout_margin="@dimen/_5sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorDarkGrey"
-                    android:text="Distributor Name : "/>
-
-                <TextView
-                    android:id="@+id/txtOrderDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="5"
-                    android:textColor="@color/colorGrey"
-                    android:text="Distributor Name : "/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:background="@color/colorLightBlue"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:textColor="@color/colorDarkGrey"
-                android:text="Item"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:textColor="@color/colorGrey"
-                android:text="Price"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:textColor="@color/colorGrey"
-                android:text="Quantity"/>
-
-        </LinearLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerProductCartList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10sdp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                android:weightSum="3"
+                android:background="@color/colorLightBlue"
+                android:orientation="horizontal">
 
-        </androidx.core.widget.NestedScrollView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textColor="@color/colorDarkGrey"
+                    android:text="Item"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:background="@color/colorLightBlue"
-            android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textColor="@color/colorGrey"
+                    android:text="Price"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textColor="@color/colorGrey"
+                    android:text="Quantity"/>
+
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScroll"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:textColor="@color/colorDarkGrey"
-                android:text="Total"/>
+                android:fillViewport="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <TextView
-                android:id="@+id/txtTotalPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:textColor="@color/colorGrey"
-                android:text="Price"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerProductCartList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-            <TextView
-                android:id="@+id/txtTotalProductCount"
-                android:layout_width="wrap_content"
+            </androidx.core.widget.NestedScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:textColor="@color/colorGrey"
-                android:text="Quantity"/>
+                android:padding="@dimen/_10sdp"
+                android:weightSum="3"
+                android:background="@color/colorLightBlue"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textColor="@color/colorDarkGrey"
+                    android:text="Total"/>
+
+                <TextView
+                    android:id="@+id/txtTotalPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textColor="@color/colorGrey"
+                    android:text="Price"/>
+
+                <TextView
+                    android:id="@+id/txtTotalProductCount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:textColor="@color/colorGrey"
+                    android:text="Quantity"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
+    </androidx.core.widget.NestedScrollView>
 
 
-    </LinearLayout>
 
 </layout>
 

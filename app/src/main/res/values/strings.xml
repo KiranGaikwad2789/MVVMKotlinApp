@@ -63,6 +63,8 @@
 
     <string name="removeproduct_message">Are you sure you want remove this from order?</string>
 
+    <string name="confirm_order_title">Confirm order</string>
+    <string name="confirm_order_message">Are you sure want to confirm order?</string>
 
 
     <string name="route">Enter Route</string>

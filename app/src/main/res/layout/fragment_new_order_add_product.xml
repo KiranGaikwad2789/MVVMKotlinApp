@@ -12,6 +12,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,20 +25,23 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
             app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/nestedScroll"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtSearchCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
                 android:drawableLeft="@drawable/ic_search"
                 android:drawablePadding="@dimen/_5sdp"
-                android:hint="Product and Category" />
+                android:hint="Product and Category"
+                android:padding="@dimen/_10sdp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,55 +49,36 @@
             android:id="@+id/nestedScroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toTopOf="@+id/btnAddProductToCart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewProductCatList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                android:layout_height="match_parent"
+                android:padding="@dimen/_10sdp" />
 
         </androidx.core.widget.NestedScrollView>
 
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout17"
+        <Button
+            android:id="@+id/btnAddProductToCart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryTransparent"
-            android:elevation="@dimen/_15sdp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/drw_button"
+            android:text="Add to list"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/btnAddProductToCart"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:background="@drawable/drw_button"
-                android:text="Add to list"
-                android:textAllCaps="true"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_14sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

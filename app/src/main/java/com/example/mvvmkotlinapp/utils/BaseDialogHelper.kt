@@ -7,9 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 
-
-abstract open class BaseDialogHelper {
-
+ open class BaseDialogHelper() {
 
 
     public fun dialogYesOrNo(

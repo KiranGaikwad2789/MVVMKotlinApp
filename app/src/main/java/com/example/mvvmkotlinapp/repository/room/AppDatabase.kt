@@ -7,13 +7,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.mvvmkotlinapp.model.ProductOrderModel
 import com.example.mvvmkotlinapp.repository.room.dao.*
+import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
 import com.example.mvvmkotlinapp.repository.room.tables.Product
 import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 
 
 @Database(entities = arrayOf(User::class,CurrentLocation::class,StartDutyStatus::class,Features::class,
     City::class,Route::class,Outlet::class,Distributor::class,ProductCategory::class,Product::class,
-    ProductOrderModel::class), version = 1)
+    ProductOrderModel::class, MasterProductOrder::class), version = 1)
 @TypeConverters(DataConverter::class,RouteListConverter::class,ProductListConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -28,6 +29,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun productCatDao(): ProductCategoryDao
     abstract fun productDao(): ProductDao
     abstract fun productOrderDao(): ProductOrderDao
+    abstract fun masterProductOrderDao(): MasterProductOrderDao
+
 
 
     companion object {

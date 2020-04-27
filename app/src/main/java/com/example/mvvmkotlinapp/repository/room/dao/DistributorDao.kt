@@ -16,4 +16,8 @@ interface DistributorDao {
 
     @Query("DELETE FROM Distributor")
     fun deleteDistTable()
+
+    @Query("SELECT dist_name FROM Distributor WHERE dist_id LIKE :dist_id")
+    fun getOutletNameFromID(dist_id:String):LiveData<String>
+
 }

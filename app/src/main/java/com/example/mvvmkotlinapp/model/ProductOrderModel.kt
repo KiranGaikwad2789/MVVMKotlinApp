@@ -29,6 +29,7 @@ import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 ))
 @TypeConverters(ProductListConverter::class)
 data class ProductOrderModel(@PrimaryKey(autoGenerate = true) val uid: Int,
+                             @ColumnInfo(name = "master_product_orderid") var master_product_orderid: Int? =0,
                         @ColumnInfo(name = "product_id") var product_id: Int? =0,
                         @ColumnInfo(name = "product_name") var product_name: String? =null,
                         @ColumnInfo(name = "prod_cat_id") var prod_cat_id: Int? =0,
@@ -41,7 +42,7 @@ data class ProductOrderModel(@PrimaryKey(autoGenerate = true) val uid: Int,
                         @ColumnInfo(name = "product_compony") var product_compony: String? =null,
                         @ColumnInfo(name = "status") var status: String? =null) {
 
-    constructor() : this(0,product_id=0,product_name = null,prod_cat_id=0,route_id=0,outlet_id=0,dist_id=0, product_price = 0.0,product_total_price=0.0,
+    constructor() : this(0,0,product_id=0,product_name = null,prod_cat_id=0,route_id=0,outlet_id=0,dist_id=0, product_price = 0.0,product_total_price=0.0,
         product_quantity = 0,
         product_compony = null,
         status = null)

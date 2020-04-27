@@ -20,6 +20,7 @@ import com.example.mvvmkotlinapp.databinding.ActivityProductSelectBinding
 import com.example.mvvmkotlinapp.repository.room.City
 import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 import com.example.mvvmkotlinapp.view.adapter.ProductCatListAdapter
+import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.NewOrderAddProductFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.ProductCartFragment
 import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
@@ -142,6 +143,16 @@ class ProductListActivity : AppCompatActivity() {
         if (activityProductListBinding!!.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             activityProductListBinding!!.drawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
 
+    override fun onBackPressed() {
+
+        val myFragment: Fragment = supportFragmentManager.findFragmentByTag("ProductCartFragment")!!
+
+        if (myFragment != null && myFragment.isVisible()) { // add your code here
+            finish()
+        }else{
+            loadFragment(ProductCartFragment())
+        }
     }
 }

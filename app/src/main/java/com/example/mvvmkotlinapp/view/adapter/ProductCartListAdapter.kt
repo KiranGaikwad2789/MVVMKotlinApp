@@ -56,7 +56,7 @@ class ProductCartListAdapter (private val context: Context, private val arrayLis
     class ViewHolder(val binding: RowProductCartListBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: ProductOrderModel) {
-            binding.setVariable(BR.product, data) //BR - generated class; BR.user - 'user' is variable name declared in layout
+            binding.setVariable(BR.product, data) //BR - generated class; BR.product - 'product' is variable name declared in layout
             binding.executePendingBindings()
         }
     }
@@ -71,7 +71,7 @@ class ProductCartListAdapter (private val context: Context, private val arrayLis
          productQuantity= productPOJO.product_quantity!!.toInt()-1
 
         Log.e("current Product: ",""+ productPOJO)
-        var productSelected= ProductOrderModel(productPOJO.uid,productPOJO?.product_id,
+        var productSelected= ProductOrderModel(productPOJO.uid,productPOJO.master_product_orderid,productPOJO?.product_id,
             productPOJO?.product_name,productPOJO?.prod_cat_id,productPOJO?.route_id,productPOJO?.outlet_id,
             productPOJO?.dist_id, productPOJO?.product_price?.toDouble()!!,productQuantity* productPOJO?.product_price?.toDouble()!!,productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status)
         Log.e("current Product update: ",""+ productSelected)
