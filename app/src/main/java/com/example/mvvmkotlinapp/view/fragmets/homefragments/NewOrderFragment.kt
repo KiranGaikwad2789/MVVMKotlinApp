@@ -41,7 +41,7 @@ class NewOrderFragment : Fragment() {
         var newOrderModel = NewOrderModel(
             routeName = newOrderDataBinding.autoCompleteRouteName.text.toString(),
            outletName =  newOrderDataBinding.autoCompleteOutletName.text.toString(),
-           distributorName =  newOrderDataBinding.autoCompleteDistName.text.toString(), isCheck=newOrderDataBinding.chkNewLeadOrder.isChecked)
+           distributorName =  newOrderDataBinding.autoCompleteDistName.text.toString())
         newOrderDataBinding.order=newOrderModel
 
         (getActivity() as HomePageActivity?)?.visibleMenuItems(4)
@@ -80,18 +80,18 @@ class NewOrderFragment : Fragment() {
         //Listners
         newOrderDataBinding.autoCompleteRouteName.setOnItemClickListener() { parent, _, position, id ->
             val selectedPoi = parent.adapter.getItem(position) as Route?
-            newOrderDataBinding.autoCompleteRouteName.setText(selectedPoi?.route_name)
+            newOrderDataBinding.autoCompleteRouteName.setText(selectedPoi?.route_name+" | "+selectedPoi?.route_id)
             newOrderDataBinding.autoCompleteOutletName.isEnabled=true
         }
 
         newOrderDataBinding.autoCompleteOutletName.setOnItemClickListener() { parent, _, position, id ->
             val selectedPoi = parent.adapter.getItem(position) as Outlet?
-            newOrderDataBinding.autoCompleteOutletName.setText(selectedPoi?.outlet_name)
+            newOrderDataBinding.autoCompleteOutletName.setText(selectedPoi?.outlet_name+" | "+selectedPoi?.outlet_id)
         }
 
         newOrderDataBinding.autoCompleteDistName.setOnItemClickListener() { parent, _, position, id ->
             val selectedPoi = parent.adapter.getItem(position) as Distributor?
-            newOrderDataBinding.autoCompleteDistName.setText(selectedPoi?.dist_name)
+            newOrderDataBinding.autoCompleteDistName.setText(selectedPoi?.dist_name+" | "+selectedPoi?.dist_id)
         }
 
         return view
@@ -105,16 +105,4 @@ class NewOrderFragment : Fragment() {
             newOrderDataBinding.autoCompleteRouteName.threshold = 2
         }
     }
-
-    fun loadFragment(fragment: Fragment){
-
-        val transaction = activity!!.supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-        transaction.addToBackStack(null)
-        transaction.commit()
-
-    }
-
-
 }

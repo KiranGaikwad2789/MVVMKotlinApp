@@ -11,16 +11,18 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.DateTime
+import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentProductCartBinding
+import com.example.mvvmkotlinapp.model.NewOrderModel
 import com.example.mvvmkotlinapp.model.ProductOrderModel
 import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
+import com.example.mvvmkotlinapp.utils.ModelPreferencesManager
 import com.example.mvvmkotlinapp.view.adapter.ProductCartListAdapter
 import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
 import kotlinx.android.synthetic.main.activity_product_select.view.*
@@ -37,8 +39,11 @@ class ProductCartFragment : Fragment() {
     var commaSeperatedString: String? =null
     private var currentDate: DateTime? =null
     var arryListProductCart: ArrayList<ProductOrderModel>? = null
+    var orderModel: NewOrderModel? =null
+    private var userSession: UserSession? =null
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         productListViewModel = ViewModelProviders.of(this).get(ProductListViewModel::class.java)
         bindingProductCart = DataBindingUtil.inflate(inflater, R.layout.fragment_product_cart, container, false)
@@ -47,8 +52,19 @@ class ProductCartFragment : Fragment() {
         bindingProductCart.productList=productListViewModel
 
         currentDate= DateTime()
+        userSession=UserSession(activity)
+
         val viewProductNav = activity!!.findViewById<View>(R.id.navigationProduct)
         viewProductNav.visibility=View.VISIBLE
+
+        arryListProductCart=ArrayList<ProductOrderModel>()
+
+        orderModel = ModelPreferencesManager.get<NewOrderModel>("orderModel")
+        if (orderModel != null) {
+            bindingProductCart.txtDistributorName.text= orderModel!!.distributorName
+            bindingProductCart.txtOutletName.text= orderModel!!.outletName
+            bindingProductCart.txtOrderDate.text= currentDate!!.getDateTime()
+        }
 
         activity?.let {
             productListViewModel.getSelectedProductList()?.observe(it, Observer<List<ProductOrderModel>> {
@@ -67,6 +83,7 @@ class ProductCartFragment : Fragment() {
                 }
 
                 R.id.nav_confirm_product_order-> {
+                    if(arryListProductCart?.size!! >0)
                     confirmOrderRemarkAddDialog()
                     return@setOnNavigationItemSelectedListener true
                 }
@@ -98,20 +115,34 @@ class ProductCartFragment : Fragment() {
         //performing positive action
         builder.setPositiveButton("Yes"){dialogInterface, which ->
 
-            var masterProductOrder= MasterProductOrder(0,
-                commaSeperatedString,1,1,1,totalPrice,totalProductQuantity,
-                currentDate?.getDateTime(),"Pending")
+            var delimiter = "| "
+            val routeNameSplit = orderModel?.routeName?.split(delimiter)
+            val outletNameSplit = orderModel?.outletName?.split(delimiter)
+            val distNameSplit = orderModel?.distributorName?.split(delimiter)
+
+            var orserMasterID= userSession?.getUserId() +"_"+ currentDate!!.orderDateFormater()
+
+            var masterProductOrder= MasterProductOrder(orserMasterID.toInt(),
+                commaSeperatedString,
+                routeNameSplit?.get(1)?.toInt(),
+                outletNameSplit?.get(1)?.toInt(),
+                distNameSplit?.get(1)?.toInt(),totalPrice,totalProductQuantity,
+                currentDate?.getDateTime(),"Pending", arryListProductCart?.size,null,null,
+                0,0.0,0)
+
             Log.e("masterProductOrder: ",""+ masterProductOrder)
 
-            var result = productListViewModel.addNewMasterProductOrder(masterProductOrder,arryListProductCart)
-            Log.e("masterProductOrder result: ",""+ result)
-            dialogInterface.dismiss()
+            activity?.let {
+                productListViewModel?.addNewMasterProductOrder(masterProductOrder,arryListProductCart)?.observe(it, Observer<Long?> {
+                    dialogInterface.dismiss()
+                })
+                //productListViewModel.resultMasterProductOrder.value = null
+            }
         }
         //performing negative action
         builder.setNegativeButton("No"){dialogInterface, which ->
             dialogInterface.dismiss()
         }
-
         // Create the AlertDialog
         val alertDialog: AlertDialog = builder.create()
         // Set other dialog properties

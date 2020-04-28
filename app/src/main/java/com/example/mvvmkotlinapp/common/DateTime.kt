@@ -24,4 +24,12 @@ public class DateTime {
         val formatted = current.format(formatter)
         return  formatted
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    public fun orderDateFormater():String{
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm")
+        val formatted = current.format(formatter)
+        return  formatted
+    }
 }

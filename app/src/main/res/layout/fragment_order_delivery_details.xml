@@ -24,9 +24,9 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fillViewport="true"
-        android:layout_marginBottom="@dimen/_60sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -37,37 +37,128 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
+                android:padding="@dimen/_7sdp"
                 android:weightSum="3"
-                android:background="@color/colorLightBlue"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:textColor="@color/colorWhite"
+                    android:text="Back"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textStyle="bold"
+                    android:layout_weight="2"
+                    android:gravity="right"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:textColor="@color/colorWhite"
+                    android:text="Resend Order"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:tint="@color/colorWhite"
+                    android:src="@drawable/ic_check_cinfirm"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtCompleteDeliverOrder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/drw_button"
+                    android:textColor="@color/colorWhite"
+                    android:layout_margin="@dimen/_7sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Complete Deliver"/>
+
+                <TextView
+                    android:id="@+id/txtShortDeliverOrder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/drw_button"
+                    android:textColor="@color/colorWhite"
+                    android:layout_margin="@dimen/_7sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Short Close"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
+                android:weightSum="6"
+                android:background="@color/colorPrimary"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:textColor="@color/colorDarkGrey"
-                    android:text="Item"/>
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="Product"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:layout_weight="1"
-                    android:gravity="left"
-                    android:textColor="@color/colorGrey"
-                    android:text="Price"/>
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="Rate"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:layout_weight="1"
-                    android:gravity="left"
-                    android:textColor="@color/colorGrey"
-                    android:text="Quantity"/>
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="Q_Qty"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="Total"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/colorWhite"
+                    android:text="D_Qty"/>
 
             </LinearLayout>
 
@@ -96,21 +187,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:layout_weight="1"
                     android:gravity="left"
                     android:textColor="@color/colorDarkGrey"
-                    android:text="Total"/>
+                    android:text="Order Total="/>
 
                 <TextView
                     android:id="@+id/txtTotalPrice"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:textColor="@color/colorGrey"
                     android:text="Price"/>
 
@@ -126,190 +217,156 @@
 
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:background="@color/colorWhite">
+
+                <TextView
+                    android:id="@+id/txtOrderStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:gravity="left"
+                    android:padding="@dimen/_2sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/drw_filled_curve_bk"
+                    android:textColor="@color/colorWhite" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:weightSum="10"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:layout_weight="4"
+                        android:gravity="left"
+                        android:text="Ordered Date"
+                        android:textColor="@color/colorDarkGrey" />
+
+                    <TextView
+                        android:id="@+id/txtOrderDateTime"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:layout_weight="6"
+                        android:gravity="right"
+                        android:textColor="@color/colorGrey" />
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtOrderoutletId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:gravity="left"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/colorPrimary3" />
+
+                <TextView
+                    android:id="@+id/txtOrderDistributortId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="normal"
+                    android:gravity="left"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/colorDarkGrey" />
+
+                <TextView
+                    android:id="@+id/txtmasterOrderId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="normal"
+                    android:gravity="left"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/colorDarkGrey" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@color/colorWhite"
-                    tools:ignore="MissingConstraints">
-
-
-                    <TextView
-                        android:id="@+id/txtOrderDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:gravity="left"
-                        android:text="Ordered Date"
-                        android:textSize="@dimen/_14sdp"
-                        android:background="@drawable/drw_filled_curve_multicolor_bk"
-                        android:padding="@dimen/_3sdp"
-                        android:textColor="@color/colorWhite" />
-
-                    <TextView
-                        android:id="@+id/txtOrderStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:gravity="left"
-                        android:padding="@dimen/_2sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:background="@drawable/drw_filled_curve_bk"
-                        android:text="@{orderDeliveryProduct.order_status}"
-                        android:textColor="@color/colorWhite" />
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/colorDarkGreyBackground"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:weightSum="10"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:text="Ordered Total"
                             android:textStyle="bold"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="Ordered Date"
-                            android:textColor="@color/colorDarkGrey" />
+                            android:gravity="center"
+                            android:padding="@dimen/_2sdp"/>
 
                         <TextView
-                            android:id="@+id/txtOrderDateTime"
-                            android:layout_width="0dp"
+                            android:id="@+id/txtMasterOrderTotal"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:textStyle="bold"
-                            android:layout_weight="6"
-                            android:gravity="right"
-                            android:text="@{orderDeliveryProduct.order_date}"
-                            android:textColor="@color/colorGrey" />
-
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:text="Product Unit"
+                            android:layout_gravity="left"
+                            android:gravity="center"
+                            android:padding="@dimen/_2sdp"/>
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/txtOrderoutletId"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:gravity="left"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:textSize="@dimen/_14sdp"
-                        android:text="@{orderDeliveryProduct.outlet_id}"
-                        android:textColor="@color/colorPrimary3" />
-
-                    <TextView
-                        android:id="@+id/txtOrderdistId"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="normal"
-                        android:gravity="left"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="@{orderDeliveryProduct.dist_id}"
-                        android:textColor="@color/colorDarkGrey" />
-
-                    <TextView
-                        android:id="@+id/txtOrderuid"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="normal"
-                        android:gravity="left"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="@{orderDeliveryProduct.uid}"
-                        android:textColor="@color/colorDarkGrey" />
-
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:background="@color/colorDarkGreyBackground"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:text="Product"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:padding="@dimen/_2sdp"/>
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_10sdp"
-                                android:text="Ordered Total"
-                                android:textStyle="bold"
-                                android:gravity="center"
-                                android:padding="@dimen/_2sdp"/>
-
-                            <TextView
-                                android:id="@+id/txtOrderTotal"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="@dimen/_10sdp"
-                                android:text="Product Unit"
-                                android:layout_gravity="left"
-                                android:gravity="center"
-                                android:padding="@dimen/_2sdp"/>
-
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_10sdp"
-                                android:text="Product"
-                                android:textStyle="bold"
-                                android:gravity="center"
-                                android:padding="@dimen/_2sdp"/>
-
-                            <TextView
-                                android:id="@+id/txtOrderproducts"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="@dimen/_10sdp"
-                                android:text="Product Unit"
-                                android:layout_gravity="left"
-                                android:gravity="center"
-                                android:layout_marginRight="@dimen/_5sdp"
-                                android:padding="@dimen/_2sdp"/>
-
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/txtMasterOrderProducts"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/ic_check_cinfirm"/>
-
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:text="Product Unit"
+                            android:layout_gravity="left"
+                            android:gravity="center"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:padding="@dimen/_2sdp"/>
 
                     </LinearLayout>
+
 
                 </LinearLayout>
 
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

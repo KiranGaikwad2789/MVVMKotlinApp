@@ -3,6 +3,7 @@ package com.example.mvvmkotlinapp.app
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import com.example.mvvmkotlinapp.utils.ModelPreferencesManager
 
 open class AppController : Application() {
 
@@ -20,6 +21,7 @@ open class AppController : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        ModelPreferencesManager.with(this)
         // initialize for any
 
         // Use ApplicationContext.

@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,6 +27,8 @@ import com.example.mvvmkotlinapp.viewmodel.OrderDeliveryViewModel
  * A simple [Fragment] subclass.
  */
 class OrderDeliveryFragment : Fragment() {
+
+    //https://stackoverflow.com/questions/51218535/unable-to-resolve-dependency-for-appdebug-compileclasspath-could-not-resolv
 
     lateinit var orderDeliveryViewModel: OrderDeliveryViewModel
     lateinit var binding: FragmentOrderDeliveryBinding
@@ -56,7 +60,7 @@ class OrderDeliveryFragment : Fragment() {
     private fun setDataToAdapter(arryListOrders: List<MasterProductOrder>?) {
 
         adapter = activity?.let { OrderDeliveryListAdapter(it,arryListOrders,orderDeliveryViewModel) }!!
-        binding.recyclerViewOrderDeliveryList.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+        //binding.recyclerViewOrderDeliveryList.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         binding.recyclerViewOrderDeliveryList!!.adapter = adapter
         binding.recyclerViewOrderDeliveryList!!.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewOrderDeliveryList.setNestedScrollingEnabled(false)
@@ -85,12 +89,11 @@ class OrderDeliveryFragment : Fragment() {
 
     private fun navigateToNextFragment(masterProductOrder: MasterProductOrder) {
 
-        val ldf = OrderDeliveryDetailsFragment()
-        val args = Bundle()
-        args.putSerializable("masterProductOrderPOJO", masterProductOrder)
-        ldf.setArguments(args)
-        //Inflate the fragment
-        fragmentManager?.beginTransaction()?.add(R.id.container, ldf)?.commit()
+        val transaction = activity!!.supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, OrderDeliveryDetailsFragment(masterProductOrder),"OrderDeliveryDetailsFragment")
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
 }

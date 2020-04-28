@@ -1,18 +1,21 @@
 package com.example.mvvmkotlinapp.view.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.ActivityHomePageBinding
 import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
+import com.example.mvvmkotlinapp.view.fragmets.homefragments.OrderDeliveryFragment
 import com.example.mvvmkotlinapp.viewmodel.HomeMainViewModel
 import com.google.android.material.bottomnavigation.LabelVisibilityMode.LABEL_VISIBILITY_LABELED
 import kotlinx.android.synthetic.main.app_bar_home_page.*
@@ -85,11 +88,24 @@ class HomePageActivity : AppCompatActivity() {
 
         val myFragment: Fragment = supportFragmentManager.findFragmentByTag("HomePageFragment")!!
 
+        val fragments: List<Fragment> = supportFragmentManager.getFragments()
+
         if (myFragment != null && myFragment.isVisible()) { // add your code here
             finish()
-        }else{
-            visibleMenuItems(0)
-            loadFragment(HomePageFragment())
+        }else {
+            if (fragments != null) {
+                for (fragment in fragments) {
+                    Log.e("fragment ",""+fragment)
+                    if (fragment != null && fragment.isVisible){
+                        if ((fragment.javaClass.simpleName).equals("OrderDeliveryDetailsFragment")){
+                            loadFragment(OrderDeliveryFragment())
+                        }else{
+                            visibleMenuItems(0)
+                            loadFragment(HomePageFragment())
+                        }
+                    }
+                }
+            }
         }
     }
 

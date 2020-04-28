@@ -67,6 +67,10 @@ class NewOrderAddProductFragment : Fragment() {
         //Insert data to tables
         productListViewModel?.deleteProductTable()
         arryListproductSelected?.let { productListViewModel?.insertSelectedProducts(it) }
+
+        onDestroyView()
+        onDestroy()
+        onDetach()
     }
 
     private fun setDataToAdapter(arryListCity: List<Product>) {

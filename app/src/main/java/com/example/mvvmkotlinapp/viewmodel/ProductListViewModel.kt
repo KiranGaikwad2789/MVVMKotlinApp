@@ -15,13 +15,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.doAsync
 
 class ProductListViewModel(application: Application) : AndroidViewModel(application),
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var repository: ProductListRepository = ProductListRepository(application)
     private val disposable = CompositeDisposable()
-    public var resultMasterProductOrder = MutableLiveData<String?>()
+    public var resultMasterProductOrder = MutableLiveData<Long?>()
 
 
 
@@ -43,31 +44,30 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    //fun addNewMasterProductOrder(masterProductOrder: MasterProductOrder) = repository.addNewMasterProductOrder(masterProductOrder)
+    //fun addNewMasterProductOrder(masterProductOrder:MasterProductOrder) = repository.addNewMasterProductOrder(masterProductOrder)
 
 
 
     fun addNewMasterProductOrder(
         masterProductOrder: MasterProductOrder,
         arryListProductCart: ArrayList<ProductOrderModel>?
-    ):MutableLiveData<String?> {
-        disposable.add(
-            repository.addNewMasterProductOrder(masterProductOrder)
+    ): MutableLiveData<Long?> {
+
+        disposable.add(repository.addNewMasterProductOrder(masterProductOrder)
                 ?.subscribeOn(Schedulers.newThread())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribeWith(object : DisposableSingleObserver<Long>() {
                     override fun onSuccess(masterOrderID: Long) {
-                        Log.e("master Product order insert", masterOrderID.toString())
-                        resultMasterProductOrder.setValue("1")
-                        /*for (product in arryListProductCart!!) {
-                            repository.updateProductMasterProductID(product.uid,masterOrderID)
-                        }*/
+                        var status="Pending"
+                        repository.updateProductMasterProductID(arryListProductCart,masterOrderID?.toInt(),status)
+                        //updateProductMasterProductID(arryListProductCart, masterOrderID?.toInt(),status)
+
+                        resultMasterProductOrder.setValue(masterOrderID)
                     }
                     override fun onError(e: Throwable) {
-                        resultMasterProductOrder.setValue("0")
+                        resultMasterProductOrder.setValue(0)
                         Log.e("ViewModel product error", e.message)
                     }
-
                 })!!
         )
         return resultMasterProductOrder
@@ -96,6 +96,9 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun updateProductCart(productSelected: ProductOrderModel) =repository.updateProductCart(productSelected)
+
+    //fun updateProductMasterProductID(arryListProductCart: ArrayList<ProductOrderModel>?, it: Int?, status: String) =repository.updateProductMasterProductID(arryListProductCart,it,status)
+
 
     fun removeProductCart(productCartId: Int) =repository.removeProductCart(productCartId)
 

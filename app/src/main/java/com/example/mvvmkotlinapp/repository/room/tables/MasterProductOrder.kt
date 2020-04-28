@@ -31,7 +31,15 @@ data class MasterProductOrder(@PrimaryKey(autoGenerate = true) val uid: Int,
     @ColumnInfo(name = "order_total_price") var order_total_price: Double? =0.0,
     @ColumnInfo(name = "order_total_quantity") var order_total_quantity: Int? =0,
     @ColumnInfo(name = "order_date") var order_date: String? =null,
-    @ColumnInfo(name = "order_status") var order_status: String? =null) : Serializable {
+    @ColumnInfo(name = "order_status") var order_status: String? =null,
+    @ColumnInfo(name = "order_total_products") var order_total_products: Int? =0,
+    @ColumnInfo(name = "order_deliver_date") var order_deliver_date: String? =null,
+    @ColumnInfo(name = "order_remark") var order_remark: String? =null,
+    @ColumnInfo(name = "offer_id") var offer_id: Int? =0,
+    @ColumnInfo(name = "offer_amount") var offer_amount: Double? =0.0,
+    @ColumnInfo(name = "order_delivered_quantity") var order_delivered_quantity: Int? =0) : Serializable {
 
-    constructor() : this(0,cart_ids=null,route_id=0,outlet_id=0,dist_id=0, order_total_price = 0.0, order_total_quantity = 0, order_date=null,order_status = null)
+    constructor() : this(0,cart_ids=null,route_id=0,outlet_id=0,dist_id=0, order_total_price = 0.0,
+        order_total_quantity = 0, order_date=null,order_status = null,order_total_products=0,order_deliver_date=null,
+        order_remark=null,offer_id=0,offer_amount=0.0,order_delivered_quantity=0)
 }

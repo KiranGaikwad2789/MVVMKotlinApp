@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.mvvmkotlinapp.model.NewOrderModel
 import com.example.mvvmkotlinapp.repository.CaptureOutletRepository
 import com.example.mvvmkotlinapp.repository.room.Outlet
+import com.example.mvvmkotlinapp.utils.ModelPreferencesManager
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.activities.ProductListActivity
 import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
@@ -38,12 +39,12 @@ class NewOrderViewModel(application: Application) : AndroidViewModel(application
 
     fun onNewOrderClicked(order:NewOrderModel){
 
-        var intent= Intent(context,ProductListActivity::class.java)
+     /*   var intent= Intent(context,ProductListActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent)
+        context.startActivity(intent)*/
 
 
-        /*if (order.routeName=="")
+        if (order.routeName=="")
             errorRouteName.value="Please select Route"
         else
             errorRouteName.value=null
@@ -59,19 +60,21 @@ class NewOrderViewModel(application: Application) : AndroidViewModel(application
             errorDistName.value=null
 
 
-
         if (!order.routeName.equals("") && !order.outletName.equals("") &&
             !order.distributorName.equals("")) {
             Log.e("order1 : ", ""+order.routeName)
             Log.e("order2 : ", ""+order.outletName)
             Log.e("order3 : ", ""+order.distributorName)
 
+            var orderModel=NewOrderModel(order.routeName,order.outletName,order.distributorName)
+            ModelPreferencesManager.put(orderModel, "orderModel")
+
             var intent= Intent(context,ProductListActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent)
 
             //activity1!!.loadFragment(NewOrderAddProductFragment())
-        }*/
+        }
     }
 
 
