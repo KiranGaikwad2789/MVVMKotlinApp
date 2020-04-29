@@ -1,6 +1,8 @@
 package com.example.mvvmkotlinapp.view.activities
 
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -9,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.databinding.ContentRegisterBinding
 import com.example.mvvmkotlinapp.repository.room.User
+import com.example.mvvmkotlinapp.utils.DeviceID
 import com.example.mvvmkotlinapp.viewmodel.RegisterViewModel
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -17,6 +20,7 @@ class RegisterActivity() : AppCompatActivity() {
 
     lateinit var registerModel: RegisterViewModel
     lateinit var binding: ContentRegisterBinding
+    private var deviceID: DeviceID? =null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,13 +31,15 @@ class RegisterActivity() : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.registerViewModel=registerModel
 
-        var user = User(username =binding.edtuserName.text.toString(), mobilenumber =binding.edtMobileNumber.text.toString(), address =binding.edtAddress.text.toString(), email =binding.edtEmail.text.toString(), password =binding.edtPassword.text.toString())
-        binding.user=user
-
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar()!!.setDisplayShowHomeEnabled(true);
+        deviceID= DeviceID()
 
+        var user = User(user_id = 0,username =binding.edtuserName.text.toString(), mobilenumber =binding.edtMobileNumber.text.toString(),
+            address =binding.edtAddress.text.toString(), email =binding.edtEmail.text.toString(), password =binding.edtPassword.text.toString(),
+            IMEI=deviceID!!.getIMEI(application),androidID=deviceID!!.getDeviceUniqueID(application))
+        binding.user=user
 
         registerModel.status.observe(this, Observer { status ->
             status?.let {

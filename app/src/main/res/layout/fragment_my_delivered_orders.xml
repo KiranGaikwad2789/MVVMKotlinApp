@@ -49,6 +49,7 @@
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_weight="2"
                 android:gravity="center"
+                android:visibility="gone"
                 android:text="Order Delivery Update"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold" />
@@ -58,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My Orders"
+                android:visibility="gone"
                 android:textColor="@color/colorWhite"
                 android:background="@color/colorPrimaryDarkTransparent"
                 android:textStyle="bold" />
@@ -72,7 +74,7 @@
             android:layout_margin="@dimen/_5sdp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Only Pending orders shown here"
+            android:text="Delivered/Short close orders shown here"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toTopOf="@+id/recyclerViewOrderDeliveryList"

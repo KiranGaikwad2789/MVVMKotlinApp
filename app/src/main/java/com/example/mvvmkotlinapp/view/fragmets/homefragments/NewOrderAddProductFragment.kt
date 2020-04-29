@@ -1,14 +1,10 @@
 package com.example.mvvmkotlinapp.view.fragmets.homefragments
 
-import android.app.Dialog
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,19 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
 import com.example.mvvmkotlinapp.databinding.FragmentNewOrderAddProductBinding
-
 import com.example.mvvmkotlinapp.model.ProductOrderModel
 import com.example.mvvmkotlinapp.repository.room.tables.Product
 import com.example.mvvmkotlinapp.view.adapter.NewOrderProductListAdapter
+import com.example.mvvmkotlinapp.view.fragmets.homefragments.ProductCartFragment.Companion.arryListproductSelected
 import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
-import com.google.android.material.textfield.TextInputEditText
 
 
 class NewOrderAddProductFragment : Fragment() {
 
-    companion object {
-        var arryListproductSelected: ArrayList<ProductOrderModel>? = null
-    }
+
 
     lateinit var productListViewModel: ProductListViewModel
     lateinit var bindingAddProduct: FragmentNewOrderAddProductBinding
@@ -45,7 +38,7 @@ class NewOrderAddProductFragment : Fragment() {
         val view: View = bindingAddProduct.getRoot()
         bindingAddProduct.lifecycleOwner = this
         bindingAddProduct.productList=productListViewModel
-        arryListproductSelected= ArrayList<ProductOrderModel>()
+
 
         val viewProductNav = activity!!.findViewById<View>(R.id.navigationProduct)
         viewProductNav.visibility=View.GONE
@@ -65,12 +58,9 @@ class NewOrderAddProductFragment : Fragment() {
     private fun addProductToCart() {
         Log.e("Product add to cart: ",""+ arryListproductSelected)
         //Insert data to tables
-        productListViewModel?.deleteProductTable()
+        //productListViewModel?.deleteProductTable()
         arryListproductSelected?.let { productListViewModel?.insertSelectedProducts(it) }
-
-        onDestroyView()
-        onDestroy()
-        onDetach()
+        activity!!.onBackPressed()
     }
 
     private fun setDataToAdapter(arryListCity: List<Product>) {
@@ -84,10 +74,6 @@ class NewOrderAddProductFragment : Fragment() {
         bindingAddProduct.recyclerViewProductCatList.setNestedScrollingEnabled(false);
 
 
-
-
-
-
         activity?.let {
             RecyclerItemClickListenr(it, bindingAddProduct.recyclerViewProductCatList, object : RecyclerItemClickListenr.OnItemClickListener {
 
@@ -95,11 +81,9 @@ class NewOrderAddProductFragment : Fragment() {
 
                     productPOJO= arryListCity!!.get(position);
                     Toast.makeText(activity,""+ productPOJO!!.product_name, Toast.LENGTH_SHORT).show()
-                    showProductQuantityDialog(productPOJO)
+                    //showProductQuantityDialog(productPOJO)
                 }
-
                 override fun onItemLongClick(view: View?, position: Int) {
-                    TODO("do nothing")
                 }
             })
         }?.let {
@@ -109,7 +93,7 @@ class NewOrderAddProductFragment : Fragment() {
         }
     }
 
-    private fun showProductQuantityDialog(productPOJO: Product?) {
+    /*private fun showProductQuantityDialog(productPOJO: Product?) {
         val dialog = activity?.let { Dialog(it, R.style.Theme_Dialog) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(false)
@@ -134,6 +118,6 @@ class NewOrderAddProductFragment : Fragment() {
         arryListproductSelected!!.add(productSelected!!)
         Log.e("Product dialog: ",""+ arryListproductSelected!!.size)
         dialog.dismiss()
-    }
+    }*/
 
 }

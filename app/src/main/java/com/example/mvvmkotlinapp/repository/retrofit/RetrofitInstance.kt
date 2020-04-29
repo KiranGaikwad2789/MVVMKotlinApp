@@ -1,6 +1,5 @@
 package com.example.mvvmkotlinapp.repository.retrofit
 
-import com.example.mvvmkotlinapp.app.AppController
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

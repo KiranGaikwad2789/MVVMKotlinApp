@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.databinding.FragmentNewOrderBinding
+import com.example.mvvmkotlinapp.interfaces.DrawerLocker
 import com.example.mvvmkotlinapp.model.NewOrderModel
 import com.example.mvvmkotlinapp.repository.room.Distributor
 import com.example.mvvmkotlinapp.repository.room.Outlet
@@ -45,6 +47,9 @@ class NewOrderFragment : Fragment() {
         newOrderDataBinding.order=newOrderModel
 
         (getActivity() as HomePageActivity?)?.visibleMenuItems(4)
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+        (activity as DrawerLocker?)!!.setDrawerEnabled(true)
+
         newOrderViewModel!!.anotherClass(this)
 
 

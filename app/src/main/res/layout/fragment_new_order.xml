@@ -14,126 +14,136 @@
             type="com.example.mvvmkotlinapp.viewmodel.NewOrderViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_100sdp"
-            android:padding="@dimen/_6sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent">
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout2"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:errorEnabled="true"
-                app:error="@{newOrderViewModel.errorRouteName}"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_100sdp"
+                android:padding="@dimen/_6sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteRouteName"
-                    android:layout_width="match_parent"
-                    android:layout_height="51dp"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:hint="@string/route"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:text="@={order.routeName}" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout6"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                app:errorEnabled="true"
-                app:error="@{newOrderViewModel.errorOutletName}"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteOutletName"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:hint="@string/outlet"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:enabled="false"
-                    android:text="@={order.outletName}"
-                    android:layout_margin="@dimen/_5sdp" />
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:errorEnabled="true"
+                    app:error="@{newOrderViewModel.errorRouteName}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteRouteName"
+                        android:layout_width="match_parent"
+                        android:layout_height="51dp"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:hint="@string/route"
+                        android:imeOptions="actionNext"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:text="@={order.routeName}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout7"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                app:errorEnabled="true"
-                app:error="@{newOrderViewModel.errorDistName}"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
 
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteDistName"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout6"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:hint="@string/dist"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:text="@={order.distributorName}"
-                    android:layout_margin="@dimen/_5sdp" />
+                    android:layout_marginTop="8dp"
+                    app:errorEnabled="true"
+                    app:error="@{newOrderViewModel.errorOutletName}"
+                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+                    app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteOutletName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/outlet"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:enabled="false"
+                        android:imeOptions="actionNext"
+                        android:text="@={order.outletName}"
+                        android:layout_margin="@dimen/_5sdp" />
 
-            <CheckBox
-                android:id="@+id/chkNewLeadOrder"
-                android:layout_width="match_parent"
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout7"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    app:errorEnabled="true"
+                    app:error="@{newOrderViewModel.errorDistName}"
+                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
+                    app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteDistName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/dist"
+                        android:imeOptions="actionDone"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:text="@={order.distributorName}"
+                        android:layout_margin="@dimen/_5sdp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/chkNewLeadOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="New Lead Order"
+                    android:onCheckedChanged="@{(compoundButton, checked) ->newOrderViewModel.onCheckedChange(compoundButton, checked)}"
+                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout7"
+                    app:layout_constraintStart_toStartOf="@+id/textInputLayout7"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btnOrderPlace"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="New Lead Order"
-                android:onCheckedChanged="@{(compoundButton, checked) ->newOrderViewModel.onCheckedChange(compoundButton, checked)}"
-                app:layout_constraintEnd_toEndOf="@+id/textInputLayout7"
-                app:layout_constraintStart_toStartOf="@+id/textInputLayout7"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout7"
-                />
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:text="Process to order"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:onClick="@{() -> newOrderViewModel.onNewOrderClicked(order)}"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/drw_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLogin" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/btnOrderPlace"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:text="Process to order"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:onClick="@{() -> newOrderViewModel.onNewOrderClicked(order)}"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/drw_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLogin" />
+    </androidx.core.widget.NestedScrollView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

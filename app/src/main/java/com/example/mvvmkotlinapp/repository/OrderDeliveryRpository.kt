@@ -6,6 +6,9 @@ import com.example.mvvmkotlinapp.repository.room.dao.DistributorDao
 import com.example.mvvmkotlinapp.repository.room.dao.MasterProductOrderDao
 import com.example.mvvmkotlinapp.repository.room.dao.OutletDao
 import com.example.mvvmkotlinapp.repository.room.dao.ProductOrderDao
+import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
+import io.reactivex.Single
+import java.util.concurrent.Callable
 
 class OrderDeliveryRpository  (application: Application){
 
@@ -23,7 +26,7 @@ class OrderDeliveryRpository  (application: Application){
         productOrderDao = database?.productOrderDao()
     }
 
-    fun getOrderDeliveryList() = masterProductOrderDao?.getAllMasterProductOrders()
+    fun getOrderDeliveryList(orderStatus:String) = masterProductOrderDao?.getAllMasterProductOrders(orderStatus)
 
     fun getOutletNameFromID(outeletId:String) = outletDao?.getOutletNameFromID(outeletId)!!
 
@@ -31,5 +34,13 @@ class OrderDeliveryRpository  (application: Application){
 
     fun getOrderedProductList(masterProductOrderId:Int) = productOrderDao?.getOrderedProductList(masterProductOrderId)
 
+    fun updateMasterProductOrderToDeliver(uid: Int,
+                                          OrderDeliveredDate: String,
+                                          orderStatus: String,
+                                          orderTotalQuantity: Int?): Single<Int>? {
+        return Single.fromCallable(
+            Callable<Int> {  masterProductOrderDao?.updateMasterProductOrderToDeliver(uid, OrderDeliveredDate, orderStatus, orderTotalQuantity) }
+        )
+    }
 
 }

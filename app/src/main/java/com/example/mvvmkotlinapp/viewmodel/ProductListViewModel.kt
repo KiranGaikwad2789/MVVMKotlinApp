@@ -41,6 +41,7 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
 
         for (product in arrayList!!) {
             insertSelectedProducts1(product)
+            repository.updateProductSelectedQuantity(product.product_id,true, product.product_quantity)
         }
     }
 
@@ -59,19 +60,22 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
                 ?.subscribeWith(object : DisposableSingleObserver<Long>() {
                     override fun onSuccess(masterOrderID: Long) {
                         var status="Pending"
-                        repository.updateProductMasterProductID(arryListProductCart,masterOrderID?.toInt(),status)
+                        //repository.updateProductMasterProductID(arryListProductCart,masterOrderID?.toInt(),status)
                         //updateProductMasterProductID(arryListProductCart, masterOrderID?.toInt(),status)
 
-                        resultMasterProductOrder.setValue(masterOrderID)
+                        resultMasterProductOrder.postValue(masterOrderID)
                     }
                     override fun onError(e: Throwable) {
-                        resultMasterProductOrder.setValue(0)
+                        resultMasterProductOrder.postValue(0)
                         Log.e("ViewModel product error", e.message)
                     }
                 })!!
         )
         return resultMasterProductOrder
     }
+
+    fun updateProductMasterProductID(arryListProductCart: ArrayList<ProductOrderModel>?, it: Int?, status: String) =repository.updateProductMasterProductID(arryListProductCart,it,status)
+
 
 
     public var status = MutableLiveData<String?>()
@@ -97,11 +101,10 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun updateProductCart(productSelected: ProductOrderModel) =repository.updateProductCart(productSelected)
 
-    //fun updateProductMasterProductID(arryListProductCart: ArrayList<ProductOrderModel>?, it: Int?, status: String) =repository.updateProductMasterProductID(arryListProductCart,it,status)
-
 
     fun removeProductCart(productCartId: Int) =repository.removeProductCart(productCartId)
 
+    fun updateProductSelectedQuantity(product_id: Int?, product_isSelected: Boolean?, product_quantity: Int?) =repository.updateProductSelectedQuantity(product_id,product_isSelected,product_quantity)
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

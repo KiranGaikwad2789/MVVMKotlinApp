@@ -220,19 +220,19 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        val ctc1 = Product(1,"Pasta Sauce", 1,1,1,1,96.00,"Parle-G","1")
-        val ctc2 = Product(2,"Salsa", 1,1,1,1,96.00,"Parle-G","1")
-        val ctc3 = Product(3,"Facial tissue", 1,1,1,1,240.00,"Parle-G","1")
+        val ctc1 = Product(1,"Pasta Sauce", 1,1,1,1,96.00,"Parle-G","1",false,0)
+        val ctc2 = Product(2,"Salsa", 1,1,1,1,96.00,"Parle-G","1",false,0)
+        val ctc3 = Product(3,"Facial tissue", 1,1,1,1,240.00,"Parle-G","1",false,0)
 
-        val ctc4 = Product(4,"Peanut Buttor 125 ML", 2,1,1,1,224.00,"Parle-G","1")
-        val ctc5 = Product(5,"Shrikhand 125Ml", 2,1,1,1,224.00,"Parle-G","1")
+        val ctc4 = Product(4,"Peanut Buttor 125 ML", 2,1,1,1,224.00,"Parle-G","1",false,0)
+        val ctc5 = Product(5,"Shrikhand 125Ml", 2,1,1,1,224.00,"Parle-G","1",false,0)
 
 
-        val ctc6 = Product(6,"Lotion", 4,1,1,1,128.00,"Parle-G","1")
-        val ctc7 = Product(7,"Baby wash", 4,1,1,1,128.00,"Parle-G","1")
+        val ctc6 = Product(6,"Lotion", 4,1,1,1,128.00,"Parle-G","1",false,0)
+        val ctc7 = Product(7,"Baby wash", 4,1,1,1,128.00,"Parle-G","1",false,0)
 
-        val ctc8 = Product(8,"mini cone buttor scotch", 5,1,1,1,144.00,"Parle-G","1")
-        val ctc9 = Product(9,"Big cone black currant", 5,1,1,1,384.00,"Parle-G","1")
+        val ctc8 = Product(8,"mini cone buttor scotch", 5,1,1,1,144.00,"Parle-G","1",false,0)
+        val ctc9 = Product(9,"Big cone black currant", 5,1,1,1,384.00,"Parle-G","1",false,0)
 
         var arrayListProduct= ArrayList<Product>()
 
@@ -266,7 +266,8 @@ class LoginActivity : AppCompatActivity() {
 
         val list = listOf<String>(
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE
         )
 
         // Initialize a new instance of ManagePermissions class

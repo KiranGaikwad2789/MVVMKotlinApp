@@ -34,6 +34,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:fitsSystemWindows="true"
+                android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
                 app:headerLayout="@layout/nav_header_product_list" />
 
         </androidx.drawerlayout.widget.DrawerLayout>

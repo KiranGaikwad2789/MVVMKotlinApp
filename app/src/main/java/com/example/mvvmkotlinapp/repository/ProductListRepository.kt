@@ -22,8 +22,6 @@ class ProductListRepository (application: Application){
     private var productOrderDao: ProductOrderDao? = null
     private var masterProductOrderDao: MasterProductOrderDao? = null
 
-
-
     var database: AppDatabase? =null
 
     init {
@@ -55,6 +53,12 @@ class ProductListRepository (application: Application){
                 Log.e("productCart data: ",""+ productCart)
                 productOrderDao?.updateProductMasterProductID(productCart.uid,masterOrderID,status)
             }
+        }
+    }
+
+    fun updateProductSelectedQuantity(product_id: Int?, product_isSelected: Boolean?, product_quantity: Int?){
+        doAsync {
+            productDao?.updateProductSelectedQuantity(product_id,product_isSelected,product_quantity)
         }
     }
 

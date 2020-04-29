@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentHomePageBinding
+import com.example.mvvmkotlinapp.interfaces.DrawerLocker
 import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
 import com.example.mvvmkotlinapp.view.adapter.HomePageAdapter
@@ -77,6 +79,10 @@ class HomePageFragment : Fragment() {
         homePageViewModel!!.anotherClass(this)
         userSession=UserSession(activity)
         homePageBinding.txtLocation.text= userSession!!.getCurrentCity()
+
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+        (activity as DrawerLocker?)!!.setDrawerEnabled(true)
+
     }
 
 

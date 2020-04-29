@@ -11,10 +11,9 @@ data class User(
     @ColumnInfo(name = "address") var address: String? =null,
     @ColumnInfo(name = "email") var email: String? =null,
     @ColumnInfo(name = "password") var password: String? =null,
-    @ColumnInfo(name = "city") var city: String? =null):MasterResponseModel(){
+    @ColumnInfo(name = "city") var city: String? =null,
+    @ColumnInfo(name = "IMEI") var IMEI: String? =null,
+    @ColumnInfo(name = "androidID") var androidID: String? =null):MasterResponseModel(){
 
-        constructor() : this( 0,username = null, mobilenumber = null,
-            address = null,
-            email = null,
-            password = null, city=null)
+        constructor() : this( 0,username = null, mobilenumber = null, address = null, email = null, password = null, city=null,IMEI=null,androidID=null)
 }

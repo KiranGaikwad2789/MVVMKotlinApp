@@ -7,13 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.ActivityHomePageBinding
+import com.example.mvvmkotlinapp.interfaces.DrawerLocker
 import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.OrderDeliveryFragment
 import com.example.mvvmkotlinapp.viewmodel.HomeMainViewModel
@@ -22,12 +23,12 @@ import kotlinx.android.synthetic.main.app_bar_home_page.*
 import kotlinx.android.synthetic.main.nav_header_home_page.view.*
 
 
-class HomePageActivity : AppCompatActivity() {
+class HomePageActivity : AppCompatActivity(), DrawerLocker {
 
     private var binding: ActivityHomePageBinding? = null
     private var homeMainViewModel: HomeMainViewModel? = null
     private var userSession: UserSession? =null
-
+    var toggle: ActionBarDrawerToggle? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,8 @@ class HomePageActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home_page)
         binding?.lifecycleOwner = this
         binding?.homeModel=homeMainViewModel
+
+
     }
 
     private fun initializeObjects() {
@@ -50,9 +53,9 @@ class HomePageActivity : AppCompatActivity() {
         homeMainViewModel!!.anotherClass(this)
         userSession=UserSession(this)
 
-        val toggle = ActionBarDrawerToggle(this, binding?.drawerLayout, toolbar, 0, 0)
-        binding?.drawerLayout!!.addDrawerListener(toggle)
-        toggle.syncState()
+        toggle = ActionBarDrawerToggle(this, binding?.drawerLayout, toolbar, 0, 0)
+        binding?.drawerLayout!!.addDrawerListener(toggle!!)
+        toggle!!.syncState()
 
         binding!!.navigation!!.isItemHorizontalTranslationEnabled = true
         binding!!.navigation.labelVisibilityMode= LABEL_VISIBILITY_LABELED
@@ -60,8 +63,15 @@ class HomePageActivity : AppCompatActivity() {
         val headerView = binding!!.navView.getHeaderView(0)
         headerView.txtUserName.text = userSession!!.getUsername()
         headerView.txtAppVersion.text = userSession!!.getEmail()
+
+
     }
 
+    override fun setDrawerEnabled(enabled: Boolean) {
+        val lockMode = if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+        binding?.drawerLayout?.setDrawerLockMode(lockMode)
+        toggle!!.isDrawerIndicatorEnabled=enabled
+    }
 
 
 
@@ -97,7 +107,7 @@ class HomePageActivity : AppCompatActivity() {
                 for (fragment in fragments) {
                     Log.e("fragment ",""+fragment)
                     if (fragment != null && fragment.isVisible){
-                        if ((fragment.javaClass.simpleName).equals("OrderDeliveryDetailsFragment")){
+                        if ((fragment.javaClass.simpleName).equals("OrderDeliveryDetailsFragment") || (fragment.javaClass.simpleName).equals("MyDeliveredOrdersFragment")){
                             loadFragment(OrderDeliveryFragment())
                         }else{
                             visibleMenuItems(0)

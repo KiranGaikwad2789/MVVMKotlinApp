@@ -59,8 +59,9 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
 
 
     fun onLoginClicked(user: User) {
+
         user.city=strCityName
-        Log.e("register usernmae",""+user)
+        Log.e("register user details",""+user)
 
         if (user.username.equals("")) {
             errorUserName.setValue("Enter UserName")

@@ -18,4 +18,11 @@ interface ProductDao {
 
     @Query("DELETE FROM Product")
     fun deleteProductTable()
+
+    @Query("UPDATE Product SET product_isSelected=:product_isSelected,product_quantity=:product_quantity WHERE product_id =:product_id")
+    fun updateProductSelectedQuantity(
+        product_id: Int?,
+        product_isSelected: Boolean?,
+        product_quantity: Int?
+    )
 }

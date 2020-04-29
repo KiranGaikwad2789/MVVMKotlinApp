@@ -1,14 +1,10 @@
 package com.example.mvvmkotlinapp.view.adapter
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -17,9 +13,7 @@ import com.example.mvvmkotlinapp.BR
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.databinding.RowProductCartListBinding
 import com.example.mvvmkotlinapp.model.ProductOrderModel
-import com.example.mvvmkotlinapp.repository.room.tables.Product
 import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
-import com.google.android.material.textfield.TextInputEditText
 
 class ProductCartListAdapter (private val context: Context, private val arrayListProduct: List<ProductOrderModel>?) : RecyclerView.Adapter<ProductCartListAdapter.ViewHolder>(){
 
@@ -70,13 +64,12 @@ class ProductCartListAdapter (private val context: Context, private val arrayLis
         else if (flag=="minus")
          productQuantity= productPOJO.product_quantity!!.toInt()-1
 
-        Log.e("current Product: ",""+ productPOJO)
         var productSelected= ProductOrderModel(productPOJO.uid,productPOJO.master_product_orderid,productPOJO?.product_id,
             productPOJO?.product_name,productPOJO?.prod_cat_id,productPOJO?.route_id,productPOJO?.outlet_id,
             productPOJO?.dist_id, productPOJO?.product_price?.toDouble()!!,productQuantity* productPOJO?.product_price?.toDouble()!!,productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status)
-        Log.e("current Product update: ",""+ productSelected)
 
         productListViewModel.updateProductCart(productSelected)
+        productListViewModel.updateProductSelectedQuantity(productPOJO.product_id,true,productQuantity)
         notifyDataSetChanged()
     }
 
@@ -90,6 +83,7 @@ class ProductCartListAdapter (private val context: Context, private val arrayLis
         //performing positive action
         builder.setPositiveButton("Yes"){dialogInterface, which ->
             productListViewModel.removeProductCart(productPOJO.uid)
+            productListViewModel.updateProductSelectedQuantity(productPOJO.product_id,false,0)
             notifyDataSetChanged()
             dialogInterface.dismiss()
         }

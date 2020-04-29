@@ -42,6 +42,10 @@ class ProductCartFragment : Fragment() {
     var orderModel: NewOrderModel? =null
     private var userSession: UserSession? =null
 
+    companion object {
+        var arryListproductSelected: ArrayList<ProductOrderModel>? = null
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,6 +57,7 @@ class ProductCartFragment : Fragment() {
 
         currentDate= DateTime()
         userSession=UserSession(activity)
+        arryListproductSelected= ArrayList<ProductOrderModel>()
 
         val viewProductNav = activity!!.findViewById<View>(R.id.navigationProduct)
         viewProductNav.visibility=View.VISIBLE
@@ -70,6 +75,7 @@ class ProductCartFragment : Fragment() {
             productListViewModel.getSelectedProductList()?.observe(it, Observer<List<ProductOrderModel>> {
                 Log.e("Product cart list ",""+it.size)
                 arryListProductCart?.addAll(it)
+                arryListproductSelected!!.addAll(it)
                 this.setDataToAdapter(it)
             })
         }
@@ -120,9 +126,9 @@ class ProductCartFragment : Fragment() {
             val outletNameSplit = orderModel?.outletName?.split(delimiter)
             val distNameSplit = orderModel?.distributorName?.split(delimiter)
 
-            var orserMasterID= userSession?.getUserId() +"_"+ currentDate!!.orderDateFormater()
+            var orserMasterID= userSession?.getUserId() +""+ currentDate!!.orderDateFormater()
 
-            var masterProductOrder= MasterProductOrder(orserMasterID.toInt(),
+            var masterProductOrder= MasterProductOrder(0,
                 commaSeperatedString,
                 routeNameSplit?.get(1)?.toInt(),
                 outletNameSplit?.get(1)?.toInt(),
@@ -134,6 +140,11 @@ class ProductCartFragment : Fragment() {
 
             activity?.let {
                 productListViewModel?.addNewMasterProductOrder(masterProductOrder,arryListProductCart)?.observe(it, Observer<Long?> {
+
+                    var status="Pending"
+                    productListViewModel.updateProductMasterProductID(arryListProductCart,
+                        it?.toInt(),status)
+
                     dialogInterface.dismiss()
                 })
                 //productListViewModel.resultMasterProductOrder.value = null

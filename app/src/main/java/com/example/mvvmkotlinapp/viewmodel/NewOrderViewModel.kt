@@ -39,7 +39,7 @@ class NewOrderViewModel(application: Application) : AndroidViewModel(application
 
     fun onNewOrderClicked(order:NewOrderModel){
 
-     /*   var intent= Intent(context,ProductListActivity::class.java)
+       /* var intent= Intent(context,ProductListActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent)*/
 

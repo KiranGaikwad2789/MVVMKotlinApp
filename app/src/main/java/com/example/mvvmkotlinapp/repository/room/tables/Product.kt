@@ -35,5 +35,7 @@ data class Product(@PrimaryKey(autoGenerate = true) @ColumnInfo(name = "product_
                    @ColumnInfo(name = "dist_id") var dist_id: Int? =0,
                    @ColumnInfo(name = "product_price") var product_price: Double? =0.0,
                    @ColumnInfo(name = "product_compony") var product_compony: String? =null,
-                   @ColumnInfo(name = "status") var status: String? =null) {
+                   @ColumnInfo(name = "status") var status: String? =null,
+                   @ColumnInfo(name = "product_isSelected") var product_isSelected: Boolean? =false,
+                   @ColumnInfo(name = "product_quantity") var product_quantity: Int? =0) {
 }

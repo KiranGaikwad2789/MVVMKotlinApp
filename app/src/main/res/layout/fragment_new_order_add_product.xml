@@ -30,7 +30,6 @@
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
             app:errorEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -48,18 +47,23 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginBottom="@dimen/_50sdp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toTopOf="@+id/btnAddProductToCart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewProductCatList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/_10sdp" />
+                android:padding="@dimen/_10sdp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.core.widget.NestedScrollView>
 
@@ -77,8 +81,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,11 +1,15 @@
 package com.example.mvvmkotlinapp.view.fragmets.homefragments
 
+import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,6 +25,8 @@ import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.adapter.OrderedProductsListAdapter
 import com.example.mvvmkotlinapp.viewmodel.OrderDeliveryViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -62,7 +68,7 @@ class OrderDeliveryDetailsFragment(var masterProductOrder: MasterProductOrder) :
         }
 
         binding.txtCompleteDeliverOrder.setOnClickListener {
-
+            showOrderDeliveredDateDialog()
         }
 
         return view
@@ -95,6 +101,59 @@ class OrderDeliveryDetailsFragment(var masterProductOrder: MasterProductOrder) :
         binding.recyclerProductCartList.adapter = adapter
         binding.recyclerProductCartList.layoutManager = LinearLayoutManager(activity)
         binding.recyclerProductCartList.setNestedScrollingEnabled(false);
+    }
+
+    private fun showOrderDeliveredDateDialog() {
+
+        val dialog = activity?.let { Dialog(it, R.style.Theme_Dialog) }
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setCancelable(false)
+        dialog?.setContentView(R.layout.dialog_order_deliver_date)
+
+
+        val edtOrderDeliveredDate = dialog?.findViewById(R.id.edtOrderDeliveredDate) as TextView
+        edtOrderDeliveredDate.setPaintFlags(edtOrderDeliveredDate.getPaintFlags())
+
+
+        val txtUpdateDeliveredDate = dialog?.findViewById(R.id.txtUpdateDeliveredDate) as TextView
+        val txtCancelDialog = dialog?.findViewById(R.id.txtCancelDialog) as TextView
+
+        edtOrderDeliveredDate.text = SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis())
+
+        var cal = Calendar.getInstance()
+
+        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, monthOfYear)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            val myFormat = "yyyy-MM-dd" // mention the format you need
+            val sdf = SimpleDateFormat(myFormat, Locale.US)
+            var selectedDate:String = sdf.format(cal.time)
+            edtOrderDeliveredDate.text=selectedDate
+        }
+        edtOrderDeliveredDate.setOnClickListener {
+            activity?.let { it1 ->
+                DatePickerDialog(
+                    it1, dateSetListener,
+                    cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH),
+                    cal.get(Calendar.DAY_OF_MONTH)).show()
+            }
+        }
+
+        txtUpdateDeliveredDate.setOnClickListener {
+            activity?.let {
+                var orderStatus="Deliver"
+               orderDeliveryViewModel?.updateMasterProductOrderToDeliver(masterProductOrder.uid, edtOrderDeliveredDate.text.toString(),orderStatus,masterProductOrder.order_total_quantity)?.observe(it, Observer<Int?> {
+                    Log.e("Update id",""+it)
+               })
+                orderDeliveryViewModel.resultMasterProductOrder.value = null
+                dialog.dismiss()
+           }
+        }
+        txtCancelDialog.setOnClickListener { dialog .dismiss() }
+        dialog?.show()
     }
 
 }
