@@ -66,7 +66,8 @@ class ProductCartListAdapter (private val context: Context, private val arrayLis
 
         var productSelected= ProductOrderModel(productPOJO.uid,productPOJO.master_product_orderid,productPOJO?.product_id,
             productPOJO?.product_name,productPOJO?.prod_cat_id,productPOJO?.route_id,productPOJO?.outlet_id,
-            productPOJO?.dist_id, productPOJO?.product_price?.toDouble()!!,productQuantity* productPOJO?.product_price?.toDouble()!!,productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status)
+            productPOJO?.dist_id, productPOJO?.product_price?.toDouble()!!,productQuantity* productPOJO?.product_price?.toDouble()!!,
+            productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status,productPOJO.product_delivered_quantity)
 
         productListViewModel.updateProductCart(productSelected)
         productListViewModel.updateProductSelectedQuantity(productPOJO.product_id,true,productQuantity)

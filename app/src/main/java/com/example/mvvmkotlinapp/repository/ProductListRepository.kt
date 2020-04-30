@@ -56,6 +56,12 @@ class ProductListRepository (application: Application){
         }
     }
 
+    fun updateShortCloseDeliveredQuantity(product_id: Int?, productdeliveredQuantity: Int?){
+        doAsync {
+            productOrderDao?.updateShortCloseDeliveredQuantity(product_id,productdeliveredQuantity)
+        }
+    }
+
     fun updateProductSelectedQuantity(product_id: Int?, product_isSelected: Boolean?, product_quantity: Int?){
         doAsync {
             productDao?.updateProductSelectedQuantity(product_id,product_isSelected,product_quantity)

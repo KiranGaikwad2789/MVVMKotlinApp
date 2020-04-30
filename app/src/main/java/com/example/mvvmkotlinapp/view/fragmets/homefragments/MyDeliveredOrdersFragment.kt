@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.mvvmkotlinapp.R
+import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
 import com.example.mvvmkotlinapp.databinding.FragmentMyDeliveredOrdersBinding
 import com.example.mvvmkotlinapp.databinding.FragmentOrderDeliveryBinding
@@ -30,6 +31,7 @@ class MyDeliveredOrdersFragment : Fragment() {
     lateinit var binding: FragmentMyDeliveredOrdersBinding
     private var adapter: OrderDeliveryListAdapter? = null
     private var masterProductOrderPOJO: MasterProductOrder? = null
+    private var currentDate: DateTime? =null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -41,10 +43,10 @@ class MyDeliveredOrdersFragment : Fragment() {
 
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
         (getActivity() as HomePageActivity?)?.visibleMenuItems(5)
-        // Inflate the layout for this fragment
+        currentDate= DateTime()
 
         activity?.let {
-            orderDeliveryViewModel?.getOrderDeliveryList("Deliver")?.observe(it, Observer<List<MasterProductOrder>> {
+            orderDeliveryViewModel?.getOrderDeliveryList("Deliver","ShortClose")?.observe(it, Observer<List<MasterProductOrder>> {
                 Log.e("order list ",""+it.size)
                 setDataToAdapter(it)
             })

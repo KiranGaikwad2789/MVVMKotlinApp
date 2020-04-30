@@ -32,7 +32,11 @@ interface ProductOrderDao {
     fun updateProductMasterProductID(
         productCart: Int,
         masterOrderID: Int?,
-        status: String
-    )
+        status: String)
+
+    @Query("UPDATE ProductOrderModel SET product_delivered_quantity=:productdeliveredQuantity WHERE uid =:product_id")
+    fun updateShortCloseDeliveredQuantity(
+        product_id: Int?,
+        productdeliveredQuantity: Int?)
 
 }

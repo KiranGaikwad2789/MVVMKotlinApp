@@ -76,6 +76,7 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun updateProductMasterProductID(arryListProductCart: ArrayList<ProductOrderModel>?, it: Int?, status: String) =repository.updateProductMasterProductID(arryListProductCart,it,status)
 
+    fun updateShortCloseDeliveredQuantity(product_id: Int?, productdeliveredQuantity: Int?) =repository.updateShortCloseDeliveredQuantity(product_id,productdeliveredQuantity)
 
 
     public var status = MutableLiveData<String?>()

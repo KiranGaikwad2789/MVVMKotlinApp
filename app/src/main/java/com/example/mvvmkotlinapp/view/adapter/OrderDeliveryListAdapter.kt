@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -83,6 +84,11 @@ class OrderDeliveryListAdapter(private val context: Context, private var arrayLi
         holder.txtOrderuid.text="Order Id: "+arrayListProduct!!.get(position).uid.toString()
         holder.txtOrderTotal.text=arrayListProduct!!.get(position).order_total_price.toString()
         holder.txtOrderproducts.text=arrayListProduct!!.get(position).order_total_quantity.toString()
+
+        if(arrayListProduct!!.get(position).order_status.equals("Deliver")){
+            holder.linearDeliveredDate.visibility=View.VISIBLE
+            holder.txtOrderDeliveredDateTime.text=arrayListProduct!!.get(position).order_deliver_date
+        }
     }
 
     override fun getItemCount(): Int {
@@ -100,9 +106,10 @@ class OrderDeliveryListAdapter(private val context: Context, private var arrayLi
         var txtOrderDateTime: TextView
         var txtOrderTotal: TextView
         var txtOrderproducts: TextView
+        var txtOrderDeliveredDateTime: TextView
+        var linearDeliveredDate: LinearLayout
 
         init {
-
             txtOrderStatus = itemView.findViewById(R.id.txtOrderStatus) as TextView
             txtOrderDate = itemView.findViewById(R.id.txtOrderDate) as TextView
             txtOrderoutletId = itemView.findViewById(R.id.txtOrderoutletId) as TextView
@@ -111,6 +118,10 @@ class OrderDeliveryListAdapter(private val context: Context, private var arrayLi
             txtOrderDateTime = itemView.findViewById(R.id.txtOrderDateTime) as TextView
             txtOrderTotal = itemView.findViewById(R.id.txtOrderTotal) as TextView
             txtOrderproducts = itemView.findViewById(R.id.txtOrderproducts) as TextView
+            txtOrderDeliveredDateTime = itemView.findViewById(R.id.txtOrderDeliveredDateTime) as TextView
+            linearDeliveredDate = itemView.findViewById(R.id.linearDeliveredDate) as LinearLayout
+
+
 
         }
 

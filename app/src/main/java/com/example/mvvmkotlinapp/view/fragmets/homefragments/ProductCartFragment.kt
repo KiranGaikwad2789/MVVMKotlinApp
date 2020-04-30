@@ -134,7 +134,7 @@ class ProductCartFragment : Fragment() {
                 outletNameSplit?.get(1)?.toInt(),
                 distNameSplit?.get(1)?.toInt(),totalPrice,totalProductQuantity,
                 currentDate?.getDateTime(),"Pending", arryListProductCart?.size,null,null,
-                0,0.0,0)
+                0,0.0,0,0.0)
 
             Log.e("masterProductOrder: ",""+ masterProductOrder)
 
@@ -142,8 +142,7 @@ class ProductCartFragment : Fragment() {
                 productListViewModel?.addNewMasterProductOrder(masterProductOrder,arryListProductCart)?.observe(it, Observer<Long?> {
 
                     var status="Pending"
-                    productListViewModel.updateProductMasterProductID(arryListProductCart,
-                        it?.toInt(),status)
+                    productListViewModel.updateProductMasterProductID(arryListProductCart, it?.toInt(),status)
 
                     dialogInterface.dismiss()
                 })

@@ -80,7 +80,14 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/colorGrey"
-                android:text="0"/>
+                android:text="@{orderedProducts.product_delivered_quantity.toString()}"/>
+
+            <ImageView
+                android:id="@+id/imgEditProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_edit"/>
 
         </LinearLayout>
 

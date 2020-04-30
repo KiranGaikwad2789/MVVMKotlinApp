@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.mvvmkotlinapp.model.ProductOrderModel
 import com.example.mvvmkotlinapp.repository.OrderDeliveryRpository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +18,7 @@ class OrderDeliveryViewModel(application: Application) : AndroidViewModel(applic
     public var resultMasterProductOrder = MutableLiveData<Int?>()
 
 
-    fun getOrderDeliveryList(orderStatus:String) = repository.getOrderDeliveryList(orderStatus)
+    fun getOrderDeliveryList(orderStatus:String,orderStatus1:String) = repository.getOrderDeliveryList(orderStatus,orderStatus1)
 
     fun getOutletNameFromID(outeletId:String) = repository.getOutletNameFromID(outeletId)
 
@@ -25,10 +26,12 @@ class OrderDeliveryViewModel(application: Application) : AndroidViewModel(applic
 
     fun getOrderedProductList(masterProductOrderId:Int) = repository.getOrderedProductList(masterProductOrderId)
 
+    fun updateShortCloseDeliveredQuantity(arryListProducts:List<ProductOrderModel>) =repository.updateShortCloseDeliveredQuantity(arryListProducts)
 
-    fun updateMasterProductOrderToDeliver(uid: Int, OrderDeliveredDate: String, orderStatus: String, orderTotalQuantity: Int?): MutableLiveData<Int?> {
 
-        disposable.add(repository.updateMasterProductOrderToDeliver(uid, OrderDeliveredDate, orderStatus, orderTotalQuantity)
+    fun updateMasterProductOrderToDeliver(uid: Int, OrderDeliveredDate: String, orderStatus: String, orderTotalQuantity: Int?,order_total_price:Double?): MutableLiveData<Int?> {
+
+        disposable.add(repository.updateMasterProductOrderToDeliver(uid, OrderDeliveredDate, orderStatus, orderTotalQuantity,order_total_price)
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribeWith(object : DisposableSingleObserver<Int>() {

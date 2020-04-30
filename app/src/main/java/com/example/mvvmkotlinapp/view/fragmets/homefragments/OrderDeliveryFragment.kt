@@ -51,7 +51,7 @@ class OrderDeliveryFragment : Fragment() {
 
 
         activity?.let {
-            orderDeliveryViewModel?.getOrderDeliveryList("Pending")?.observe(it, Observer<List<MasterProductOrder>> {
+            orderDeliveryViewModel?.getOrderDeliveryList("Pending","Pending,ShortClose")?.observe(it, Observer<List<MasterProductOrder>> {
                 Log.e("order list ",""+it.size)
                 setDataToAdapter(it)
             })

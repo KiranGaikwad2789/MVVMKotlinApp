@@ -40,10 +40,11 @@ data class ProductOrderModel(@PrimaryKey(autoGenerate = true) val uid: Int,
                         @ColumnInfo(name = "product_total_price") var product_total_price: Double? =0.0,
                         @ColumnInfo(name = "product_quantity") var product_quantity: Int? =0,
                         @ColumnInfo(name = "product_compony") var product_compony: String? =null,
-                        @ColumnInfo(name = "status") var status: String? =null) {
+                        @ColumnInfo(name = "status") var status: String? =null,
+                        @ColumnInfo(name = "product_delivered_quantity") var product_delivered_quantity: Int? =0) {
 
     constructor() : this(0,0,product_id=0,product_name = null,prod_cat_id=0,route_id=0,outlet_id=0,dist_id=0, product_price = 0.0,product_total_price=0.0,
         product_quantity = 0,
         product_compony = null,
-        status = null)
+        status = null,product_delivered_quantity=0)
 }

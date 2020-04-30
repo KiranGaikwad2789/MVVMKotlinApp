@@ -72,6 +72,9 @@
 
     <string name="dist">Enter distributor name</string>
 
+    <string name="shortdelivery_title">Alert</string>
+    <string name="shortdelivery_message">Please input correct delivered quantity against the respective product and then click on confirm shortclose.</string>
+
 
     <string-array name="countries_array">
         <item>India</item>

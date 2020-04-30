@@ -90,6 +90,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearDeliveredDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/_5sdp"
@@ -97,6 +98,7 @@
                 android:layout_marginRight="@dimen/_5sdp"
                 android:weightSum="10"
                 android:gravity="center"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
 
