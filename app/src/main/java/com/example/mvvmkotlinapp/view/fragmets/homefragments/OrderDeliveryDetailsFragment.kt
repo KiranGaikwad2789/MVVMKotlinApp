@@ -205,6 +205,7 @@ class OrderDeliveryDetailsFragment(var masterProductOrder: MasterProductOrder) :
                     orderDeliveryViewModel.resultMasterProductOrder.value = null
                     dialog.dismiss()
                 }
+
             }else if (orderStatus.equals("ShortClose")){
 
                 var status="Pending,ShortClose"
@@ -216,6 +217,7 @@ class OrderDeliveryDetailsFragment(var masterProductOrder: MasterProductOrder) :
                     orderDeliveryViewModel.resultMasterProductOrder.value = null
                     dialog.dismiss()
                 }
+
             }else if(orderStatus.equals("ConfirmShortClose")){
                 //Change date and update delivery date
 
@@ -236,6 +238,7 @@ class OrderDeliveryDetailsFragment(var masterProductOrder: MasterProductOrder) :
     }
 
     fun effect(){
+
       var anim: ObjectAnimator= ObjectAnimator.ofInt(binding.txtOrderPlacedMessage, "backgroundColor", Color.WHITE, Color.YELLOW, Color.GREEN);
       anim.setDuration(1500);
       anim.setEvaluator(ArgbEvaluator());
