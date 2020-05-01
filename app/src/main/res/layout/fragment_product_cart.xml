@@ -38,16 +38,16 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
                     android:layout_margin="@dimen/_5sdp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:textColor="@color/colorDarkGrey"
                         android:text="Distributor Name : "/>
 
                     <TextView
                         android:id="@+id/txtDistributorName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:layout_weight="5"
@@ -63,16 +63,16 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
                     android:layout_margin="@dimen/_5sdp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:textColor="@color/colorDarkGrey"
                         android:text="Outlet Name : "/>
 
                     <TextView
                         android:id="@+id/txtOutletName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:layout_weight="5"
@@ -88,16 +88,16 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
                     android:layout_margin="@dimen/_5sdp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:textColor="@color/colorDarkGrey"
                         android:text="Order Date : "/>
 
                     <TextView
                         android:id="@+id/txtOrderDate"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:layout_weight="5"
@@ -185,6 +185,7 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
                     android:textStyle="bold"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:paddingLeft="@dimen/_10sdp"
                     android:textColor="@color/colorGrey"
                     android:text="Price"/>
 
@@ -195,6 +196,7 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
                     android:textStyle="bold"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:paddingLeft="@dimen/_10sdp"
                     android:textColor="@color/colorGrey"
                     android:text="Quantity"/>
 

@@ -2,64 +2,78 @@ package com.example.mvvmkotlinapp.viewmodel
 
 import android.app.Application
 import android.util.Log
+import android.view.View
+import android.widget.*
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.mvvmkotlinapp.repository.CaptureOutletRepository
-import com.example.mvvmkotlinapp.repository.HomePageRepository
+import com.example.mvvmkotlinapp.repository.room.Distributor
 import com.example.mvvmkotlinapp.repository.room.Outlet
 import com.example.mvvmkotlinapp.repository.room.Route
-import com.example.mvvmkotlinapp.repository.room.User
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
+
 
 class CaptureOutletViewModel(application: Application) : AndroidViewModel(application) {
 
     private val context = application.applicationContext
     private var repository: CaptureOutletRepository = CaptureOutletRepository(application)
-    private val disposable = CompositeDisposable()
-    public var getOutlets = MutableLiveData<List<Outlet>>()
-
-
-
 
     val errorRouteName: MutableLiveData<String> = MutableLiveData()
     val errorOutletName: MutableLiveData<String> = MutableLiveData()
+
+    var strRouteName: String? =null
+
+    var spnRouteDistList: Spinner? = null
+
+    var route: LiveData<List<Route>>? = null
+    var distributor: LiveData<List<Distributor>>? = null
 
 
     fun onOutletSaveClicked(outlet: Outlet){
         Log.e("Outlet : ", ""+outlet)
     }
 
+    var route1:LiveData<List<Route>>? = repository.getRouteList()
 
     fun getRouteList() = repository.getRouteList()
 
     fun getOutletList() = repository.getOutletList()
 
 
-    /*fun getOutletList(route_id:String):List<Outlet>? {
-        Log.e("Oultet list2: ",""+ repository.getOutletList(route_id))
-        return repository.getOutletList(route_id)
-    }*/
+    fun onSelectItem(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) { // Spinner
+        if (parent != null) {
 
+            strRouteName= parent.selectedItem.toString()
+        }
+        Log.e("selected value: ",""+ parent!!.selectedItem)
 
-    /*fun getOutletList(route_id:String): MutableLiveData<List<Outlet>> {
-        disposable.add(repository.getOutletList(route_id)
-            ?.subscribeOn(Schedulers.newThread())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribeWith(object : DisposableSingleObserver<List<Outlet>>() {
+        //pos                                 get selected item position
+        //view.getText()                      get lable of selected item
+        //parent.getAdapter().getItem(pos)    get item by pos
+        //parent.getAdapter().getCount()      get item count
+        //parent.getCount()                   get item count
+        //parent.getSelectedItem()            get selected item
+        //and other...
+    }
 
-                override fun onSuccess(list: List<Outlet>) {
-                    getOutlets.postValue(list)
-                    Log.e("outlet list: ",""+list.size)
-                }
-                override fun onError(e: Throwable) {
-                    getOutlets.postValue(null)
-                }
-            })!!
-        )
-        return getOutlets
-    }*/
+    fun onSplitTypeChanged(radioGroup: RadioGroup?, id: Int,spnRouteList:Spinner) { // Radio Group
+        spnRouteDistList=spnRouteList
+        val radioButtonID = radioGroup?.checkedRadioButtonId
+        val radioButton = radioGroup?.findViewById(radioButtonID!!) as RadioButton
+        val selectedText = radioButton.text as String
+        Log.e("selected RadioGroup: ",""+ selectedText)
+
+        if(selectedText.equals("By Route")){
+            route = repository.getRouteList()!!
+            Log.e("selected route: ",""+ route!!.value)
+        }else if(selectedText.equals("By Distributor")){
+            distributor = repository.getDistList()
+            Log.e("selected distributor: ",""+ distributor!!.value)
+        }
+
+        //val arrayadapter = ArrayAdapter<Route>(context, android.R.layout.simple_spinner_item, route)
+        //spnRouteDistList.
+    }
+
 
 }

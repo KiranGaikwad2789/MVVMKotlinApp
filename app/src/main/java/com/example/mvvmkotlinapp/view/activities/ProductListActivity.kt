@@ -31,11 +31,6 @@ import java.util.*
 
 class ProductListActivity : AppCompatActivity() {
 
-
-    companion object {
-        var array_sort: ArrayList<City>? = null
-    }
-
     lateinit var productListViewModel: ProductListViewModel
     lateinit var activityProductListBinding: ActivityProductSelectBinding
     private var adapter: ProductCatListAdapter? = null
@@ -70,7 +65,6 @@ class ProductListActivity : AppCompatActivity() {
 
         this?.let {
             productListViewModel?.getProductCatList()?.observe(it, Observer<List<ProductCategory>> {
-                Log.e("Cate list ",""+it.size)
                 this.setDataToAdapter(it)
             })
         }

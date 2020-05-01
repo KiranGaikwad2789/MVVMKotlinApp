@@ -45,6 +45,12 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    fun updateSelectedProductsCountZero(arrayList: ArrayList<ProductOrderModel>?){
+        for (product in arrayList!!) {
+            repository.updateProductSelectedQuantity(product.product_id,false, 0)
+        }
+    }
+
     //fun addNewMasterProductOrder(masterProductOrder:MasterProductOrder) = repository.addNewMasterProductOrder(masterProductOrder)
 
 

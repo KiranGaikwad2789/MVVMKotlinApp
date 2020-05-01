@@ -3,7 +3,6 @@ package com.example.mvvmkotlinapp.view.fragmets.homefragments
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,7 +72,6 @@ class ProductCartFragment : Fragment() {
 
         activity?.let {
             productListViewModel.getSelectedProductList()?.observe(it, Observer<List<ProductOrderModel>> {
-                Log.e("Product cart list ",""+it.size)
                 arryListProductCart?.addAll(it)
                 arryListproductSelected!!.addAll(it)
                 this.setDataToAdapter(it)
@@ -136,17 +134,18 @@ class ProductCartFragment : Fragment() {
                 currentDate?.getDateTime(),"Pending", arryListProductCart?.size,null,null,
                 0,0.0,0,0.0)
 
-            Log.e("masterProductOrder: ",""+ masterProductOrder)
 
             activity?.let {
                 productListViewModel?.addNewMasterProductOrder(masterProductOrder,arryListProductCart)?.observe(it, Observer<Long?> {
 
                     var status="Pending"
                     productListViewModel.updateProductMasterProductID(arryListProductCart, it?.toInt(),status)
-
+                    productListViewModel.updateSelectedProductsCountZero(arryListProductCart)
                     dialogInterface.dismiss()
+                    //productListViewModel.resultMasterProductOrder.value = null
+                    activity!!.finish()
                 })
-                //productListViewModel.resultMasterProductOrder.value = null
+
             }
         }
         //performing negative action
@@ -164,13 +163,12 @@ class ProductCartFragment : Fragment() {
     private fun setDataToAdapter(arryListCity: List<ProductOrderModel>) {
 
         for(product in arryListCity){
-            Log.e("Cart product details:",""+product)
+
             totalPrice+= product.product_total_price!!
             totalProductQuantity+= product.product_quantity!!
         }
 
         commaSeperatedString = arryListCity.joinToString { it -> "${it.uid}" }
-        Log.e("cartIds:",""+commaSeperatedString)
 
         bindingProductCart.txtTotalPrice.text= totalPrice.toString()
         bindingProductCart.txtTotalProductCount.text= totalProductQuantity.toString()

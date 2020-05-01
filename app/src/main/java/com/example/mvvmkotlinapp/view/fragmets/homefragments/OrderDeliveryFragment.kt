@@ -1,11 +1,9 @@
 package com.example.mvvmkotlinapp.view.fragmets.homefragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -52,13 +50,12 @@ class OrderDeliveryFragment : Fragment() {
 
         activity?.let {
             orderDeliveryViewModel?.getOrderDeliveryList("Pending","Pending,ShortClose")?.observe(it, Observer<List<MasterProductOrder>> {
-                Log.e("order list ",""+it.size)
                 setDataToAdapter(it)
             })
         }
 
         binding.btnMyDeliveredOrders.setOnClickListener {
-            (getActivity() as HomePageActivity?)?.loadFragment(MyDeliveredOrdersFragment())
+            (getActivity() as HomePageActivity?)?.commonMethodForFragment(MyDeliveredOrdersFragment(),true)
         }
 
         return view
@@ -79,7 +76,9 @@ class OrderDeliveryFragment : Fragment() {
                 override fun onItemClick(view: View, position: Int) {
 
                     masterProductOrderPOJO= arryListOrders!!.get(position);
-                    navigateToNextFragment(masterProductOrderPOJO!!)
+                    (activity as HomePageActivity).commonMethodForFragment(OrderDeliveryDetailsFragment(
+                        masterProductOrderPOJO!!
+                    ),true)
                 }
 
                 override fun onItemLongClick(view: View?, position: Int) {
@@ -91,14 +90,4 @@ class OrderDeliveryFragment : Fragment() {
             )
         }
     }
-
-    private fun navigateToNextFragment(masterProductOrder: MasterProductOrder) {
-
-        val transaction = activity!!.supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, OrderDeliveryDetailsFragment(masterProductOrder),"OrderDeliveryDetailsFragment")
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
 }

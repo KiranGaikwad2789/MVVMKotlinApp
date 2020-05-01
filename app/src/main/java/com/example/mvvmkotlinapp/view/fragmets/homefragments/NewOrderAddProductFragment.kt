@@ -25,11 +25,9 @@ import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
 class NewOrderAddProductFragment : Fragment() {
 
 
-
     lateinit var productListViewModel: ProductListViewModel
     lateinit var bindingAddProduct: FragmentNewOrderAddProductBinding
     private var adapter: NewOrderProductListAdapter? = null
-    var productPOJO: Product? =null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,26 +37,20 @@ class NewOrderAddProductFragment : Fragment() {
         bindingAddProduct.lifecycleOwner = this
         bindingAddProduct.productList=productListViewModel
 
-
         val viewProductNav = activity!!.findViewById<View>(R.id.navigationProduct)
         viewProductNav.visibility=View.GONE
 
         activity?.let {
             productListViewModel?.getProductList()?.observe(it, Observer<List<Product>> {
-                Log.e("Product list ",""+it.size)
                 this.setDataToAdapter(it)
             })
         }
-
         bindingAddProduct.btnAddProductToCart.setOnClickListener { addProductToCart() }
 
         return view
     }
 
     private fun addProductToCart() {
-        Log.e("Product add to cart: ",""+ arryListproductSelected)
-        //Insert data to tables
-        //productListViewModel?.deleteProductTable()
         arryListproductSelected?.let { productListViewModel?.insertSelectedProducts(it) }
         activity!!.onBackPressed()
     }
@@ -73,51 +65,5 @@ class NewOrderAddProductFragment : Fragment() {
         bindingAddProduct.recyclerViewProductCatList!!.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         bindingAddProduct.recyclerViewProductCatList.setNestedScrollingEnabled(false);
 
-
-        activity?.let {
-            RecyclerItemClickListenr(it, bindingAddProduct.recyclerViewProductCatList, object : RecyclerItemClickListenr.OnItemClickListener {
-
-                override fun onItemClick(view: View, position: Int) {
-
-                    productPOJO= arryListCity!!.get(position);
-                    Toast.makeText(activity,""+ productPOJO!!.product_name, Toast.LENGTH_SHORT).show()
-                    //showProductQuantityDialog(productPOJO)
-                }
-                override fun onItemLongClick(view: View?, position: Int) {
-                }
-            })
-        }?.let {
-            bindingAddProduct.recyclerViewProductCatList.addOnItemTouchListener(
-                it
-            )
-        }
     }
-
-    /*private fun showProductQuantityDialog(productPOJO: Product?) {
-        val dialog = activity?.let { Dialog(it, R.style.Theme_Dialog) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(false)
-        dialog?.setContentView(R.layout.dialog_product_quantity)
-        val edtProductQuantity = dialog?.findViewById(R.id.edtProductQuantity) as TextInputEditText
-
-        val txtSaveProductQuantity = dialog?.findViewById(R.id.txtSaveProductQuantity) as TextView
-        val txtCancelDialog = dialog?.findViewById(R.id.txtCancelDialog) as TextView
-        txtSaveProductQuantity.setOnClickListener {
-            //dialog?.dismiss()
-            selectProduct(productPOJO,dialog,edtProductQuantity.text.toString().toInt())
-        }
-        txtCancelDialog.setOnClickListener { dialog .dismiss() }
-        dialog?.show()
-    }
-
-    private fun selectProduct(productPOJO: Product?, dialog: Dialog,productQuantity:Int) {
-
-        var productSelected= ProductOrderModel(0,0,productPOJO?.product_id,
-            productPOJO?.product_name,productPOJO?.prod_cat_id,productPOJO?.route_id,productPOJO?.outlet_id,
-            productPOJO?.dist_id, productPOJO?.product_price?.toDouble()!!,productQuantity* productPOJO?.product_price?.toDouble()!!,productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status)
-        arryListproductSelected!!.add(productSelected!!)
-        Log.e("Product dialog: ",""+ arryListproductSelected!!.size)
-        dialog.dismiss()
-    }*/
-
 }

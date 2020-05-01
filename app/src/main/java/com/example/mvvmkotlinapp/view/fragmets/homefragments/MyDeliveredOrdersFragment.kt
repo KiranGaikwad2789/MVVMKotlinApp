@@ -23,6 +23,7 @@ import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.adapter.OrderDeliveryListAdapter
 import com.example.mvvmkotlinapp.viewmodel.OrderDeliveryViewModel
+import kotlinx.android.synthetic.main.activity_register.*
 
 
 class MyDeliveredOrdersFragment : Fragment() {
@@ -47,7 +48,6 @@ class MyDeliveredOrdersFragment : Fragment() {
 
         activity?.let {
             orderDeliveryViewModel?.getOrderDeliveryList("Deliver","ShortClose")?.observe(it, Observer<List<MasterProductOrder>> {
-                Log.e("order list ",""+it.size)
                 setDataToAdapter(it)
             })
         }
@@ -70,11 +70,12 @@ class MyDeliveredOrdersFragment : Fragment() {
                 override fun onItemClick(view: View, position: Int) {
 
                     masterProductOrderPOJO= arryListOrders!!.get(position);
-                    navigateToNextFragment(masterProductOrderPOJO!!)
+                    (activity as HomePageActivity).commonMethodForFragment(OrderDeliveryDetailsFragment(
+                        masterProductOrderPOJO!!
+                    ),true)
                 }
 
                 override fun onItemLongClick(view: View?, position: Int) {
-                    TODO("do nothing")
                 }
             })
         }?.let {
@@ -83,15 +84,4 @@ class MyDeliveredOrdersFragment : Fragment() {
             )
         }
     }
-
-    private fun navigateToNextFragment(masterProductOrder: MasterProductOrder) {
-
-        val transaction = activity!!.supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, OrderDeliveryDetailsFragment(masterProductOrder),"OrderDeliveryDetailsFragment")
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-
 }

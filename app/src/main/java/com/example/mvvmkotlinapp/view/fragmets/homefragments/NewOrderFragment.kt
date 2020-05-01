@@ -61,7 +61,6 @@ class NewOrderFragment : Fragment() {
 
         activity?.let {
             newOrderViewModel?.getOutletList()?.observe(it, Observer<List<Outlet>> {
-                Log.e("Outlet List ",""+ it!!.size)
                 if (it != null) {
                     val adapter = OutletListAdapter(this!!.activity!!, android.R.layout.simple_list_item_1, it)
                     newOrderDataBinding.autoCompleteOutletName.setAdapter(adapter)
@@ -72,7 +71,6 @@ class NewOrderFragment : Fragment() {
 
         activity?.let {
             newOrderViewModel?.getDistList()?.observe(it, Observer<List<Distributor>> {
-                Log.e("Dist List ",""+ it!!.size)
                 if (it != null) {
                     val adapter = DistListAdapter(this!!.activity!!, android.R.layout.simple_list_item_1, it)
                     newOrderDataBinding.autoCompleteDistName.setAdapter(adapter)
@@ -103,7 +101,6 @@ class NewOrderFragment : Fragment() {
     }
 
     private fun setRouteListAdapter(it: List<Route>?) {
-        Log.e("Route List ",""+ it!!.size)
         if (it != null) {
             val adapter = RouteListAdapter(this!!.activity!!, android.R.layout.simple_list_item_1, it)
             newOrderDataBinding.autoCompleteRouteName.setAdapter(adapter)

@@ -3,13 +3,9 @@ package com.example.mvvmkotlinapp.view.adapter
 import android.app.Dialog
 import android.content.Context
 import android.text.TextUtils
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.CheckBox
-import android.widget.TextView
+import android.view.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.model.ProductOrderModel
@@ -52,8 +48,21 @@ class NewOrderProductListAdapter (ctx: Context, private var arrayListProductCat:
             holder.chkProductSelect!!.setChecked(true)
         }
 
-        holder.itemView.setOnClickListener {
+        holder.chkProductSelect!!.setOnCheckedChangeListener { buttonView, isChecked ->
+            holder.chkProductSelect!!.isChecked=false
+            //showProductQuantityDialog(arrayListProductCat!![position],holder,position)
+        }
+
+        holder.linearLayoutView.setOnClickListener {
             showProductQuantityDialog(arrayListProductCat!![position],holder,position)
+        }
+    }
+
+    fun EditText.showKeyboard() {
+        post {
+            requestFocus()
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 
@@ -67,12 +76,14 @@ class NewOrderProductListAdapter (ctx: Context, private var arrayListProductCat:
         var txtProductPrice: TextView
         var txtProductUnit: TextView
         var chkProductSelect: CheckBox? = null
+        var linearLayoutView:LinearLayout
 
         init {
             txtProductName = itemView.findViewById(R.id.txtProductName) as TextView
             txtProductPrice = itemView.findViewById(R.id.txtProductPrice) as TextView
             txtProductUnit = itemView.findViewById(R.id.txtProductUnit) as TextView
             chkProductSelect = itemView.findViewById(R.id.chkProductSelect) as CheckBox
+            linearLayoutView = itemView.findViewById(R.id.linearLayoutView) as LinearLayout
         }
     }
 
@@ -90,11 +101,17 @@ class NewOrderProductListAdapter (ctx: Context, private var arrayListProductCat:
         val txtSaveProductQuantity = dialog?.findViewById(R.id.txtSaveProductQuantity) as TextView
         val txtCancelDialog = dialog?.findViewById(R.id.txtCancelDialog) as TextView
 
+        edtProductQuantity.showKeyboard()
+
+        if(productPOJO?.product_quantity!! >0)
         edtProductQuantity.setText(productPOJO?.product_quantity.toString())
 
         txtSaveProductQuantity.setOnClickListener {
-            //dialog?.dismiss()
-            selectProduct(productPOJO,dialog,edtProductQuantity.text.toString().toInt(),holder,position)
+            if(!TextUtils.isEmpty(edtProductQuantity.text.toString())){
+                selectProduct(productPOJO,dialog,edtProductQuantity.text.toString().toInt(),holder,position)
+            }else{
+                Toast.makeText(context,"Please enter product quantity.",Toast.LENGTH_SHORT).show()
+            }
         }
         txtCancelDialog.setOnClickListener { dialog .dismiss() }
         dialog?.show()
@@ -106,7 +123,6 @@ class NewOrderProductListAdapter (ctx: Context, private var arrayListProductCat:
         productPOJO?.product_quantity =productQuantity
         holder.chkProductSelect!!.setChecked(true);
         notifyDataSetChanged()
-        //Log.e("productPOJO: ",""+productPOJO)
 
 
         var productSelected= ProductOrderModel(0,0,productPOJO?.product_id,
@@ -115,16 +131,11 @@ class NewOrderProductListAdapter (ctx: Context, private var arrayListProductCat:
             productQuantity.toInt(),productPOJO?.product_compony,productPOJO?.status,0)
 
         val event: ProductOrderModel? = arryListproductSelected!!.find { it.product_id == productPOJO?.product_id }
-        Log.e("isContain: ",""+event)
 
         if(!TextUtils.isEmpty(event.toString()) || event!=null){
             arryListproductSelected!!.remove(event)
         }
         arryListproductSelected!!.add(productSelected!!)
-
-        Log.e("Product selected size: ",""+ arryListproductSelected!!.size)
-        Log.e("Product selected list: ",""+ arryListproductSelected!!.toString())
-
 
         dialog.dismiss()
     }

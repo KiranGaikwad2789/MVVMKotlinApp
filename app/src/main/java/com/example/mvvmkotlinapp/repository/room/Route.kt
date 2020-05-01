@@ -19,4 +19,8 @@ data class Route(
     constructor() : this( route_id=0,route_name = null, status = null,
         route_lat = 0.0,
         route_long = 0.0,user_id = 0)
+
+    override fun toString(): String {
+        return route_name.toString()
+    }
 }

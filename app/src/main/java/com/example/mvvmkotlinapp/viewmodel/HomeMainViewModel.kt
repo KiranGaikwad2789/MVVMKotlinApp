@@ -1,9 +1,7 @@
 package com.example.mvvmkotlinapp.viewmodel
 
 import android.app.Application
-import android.content.res.Resources
 import android.os.Build
-import android.util.Log
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
@@ -34,15 +32,18 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
         when (item.itemId) {
 
             R.id.nav_home_page -> {
-                activity1!!.loadFragment(HomePageFragment())
+                (activity1 as HomePageActivity).commonMethodForFragment(HomePageFragment(), false)
+                //activity1!!.loadFragment(HomePageFragment())
                 return true
             }
             R.id.nav_my_profile -> {
-                activity1!!.loadFragment(MyProfileFragment())
+                (activity1 as HomePageActivity).commonMethodForFragment(MyProfileFragment(), true)
+                //activity1!!.loadFragment(MyProfileFragment())
                 return true
             }
             R.id.nav_alarm_setting -> {
-                activity1!!.loadFragment(AlarmSettingFragment())
+                (activity1 as HomePageActivity).commonMethodForFragment(AlarmSettingFragment(), true)
+                //activity1!!.loadFragment(AlarmSettingFragment())
                 return true
             }
             R.id.nav_backup -> {
@@ -54,19 +55,23 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
                 return true
             }
             R.id.nav_review_order -> {
-                activity1!!.loadFragment(ReviewOrderFragment())
+                (activity1 as HomePageActivity).commonMethodForFragment(ReviewOrderFragment(), true)
+                //activity1!!.loadFragment(ReviewOrderFragment())
                 return true
             }
             R.id.nav_uncapture_outlet -> {
-                activity1!!.loadFragment(ReviewOrderFragment())
+                (activity1 as HomePageActivity).commonMethodForFragment(ReviewOrderFragment(), true)
+                //activity1!!.loadFragment(ReviewOrderFragment())
                 return true
             }
             R.id.nav_new_lead -> {
-                activity1!!.loadFragment(ReviewOrderFragment())
+                (activity1 as HomePageActivity).commonMethodForFragment(ReviewOrderFragment(), true)
+                //activity1!!.loadFragment(ReviewOrderFragment())
                 return true
             }
             R.id.nav_take_order -> {
-                activity1!!.loadFragment(ReviewOrderFragment())
+                (activity1 as HomePageActivity).commonMethodForFragment(ReviewOrderFragment(), true)
+                //activity1!!.loadFragment(ReviewOrderFragment())
                 return true
             }
             R.id.nav_offer_details -> {

@@ -57,7 +57,7 @@ public class DateTime {
         val formattedDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).format(parsedDate)
 
         val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val outputFormat: DateFormat = SimpleDateFormat("EEEE, d MMM yyyy','KK:mm a")
+        val outputFormat: DateFormat = SimpleDateFormat("EEE, d MMM yyyy','KK:mm a")
         System.out.println(outputFormat.format(inputFormat.parse(selectedDate)))
 
         return outputFormat.format(inputFormat.parse(selectedDate))

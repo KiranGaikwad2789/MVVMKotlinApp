@@ -1,6 +1,7 @@
 package com.example.mvvmkotlinapp.view.activities
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmkotlinapp.R
@@ -35,7 +37,7 @@ class HomePageActivity : AppCompatActivity(), DrawerLocker {
         initializeBindingView()
         initializeObjects()
 
-        loadFragment(HomePageFragment())
+        commonMethodForFragment(HomePageFragment(), true)
     }
 
     private fun initializeBindingView() {
@@ -73,50 +75,67 @@ class HomePageActivity : AppCompatActivity(), DrawerLocker {
         toggle!!.isDrawerIndicatorEnabled=enabled
     }
 
-
-
-    fun loadFragment(fragment: Fragment){
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment,fragment.javaClass.simpleName)
-        //transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        transaction.addToBackStack(null)
-        transaction.commit()
+    fun commonMethodForFragment(fragment: Fragment, addToBackStack: Boolean) {
 
         if (binding!!.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding!!.drawerLayout.closeDrawer(GravityCompat.START);
         }
 
+        val uiHandler = Handler()
+        uiHandler.post {
+
+            val myFragmentManager: FragmentManager = supportFragmentManager
+            val backStateName: String = fragment.javaClass.simpleName
+            val fragmentPopped: Boolean = myFragmentManager.popBackStackImmediate(backStateName, 0)
+
+            val myFragmentTransaction: FragmentTransaction = myFragmentManager.beginTransaction()
+            myFragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+            if (!fragmentPopped && myFragmentManager.findFragmentByTag(backStateName) == null) {
+
+                if (addToBackStack) { //fragment not in back stack, create it.
+
+                    myFragmentTransaction.replace(R.id.container, fragment, backStateName)
+                    myFragmentTransaction.addToBackStack(backStateName)
+                    myFragmentTransaction.commitAllowingStateLoss()
+
+                } else {
+
+                    myFragmentTransaction.replace(R.id.container, fragment, backStateName)
+                    myFragmentTransaction.commitAllowingStateLoss()
+
+                }
+
+            } else {
+
+                myFragmentTransaction.replace(R.id.container, fragment)
+                myFragmentTransaction.addToBackStack(null)
+                myFragmentTransaction.commitAllowingStateLoss()
+
+            }
+        }
     }
+
 
     override fun onBackPressed() {
 
         if (binding!!.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding!!.drawerLayout.closeDrawer(GravityCompat.START);
         }
+        var isBack = true
+        val f = supportFragmentManager.findFragmentById(R.id.container)
 
-        val myFragment: Fragment = supportFragmentManager.findFragmentByTag("HomePageFragment")!!
+        if (f != null) {
+            when (f.javaClass.simpleName) {
 
-        val fragments: List<Fragment> = supportFragmentManager.getFragments()
-
-        if (myFragment != null && myFragment.isVisible()) { // add your code here
-            finish()
-        }else {
-            if (fragments != null) {
-                for (fragment in fragments) {
-                    Log.e("fragment ",""+fragment)
-                    if (fragment != null && fragment.isVisible){
-                        if ((fragment.javaClass.simpleName).equals("OrderDeliveryDetailsFragment") || (fragment.javaClass.simpleName).equals("MyDeliveredOrdersFragment")){
-                            loadFragment(OrderDeliveryFragment())
-                        }else{
-                            visibleMenuItems(0)
-                            loadFragment(HomePageFragment())
-                        }
-                    }
+                "HomePageFragment" -> {
+                    Log.e("HomePageFragment ","HomePageFragment")
+                    isBack = false
+                    finish()
                 }
             }
         }
+        visibleMenuItems(0)
+        if (isBack) super.onBackPressed()
     }
 
     fun visibleMenuItems(featureId:Int){
@@ -141,5 +160,8 @@ class HomePageActivity : AppCompatActivity(), DrawerLocker {
         }
 
     }
+
+
+
 
 }

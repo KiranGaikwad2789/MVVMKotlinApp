@@ -62,9 +62,6 @@ class NewOrderViewModel(application: Application) : AndroidViewModel(application
 
         if (!order.routeName.equals("") && !order.outletName.equals("") &&
             !order.distributorName.equals("")) {
-            Log.e("order1 : ", ""+order.routeName)
-            Log.e("order2 : ", ""+order.outletName)
-            Log.e("order3 : ", ""+order.distributorName)
 
             var orderModel=NewOrderModel(order.routeName,order.outletName,order.distributorName)
             ModelPreferencesManager.put(orderModel, "orderModel")
@@ -85,7 +82,6 @@ class NewOrderViewModel(application: Application) : AndroidViewModel(application
     fun getDistList() = repository.getDistList()
 
     fun onCheckedChange(button: CompoundButton?, check: Boolean) {
-        Log.e("chkbox", "onCheckedChange: $check")
     }
 
 

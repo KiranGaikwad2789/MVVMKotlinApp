@@ -1,16 +1,19 @@
 package com.example.mvvmkotlinapp.view.adapter
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mvvmkotlinapp.R
+import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.repository.room.tables.MasterProductOrder
 import com.example.mvvmkotlinapp.viewmodel.OrderDeliveryViewModel
 
@@ -57,10 +60,13 @@ class OrderDeliveryListAdapter(private val context: Context, private var arrayLi
 
     private val inflater: LayoutInflater
     lateinit var orderDeliveryViewModel: OrderDeliveryViewModel
+    private var currentDate: DateTime? =null
+
 
     init {
         inflater = LayoutInflater.from(context)
         this.orderDeliveryViewModel =orderDeliveryViewModel
+        currentDate= DateTime()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -69,6 +75,7 @@ class OrderDeliveryListAdapter(private val context: Context, private var arrayLi
         return MyViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         orderDeliveryViewModel.getOutletNameFromID(arrayListProduct!!.get(position).outlet_id.toString())!!.observe((context as FragmentActivity),Observer<String>{
@@ -78,16 +85,18 @@ class OrderDeliveryListAdapter(private val context: Context, private var arrayLi
             holder.txtOrderdistId.text= it
         })
 
+
+
         holder.txtOrderStatus.text=arrayListProduct!!.get(position).order_status
-        holder.txtOrderDate.text=arrayListProduct!!.get(position).order_date
-        holder.txtOrderDateTime.text=arrayListProduct!!.get(position).order_date
+        holder.txtOrderDate.text=currentDate!!.getSelectedDateForamt(arrayListProduct!!.get(position).order_date!!).toString()
+        holder.txtOrderDateTime.text=currentDate!!.getSelectedDateForamt(arrayListProduct!!.get(position).order_date!!).toString()
         holder.txtOrderuid.text="Order Id: "+arrayListProduct!!.get(position).uid.toString()
         holder.txtOrderTotal.text=arrayListProduct!!.get(position).order_total_price.toString()
         holder.txtOrderproducts.text=arrayListProduct!!.get(position).order_total_quantity.toString()
 
         if(arrayListProduct!!.get(position).order_status.equals("Deliver")){
             holder.linearDeliveredDate.visibility=View.VISIBLE
-            holder.txtOrderDeliveredDateTime.text=arrayListProduct!!.get(position).order_deliver_date
+            holder.txtOrderDeliveredDateTime.text=currentDate!!.getSelectedDateForamt(arrayListProduct!!.get(position).order_deliver_date!!).toString()
         }
     }
 
