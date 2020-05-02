@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="outletDetails"
+            type="com.example.mvvmkotlinapp.repository.room.tables.OutletDetails" />
+
+        <variable
+            name="customerProfileViewModel"
+            type="com.example.mvvmkotlinapp.viewmodel.CustomerProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorWhite"
+            app:layout_constraintBottom_toTopOf="@+id/btnUpdateOutletDetails"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_6sdp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/txtlabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="Outlet Primary Details"
+                    android:textColor="@color/colorGrey"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtOutletName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:error="@{customerProfileViewModel.errorOutletName}"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtlabel">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOutletName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Outlet Name"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_name}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtDistribtorName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOutletName">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtDistributorName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Distributor Name"
+                        android:inputType="textCapSentences"
+                        android:text="@{outletDetails.dist_id.toString()}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtRouteName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:error="@{customerProfileViewModel.errorRouteName}"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtDistribtorName">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtRouteName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Route Name"
+                        android:inputType="textCapSentences"
+                        android:text="@{outletDetails.route_id.toString()}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spnOutletType"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
+                    app:layout_constraintBottom_toTopOf="@+id/spnOutletSubType"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtRouteName"
+                    tools:layout_editor_absoluteX="8dp" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spnOutletSubType"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/txtLtOutletAddress"
+                    app:layout_constraintTop_toBottomOf="@+id/spnOutletType"
+                    tools:layout_editor_absoluteX="8dp" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtLtOutletAddress"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/spnOutletSubType"
+                    tools:layout_editor_absoluteX="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOutletAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Outlet Address"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_address}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/txtlabelPrimaryDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Outlet Primary Details"
+                    android:textColor="@color/colorGrey"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOutletAddress" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtOwnerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtlabelPrimaryDetails">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOwnerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Outlet Owner Name"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_owner_name}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtContactNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:error="@{customerProfileViewModel.errorContactNumber}"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOwnerName">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtContactNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Owner contact number"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:text="@={outletDetails.outlet_contact_number}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtContactAltNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:error="@{customerProfileViewModel.errorContactAltNumber}"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtContactNumber">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtContactAltNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alternate number"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:text="@={outletDetails.outlet_contact_alt_number}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtOutletEmailID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:error="@{customerProfileViewModel.errorOutletEmailID}"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtContactAltNumber">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOutletEmailID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Email ID"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_email_id}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtOutletContactPerson"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOutletEmailID">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOutletContactPerson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Contact person"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_contact_person}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtOutletSixeOfFacility"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOutletContactPerson">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOutletSixeOfFacility"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Size of Facility"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_sizeof_facility}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtOutletGSTNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:error="@{customerProfileViewModel.errorOutletGSTNumber}"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOutletSixeOfFacility">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOutletGSTNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="GST number"
+                        android:inputType="number"
+                        android:maxLength="20"
+                        android:text="@={outletDetails.outlet_GST_number}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtOutletLicenseDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOutletGSTNumber">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtOutletLicenseDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="License Details"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_license_details}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtAppxBusinessMonthly"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtOutletLicenseDetails">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtAppxBusinessMonthly"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Approx business monthely"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_business_monthly}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtAppxDayFootprint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtAppxBusinessMonthly">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtAppxDayFootprint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Approx day footprint"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_day_footprint}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtCompetitorRemarks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtAppxDayFootprint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtCompetitorRemarks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Competitor remarks"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_competitor_remarks}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtDateOfEstablished"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtCompetitorRemarks">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtDateOfEstablished"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Date of established"
+                        android:inputType="textCapSentences"
+                        android:clickable="false"
+                        android:editable="false"
+                        android:text="@={outletDetails.outlet_date_of_established}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtBussinessSegment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtDateOfEstablished">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtBussinessSegment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Business Segment"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_business_segment}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/txtLtPrimaryBussiness"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtLtBussinessSegment">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPrimaryBussiness"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="primary Business"
+                        android:inputType="textCapSentences"
+                        android:text="@={outletDetails.outlet_primary_business}"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btnUpdateOutletDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/drw_button"
+            android:text="Save"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"
+            android:onClick="@{() -> customerProfileViewModel.onOutletUpdateClicked(outletDetails)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

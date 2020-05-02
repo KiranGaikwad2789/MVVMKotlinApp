@@ -12,6 +12,10 @@ interface RouteDao {
     @Query("SELECT * FROM Route")
     fun getAllRoutes(): LiveData<List<Route>>
 
+    @Query("SELECT * FROM Route")
+    fun getAllRoutesList(): List<Route>
+
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAllRoutes(vararg route: Route)
 

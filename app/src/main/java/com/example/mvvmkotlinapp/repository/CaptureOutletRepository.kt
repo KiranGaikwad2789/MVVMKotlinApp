@@ -1,13 +1,11 @@
 package com.example.mvvmkotlinapp.repository
 
 import android.app.Application
-import android.util.Log
 import com.example.mvvmkotlinapp.repository.room.*
 import com.example.mvvmkotlinapp.repository.room.dao.DistributorDao
 import com.example.mvvmkotlinapp.repository.room.dao.OutletDao
 import com.example.mvvmkotlinapp.repository.room.dao.RouteDao
 import io.reactivex.Single
-import org.jetbrains.anko.doAsync
 import java.util.concurrent.Callable
 
 class CaptureOutletRepository(application: Application) {
@@ -33,22 +31,27 @@ class CaptureOutletRepository(application: Application) {
 
     fun getDistList() = distributorDao?.getAllDistributors()
 
-    //Outlet list
-    /*fun getOutletList(route_id:String): List<Outlet>? {
-        var arrayList: List<Outlet>? = null
-        doAsync {
-            arrayList=outletDao!!.getAllOutlets(route_id)
-            Log.e("Oultet list1: ",""+ arrayList!!.size)
-        }
-        return arrayList
-    }*/
-
-
-   /* fun getOutletList(route_id:String): Single<List<Outlet>>? {
+    fun getAllDistributorsList():Single<List<Distributor>>?{
         return Single.fromCallable(
-            Callable<List<Outlet>> { outletDao?.getAllOutlets(route_id) }
+            Callable<List<Distributor>> { distributorDao?.getAllDistributorsList() }
         )
-    }*/
+    }
 
+    fun getAllRoutesList(): Single<List<Route>>? {
+        return Single.fromCallable(
+            Callable<List<Route>> { routeDao?.getAllRoutesList() }
+        )
+    }
+
+    fun getOutletListFromID(spinnerValueID: String, radioGroupType: String):Single<List<Outlet>>?{
+        return Single.fromCallable(
+            Callable<List<Outlet>> {
+                if (radioGroupType.equals("By Route"))
+                    outletDao?.getOutletListFromRouteID(spinnerValueID)
+                else
+                    outletDao?.getOutletListFromDistID(spinnerValueID)
+            }
+        )
+    }
 
 }

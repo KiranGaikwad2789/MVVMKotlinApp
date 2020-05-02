@@ -13,7 +13,7 @@ import com.example.mvvmkotlinapp.repository.room.Route
         childColumns = arrayOf("outlet_id"),
         onDelete = ForeignKey.CASCADE)
 ))
-class OutletDetails(@PrimaryKey(autoGenerate = true) @ColumnInfo(name = "outlet_details_id") var outlet_details_id: Int?,
+data class OutletDetails(@PrimaryKey(autoGenerate = true) @ColumnInfo(name = "outlet_details_id") var outlet_details_id: Int?,
                     @ColumnInfo(name = "outlet_id") var outlet_id: Int?=0,
                     @ColumnInfo(name = "outlet_name") var outlet_name: String? =null,
                     @ColumnInfo(name = "route_id") var route_id: Int? =0,

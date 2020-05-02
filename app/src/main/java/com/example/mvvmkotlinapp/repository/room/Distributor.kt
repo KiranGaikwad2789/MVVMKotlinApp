@@ -22,4 +22,8 @@ class Distributor(@PrimaryKey(autoGenerate = true)
     constructor() : this( dist_id = 0, dist_name=null,route_id=0, status = null,
         dist_lat = 0.0,
         dist_long = 0.0)
+
+    override fun toString(): String {
+        return dist_name+" | "+dist_id
+    }
 }

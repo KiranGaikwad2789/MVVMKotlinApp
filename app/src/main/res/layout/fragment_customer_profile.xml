@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:onCheckedChanged="@{(group,checkedId)->captureOutletViewModel.onSplitTypeChanged(group,checkedId,spnRouteList)}"
+                    android:onCheckedChanged="@{(group,checkedId)->captureOutletViewModel.onSplitTypeChanged(group,checkedId,spnRouteList,autoCompleteOutletName)}"
                     app:layout_constraintBottom_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +111,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
                 app:errorEnabled="true"
-                android:entries="@{captureOutletViewModel.route1}"
+                android:entries="@{captureOutletViewModel.route}"
                 android:onItemSelected="@{(parent,view,pos,id)->captureOutletViewModel.onSelectItem(parent,view,pos,id)}"
                 app:layout_constraintBottom_toTopOf="@+id/textInputLayout6"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -126,9 +126,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 app:error="@{captureOutletViewModel.errorOutletName}"
                 app:errorEnabled="true"
@@ -141,6 +139,7 @@
                     android:id="@+id/autoCompleteOutletName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/_5sdp"
                     android:hint="@string/outlet"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -171,6 +170,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
+            android:onClick="@{() -> captureOutletViewModel.onNewOrderClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/ic_dialog_email" />

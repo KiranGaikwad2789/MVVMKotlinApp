@@ -15,11 +15,12 @@ data class Outlet(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "outlet_id") var outlet_id: Int?,
     @ColumnInfo(name = "outlet_name") var outlet_name: String? =null,
     @ColumnInfo(name = "route_id") var route_id: Int? =0,
+    @ColumnInfo(name = "dist_id") var dist_id: Int? =0,
     @ColumnInfo(name = "status") var status: String? =null,
     @ColumnInfo(name = "outlet_lat") var outlet_lat: Double? =0.0,
     @ColumnInfo(name = "outlet_long") var outlet_long: Double? =0.0) {
 
-    constructor() : this(0, outlet_name=null,route_id=0, status = null,
+    constructor() : this(0, outlet_name=null,route_id=0, dist_id=0, status = null,
         outlet_lat = 0.0,
         outlet_long = 0.0)
 }

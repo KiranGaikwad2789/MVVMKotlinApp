@@ -1,7 +1,9 @@
 package com.example.mvvmkotlinapp.repository.room
 
-import androidx.room.*
-import androidx.room.ForeignKey.CASCADE
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "Route",foreignKeys = arrayOf(ForeignKey(entity = User::class,
@@ -20,7 +22,7 @@ data class Route(
         route_lat = 0.0,
         route_long = 0.0,user_id = 0)
 
-    override fun toString(): String {
-        return route_name.toString()
+    override fun toString(): String { // TODO: Return a string will be displayed on list view for this object, it can be a properties for example.
+        return route_name+" | "+route_id
     }
 }

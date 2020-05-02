@@ -169,11 +169,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        val o1 = Outlet(1,"Sai stores", 1,"1",18.1890,73.122)
-        val o2 = Outlet(2,"OM shoppe", 1,"1",18.1890,73.122)
-        val o3 = Outlet(3,"Jay Ganesh genaral shoppy", 1,"1",18.1890,73.122)
-        val o4 = Outlet(4,"Balaji kirana shoppy", 2,"1",18.1890,73.122)
-        val o5 = Outlet(5,"KK Shoppy", 2,"1",18.1890,73.122)
+        val o1 = Outlet(1,"Sai stores", 1,1,"1",18.1890,73.122)
+        val o2 = Outlet(2,"OM shoppe", 1,1,"1",18.1890,73.122)
+        val o3 = Outlet(3,"Jay Ganesh genaral shoppy", 1,2,"1",18.1890,73.122)
+        val o4 = Outlet(4,"Balaji kirana shoppy", 2,2,"1",18.1890,73.122)
+        val o5 = Outlet(5,"KK Shoppy", 2,2,"1",18.1890,73.122)
+        val o6 = Outlet(6,"Shehal Shoppy", 3,3,"1",18.1890,73.122)
+        val o7 = Outlet(7,"Shiksha Shoppy", 4,3,"1",18.1890,73.122)
+        val o8 = Outlet(8,"KK Online market", 4,4,"1",18.1890,73.122)
 
         var arrayListOutlet= ArrayList<Outlet>()
 
@@ -183,6 +186,9 @@ class LoginActivity : AppCompatActivity() {
             arrayListOutlet!!.add(o3)
             arrayListOutlet!!.add(o4)
             arrayListOutlet!!.add(o5)
+            arrayListOutlet!!.add(o6)
+            arrayListOutlet!!.add(o7)
+            arrayListOutlet!!.add(o8)
         }
 
         val d1 = Distributor(1,"Sai stores D", 1,"1",18.1890,73.122)

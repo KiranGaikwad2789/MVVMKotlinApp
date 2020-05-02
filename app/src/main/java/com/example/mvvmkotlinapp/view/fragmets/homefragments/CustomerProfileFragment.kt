@@ -1,16 +1,19 @@
 package com.example.mvvmkotlinapp.view.fragmets.homefragments
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-
 import com.example.mvvmkotlinapp.R
-import com.example.mvvmkotlinapp.databinding.FragmentCaptureOutletBinding
 import com.example.mvvmkotlinapp.databinding.FragmentCustomerProfileBinding
+import com.example.mvvmkotlinapp.model.NewOrderModel
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.viewmodel.CaptureOutletViewModel
 
@@ -31,9 +34,19 @@ class CustomerProfileFragment : Fragment() {
         customerProfileBinding.captureOutletViewModel=captureOutletViewModel
 
         (getActivity() as HomePageActivity?)?.visibleMenuItems(3)
-        
-        
-        customerProfileBinding.radioGroupType.setOnCheckedChangeListener { group, checkedId ->  }
+
+
+        captureOutletViewModel.nextFragmentNavigate.observe(this, Observer<NewOrderModel> { status ->
+            status?.let {
+
+                if (it != null) {
+                    Log.e("Outlet id ",""+ it)
+                    (activity as HomePageActivity).commonMethodForFragment(CustomerProfileDetailsFragment(it),true)
+                    captureOutletViewModel.nextFragmentNavigate.value = null
+                }
+            }
+        })
+
         return view
     }
 

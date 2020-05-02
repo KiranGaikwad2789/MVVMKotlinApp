@@ -11,6 +11,10 @@ interface DistributorDao {
     @Query("SELECT * FROM Distributor")
     fun getAllDistributors(): LiveData<List<Distributor>>
 
+    @Query("SELECT * FROM Distributor")
+    fun getAllDistributorsList(): List<Distributor>?
+
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAllDist(vararg dist: Distributor)
 
