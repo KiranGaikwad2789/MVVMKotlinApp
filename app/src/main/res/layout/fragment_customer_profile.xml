@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="order"
+            type="com.example.mvvmkotlinapp.model.NewOrderModel" />
+
+        <variable
             name="outlet"
             type="com.example.mvvmkotlinapp.repository.room.Outlet" />
 
@@ -139,7 +143,8 @@
                     android:id="@+id/autoCompleteOutletName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/_5sdp"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:text="@={order.outletName}"
                     android:hint="@string/outlet"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -170,7 +175,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:onClick="@{() -> captureOutletViewModel.onNewOrderClicked()}"
+            android:onClick="@{() -> captureOutletViewModel.onNewOrderClicked(order)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@android:drawable/ic_dialog_email" />

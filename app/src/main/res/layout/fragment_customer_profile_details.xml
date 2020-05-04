@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Distributor Name"
                         android:inputType="textCapSentences"
-                        android:text="@{outletDetails.dist_id.toString()}" />
+                        android:text="@={outletDetails.dist_name}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Route Name"
                         android:inputType="textCapSentences"
-                        android:text="@{outletDetails.route_id.toString()}" />
+                        android:text="@={outletDetails.route_name}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,6 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:spinnerMode="dialog"
+                    android:onItemSelected="@{(parent,view,pos,id) ->customerProfileViewModel.onSelectItem(parent,view,pos,id)}"
                     app:layout_constraintBottom_toTopOf="@+id/spnOutletSubType"
                     app:layout_constraintTop_toBottomOf="@+id/txtLtRouteName"
                     tools:layout_editor_absoluteX="8dp" />
@@ -124,6 +125,7 @@
                     style="@style/Base.Widget.AppCompat.Spinner.Underlined"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onItemSelected="@{(parent,view,pos,id) ->customerProfileViewModel.onSelectItem(parent,view,pos,id)}"
                     app:layout_constraintBottom_toTopOf="@+id/txtLtOutletAddress"
                     app:layout_constraintTop_toBottomOf="@+id/spnOutletType"
                     tools:layout_editor_absoluteX="8dp" />

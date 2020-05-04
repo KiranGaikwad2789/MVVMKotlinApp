@@ -1,13 +1,14 @@
 package com.example.mvvmkotlinapp.view.fragmets.homefragments
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -32,6 +33,7 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
 
     lateinit var customerProfileViewModel: CustomerProfileViewModel
     lateinit var customerProfileBinding: FragmentCustomerProfileDetailsBinding
+    private var outletDetails: OutletDetails? =null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,8 +44,6 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
         customerProfileBinding.customerProfileViewModel=customerProfileViewModel
 
         var outletValNID= orderModel.outletName?.split(" | ")
-        Log.e("outlet name: ",""+ outletValNID!![0])
-        Log.e("outlet id: ",""+ outletValNID[1])
 
 
         customerProfileBinding.edtDateOfEstablished.setText(SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()))
@@ -70,45 +70,81 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
             }
         }
 
-
-
         activity?.let {
-            customerProfileViewModel?.getOutletDetails(outletValNID[1])?.observe(it, Observer<OutletDetails> {
-                Log.e("Outlet details ",""+ it)
+            customerProfileViewModel?.getOutletDetails(outletValNID!![1])?.observe(it, Observer<OutletDetails> {
                 if (it != null) {
 
+                    Log.e("Outlet fragment details ",""+ it)
+                    outletDetails=it
+
+                    var outletDetails = OutletDetails(
+                        uid = outletDetails?.uid,
+                        outlet_id = outletDetails?.outlet_id,
+                        outlet_name = outletDetails?.outlet_name,
+                        route_name = outletDetails?.route_name,
+                        dist_name = outletDetails?.dist_name,
+                        outlet_type = outletDetails?.outlet_type,
+                        outlet_subtype = outletDetails?.outlet_subtype,
+                        outlet_address =outletDetails?.outlet_address,
+                        outlet_owner_name = outletDetails?.outlet_owner_name,
+                        outlet_contact_number = outletDetails?.outlet_contact_number,
+                        outlet_contact_alt_number = outletDetails?.outlet_contact_alt_number,
+                        outlet_email_id = outletDetails?.outlet_email_id,
+                        outlet_contact_person = outletDetails?.outlet_contact_person,
+                        outlet_sizeof_facility = outletDetails?.outlet_sizeof_facility,
+                        outlet_GST_number = outletDetails?.outlet_GST_number,
+                        outlet_license_details =outletDetails?.outlet_license_details,
+                        outlet_business_monthly =outletDetails?.outlet_business_monthly,
+                        outlet_day_footprint =outletDetails?.outlet_day_footprint,
+                        outlet_competitor_remarks =outletDetails?.outlet_competitor_remarks,
+                        outlet_date_of_established =outletDetails?.outlet_date_of_established,
+                        outlet_business_segment =outletDetails?.outlet_business_segment,
+                        outlet_primary_business =outletDetails?.outlet_primary_business,
+                        outlet_status =outletDetails?.outlet_status)
+
+                    /*var outletDetails = OutletDetails(
+                        uid = outletDetails?.uid,
+                        outlet_id = outletDetails?.outlet_id,
+                        outlet_name = outletDetails?.outlet_name,
+
+                        route_name = customerProfileBinding.edtRouteName.text.toString(),
+                        dist_name = customerProfileBinding.edtDistributorName.text.toString(),
+                        outlet_type = outletType,
+                        outlet_subtype = outletSubType,
+
+                        outlet_address =customerProfileBinding.edtOutletAddress.text.toString(),
+                        outlet_owner_name =customerProfileBinding.edtOwnerName.text.toString(),
+                        outlet_contact_number =customerProfileBinding.edtContactNumber.text.toString(),
+                        outlet_contact_alt_number =customerProfileBinding.edtContactAltNumber.text.toString(),
+                        outlet_email_id =customerProfileBinding.edtOutletEmailID.text.toString(),
+                        outlet_contact_person =customerProfileBinding.edtOutletContactPerson.text.toString(),
+                        outlet_sizeof_facility =customerProfileBinding.edtOutletSixeOfFacility.text.toString(),
+                        outlet_GST_number =customerProfileBinding.edtOutletGSTNumber.text.toString(),
+                        outlet_license_details =customerProfileBinding.edtOutletLicenseDetails.text.toString(),
+                        outlet_business_monthly =customerProfileBinding.edtAppxBusinessMonthly.text.toString(),
+                        outlet_day_footprint =customerProfileBinding.edtAppxDayFootprint.text.toString(),
+                        outlet_competitor_remarks =customerProfileBinding.edtCompetitorRemarks.text.toString(),
+                        outlet_date_of_established =customerProfileBinding.edtDateOfEstablished.text.toString(),
+                        outlet_business_segment =customerProfileBinding.edtBussinessSegment.text.toString(),
+                        outlet_primary_business =customerProfileBinding.edtPrimaryBussiness.text.toString(),
+                        outlet_status ="1")*/
+
+                    customerProfileBinding.outletDetails=outletDetails
                 }
             })
         }
 
+        customerProfileViewModel.updateStatus.observe(this, Observer { status ->
+            status?.let {
+                if(it=="1"){
+                    Toast.makeText(activity , "Outlet details updated Sucessfully" , Toast.LENGTH_LONG).show()
+                } else
+                    Toast.makeText(activity , "Error occured: "+it , Toast.LENGTH_LONG).show()
+                customerProfileViewModel.updateStatus.postValue(null)
+            }
+        })
 
-        var outletDetails = OutletDetails(
-            outlet_details_id = 0,
-            outlet_id=outletValNID[1].toInt(),
-            outlet_name =outletValNID[0],
-            route_id =0,
-            dist_id =0,
-           /* route_id =customerProfileBinding.edtRouteName.getText().toString().toInt(),
-            dist_id =customerProfileBinding.edtDistributorName.getText().toString().toInt(),*/
-            outlet_type = customerProfileBinding.spnOutletType.selectedItem as Int?,
-            outlet_subtype = customerProfileBinding.spnOutletSubType.selectedItem as Int?,
-            outlet_address=customerProfileBinding.edtOutletAddress.text.toString(),
-            outlet_owner_name=customerProfileBinding.edtOwnerName.text.toString(),
-            outlet_contact_number =customerProfileBinding.edtContactNumber.text.toString(),
-            outlet_contact_alt_number =customerProfileBinding.edtContactAltNumber.text.toString(),
-            outlet_email_id =customerProfileBinding.edtOutletEmailID.text.toString(),
-            outlet_contact_person =customerProfileBinding.edtOutletContactPerson.text.toString(),
-            outlet_sizeof_facility =customerProfileBinding.edtOutletSixeOfFacility.text.toString(),
-            outlet_GST_number =customerProfileBinding.edtOutletGSTNumber.text.toString(),
-            outlet_license_details =customerProfileBinding.edtOutletLicenseDetails.text.toString(),
-            outlet_business_monthly =customerProfileBinding.edtAppxBusinessMonthly.text.toString(),
-            outlet_day_footprint =customerProfileBinding.edtAppxDayFootprint.text.toString(),
-            outlet_competitor_remarks =customerProfileBinding.edtCompetitorRemarks.text.toString(),
-            outlet_date_of_established =customerProfileBinding.edtDateOfEstablished.text.toString(),
-            outlet_business_segment =customerProfileBinding.edtBussinessSegment.text.toString(),
-            outlet_primary_business =customerProfileBinding.edtPrimaryBussiness.text.toString(),
-            outlet_status ="1")
-        customerProfileBinding.outletDetails=outletDetails
+
 
         (getActivity() as HomePageActivity?)?.visibleMenuItems(3)
 
@@ -130,12 +166,29 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
 
         val adapter = ArrayAdapter<OutletType>(this.activity!!, android.R.layout.simple_list_item_1, arrayListOutletType)
         customerProfileBinding.spnOutletType.setAdapter(adapter)
+        //val routesPos: Int = routes.indexOf(outletDetails?.outlet_type)
+
 
         val adapter1 = ArrayAdapter<OutletSubType>(this.activity!!, android.R.layout.simple_list_item_1, arrayListOutletSubType)
         customerProfileBinding.spnOutletSubType.setAdapter(adapter1)
 
+        //selectSpinnerItemByValue(customerProfileBinding.spnOutletType, outletDetails?.outlet_type,adapter)
+        //selectSpinnerItemByValue(customerProfileBinding.spnOutletSubType, outletDetails?.outlet_subtype, adapter)
+
         return view
     }
 
+
+    fun selectSpinnerItemByValue(spnr: Spinner, value: String?, adapter: ArrayAdapter<OutletType>) {
+        //val adapter = spnr.adapter as ArrayAdapter<String>
+        var currentItem: String?
+        for (i in 0 until adapter.count) {
+            currentItem = adapter.getItem(i)?.outletTypeName
+            if (currentItem == value) {
+                spnr.setSelection(i)
+                return
+            }
+        }
+    }
 
 }

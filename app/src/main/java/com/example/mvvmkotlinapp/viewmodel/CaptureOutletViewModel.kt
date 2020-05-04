@@ -43,12 +43,14 @@ class CaptureOutletViewModel(application: Application) : AndroidViewModel(applic
     fun getOutletList() = repository.getOutletList()
 
     fun onSplitTypeChanged(radioGroup: RadioGroup?, id: Int,spnRouteList:Spinner,autoCompleteOutlet:AutoCompleteTextView) { // Radio Group
+
         spnRouteDistList=spnRouteList
         autoCompleteOutletName=autoCompleteOutlet
+
         val radioButtonID = radioGroup?.checkedRadioButtonId
         val radioButton = radioGroup?.findViewById(radioButtonID!!) as RadioButton
         radioGroupType = radioButton.text as String
-        Log.e("selected RadioGroup: ",""+ radioGroupType)
+
         if(radioGroupType.equals("By Route")){
             getAllRoutesList(spnRouteDistList!!)
         }else if(radioGroupType.equals("By Distributor")){
@@ -62,8 +64,8 @@ class CaptureOutletViewModel(application: Application) : AndroidViewModel(applic
             strSpinnerName= parent.selectedItem.toString()
 
             var spinnerValNID=parent.selectedItem.toString().split(" | ")
-            Log.e("selected name: ",""+spinnerValNID[0])
-            Log.e("selected id: ",""+ spinnerValNID[1])
+            Log.e("selected spinner name: ",""+spinnerValNID[0])
+            Log.e("selected spinner id: ",""+ spinnerValNID[1])
             getOutletListFromID(spinnerValNID[1],radioGroupType)
         }
     }
@@ -83,15 +85,14 @@ class CaptureOutletViewModel(application: Application) : AndroidViewModel(applic
                             val adapter = OutletListAdapter(context, R.layout.simple_list_item_1, t)
                             autoCompleteOutletName?.setAdapter(adapter)
                             autoCompleteOutletName?.threshold = 2
-                            Log.e("selected outlets", t.toString())
                         }
 
                         //Listners
-                        autoCompleteOutletName?.setOnItemClickListener() { parent, _, position, id ->
+                       /* autoCompleteOutletName?.setOnItemClickListener() { parent,view, position, id ->
                             val selectedPoi = parent.adapter.getItem(position) as Outlet?
                             autoCompleteOutletName!!.setText(selectedPoi?.outlet_name+" | "+selectedPoi?.outlet_id)
-                            autoCompleteOutletName!!.isEnabled=true
-                        }
+                            Log.e("selected outlet ", selectedPoi.toString())
+                        }*/
                     }
                     override fun onError(e: Throwable) {
                         Log.e("selected route error", e.message)
@@ -137,11 +138,11 @@ class CaptureOutletViewModel(application: Application) : AndroidViewModel(applic
         )
     }
 
-    fun onNewOrderClicked(){
-        Log.e("Outlet : ", ""+ autoCompleteOutletName?.text.toString())
-        Log.e("spinner : ", ""+ strSpinnerName)
+    fun onNewOrderClicked(order:NewOrderModel){
+        Log.e("Outlet selected: ", ""+ order.outletName)
+        Log.e("spinner selected : ", ""+ strSpinnerName)
 
-        var newOrderModel = NewOrderModel(strSpinnerName,autoCompleteOutletName?.text.toString(),null)
+        var newOrderModel = NewOrderModel(strSpinnerName,order.outletName,null)
         nextFragmentNavigate.postValue(newOrderModel)
     }
 

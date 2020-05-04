@@ -11,11 +11,11 @@ interface OutletDetailsDao {
     fun getOutletDetails(outletId: String): LiveData<OutletDetails>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOutletDetails(vararg outletDetails: OutletDetails)
+    fun insertOutletDetails(outletDetails: OutletDetails):Long
 
     @Query("DELETE FROM OutletDetails")
     fun deleteOutletDetailsTable()
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    fun updateOutletDetailsTable(outletDetails: OutletDetails)
+    fun updateOutletDetailsTable(outletDetails: OutletDetails):Int
 }

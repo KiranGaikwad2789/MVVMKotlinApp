@@ -10,4 +10,8 @@ class NewOrderModel(
         routeName = null, outletName = null,
         distributorName = null)
 
+    override fun toString(): String {
+        return routeName+", "+outletName+", "+distributorName
+    }
+
 }

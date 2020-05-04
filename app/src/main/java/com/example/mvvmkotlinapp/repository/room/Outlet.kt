@@ -23,4 +23,9 @@ data class Outlet(
     constructor() : this(0, outlet_name=null,route_id=0, dist_id=0, status = null,
         outlet_lat = 0.0,
         outlet_long = 0.0)
+
+
+    override fun toString(): String {
+        return outlet_name+" | "+outlet_id
+    }
 }

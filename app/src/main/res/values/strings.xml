@@ -93,6 +93,7 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="home_second">Home Second</string>
+    <string name="title_activity_firebase_chat">Firebase Chat</string>
 
 
 </resources>

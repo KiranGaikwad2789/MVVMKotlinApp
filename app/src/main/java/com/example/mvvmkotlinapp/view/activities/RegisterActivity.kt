@@ -44,6 +44,7 @@ class RegisterActivity() : AppCompatActivity() {
         registerModel.status.observe(this, Observer { status ->
             status?.let {
                 if(it=="1"){
+
                     Toast.makeText(this , "User registred Sucessfully" , Toast.LENGTH_LONG).show()
                     finish()
                 } else

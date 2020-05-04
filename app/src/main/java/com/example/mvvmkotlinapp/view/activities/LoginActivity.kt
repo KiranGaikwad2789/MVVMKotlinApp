@@ -116,6 +116,7 @@ class LoginActivity : AppCompatActivity() {
         val feature11 = Features(0,11, "My Claims")
         val feature12 = Features(0,12, "Manage Leave")
         val feature13 = Features(0,13, "Customer Support")
+        val feature14 = Features(0,14, "Chat")
 
         var arrayListFeaturesInfo= ArrayList<Features>()
 
@@ -133,6 +134,7 @@ class LoginActivity : AppCompatActivity() {
             arrayListFeaturesInfo!!.add(feature11)
             arrayListFeaturesInfo!!.add(feature12)
             arrayListFeaturesInfo!!.add(feature13)
+            arrayListFeaturesInfo!!.add(feature14)
         }
 
 
@@ -154,14 +156,16 @@ class LoginActivity : AppCompatActivity() {
             arrayListCity!!.add(c6)
             arrayListCity!!.add(c7)
         }
-        val r1 = Route(1,"Kharadi Bypass", "1",18.1890,73.122,1)
-        val r2 = Route(2,"Chandan Nagar road", "1",18.1890,73.122,1)
-        val r3 = Route(3,"VimanNagar Chowk", "1",18.1890,73.122,1)
-        val r4 = Route(4,"Wagholi", "1",18.1890,73.122,1)
+        val r5 = Route(1,"All Route", "1",18.1890,73.122,1)
+        val r1 = Route(2,"Kharadi Bypass", "1",18.1890,73.122,1)
+        val r2 = Route(3,"Chandan Nagar road", "1",18.1890,73.122,1)
+        val r3 = Route(4,"VimanNagar Chowk", "1",18.1890,73.122,1)
+        val r4 = Route(5,"Wagholi", "1",18.1890,73.122,1)
         var arrayListRoute= ArrayList<Route>()
 
 
         if (arrayListRoute != null) {
+            arrayListRoute!!.add(r5)
             arrayListRoute!!.add(r1)
             arrayListRoute!!.add(r2)
             arrayListRoute!!.add(r3)
@@ -169,14 +173,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        val o1 = Outlet(1,"Sai stores", 1,1,"1",18.1890,73.122)
-        val o2 = Outlet(2,"OM shoppe", 1,1,"1",18.1890,73.122)
+        val o1 = Outlet(1,"Sai stores", 2,1,"1",18.1890,73.122)
+        val o2 = Outlet(2,"OM shoppe", 2,1,"1",18.1890,73.122)
         val o3 = Outlet(3,"Jay Ganesh genaral shoppy", 1,2,"1",18.1890,73.122)
-        val o4 = Outlet(4,"Balaji kirana shoppy", 2,2,"1",18.1890,73.122)
-        val o5 = Outlet(5,"KK Shoppy", 2,2,"1",18.1890,73.122)
-        val o6 = Outlet(6,"Shehal Shoppy", 3,3,"1",18.1890,73.122)
-        val o7 = Outlet(7,"Shiksha Shoppy", 4,3,"1",18.1890,73.122)
-        val o8 = Outlet(8,"KK Online market", 4,4,"1",18.1890,73.122)
+        val o4 = Outlet(4,"Balaji kirana shoppy", 3,2,"1",18.1890,73.122)
+        val o5 = Outlet(5,"KK Shoppy", 3,2,"1",18.1890,73.122)
+        val o6 = Outlet(6,"Shehal Shoppy", 4,3,"1",18.1890,73.122)
+        val o7 = Outlet(7,"Shiksha Shoppy", 5,3,"1",18.1890,73.122)
+        val o8 = Outlet(8,"KK Online market", 5,4,"1",18.1890,73.122)
 
         var arrayListOutlet= ArrayList<Outlet>()
 
@@ -191,11 +195,11 @@ class LoginActivity : AppCompatActivity() {
             arrayListOutlet!!.add(o8)
         }
 
-        val d1 = Distributor(1,"Sai stores D", 1,"1",18.1890,73.122)
-        val d2 = Distributor(2,"OM shoppe D", 1,"1",18.1890,73.122)
-        val d3 = Distributor(3,"Jay Ganesh genaral shoppy D", 1,"1",18.1890,73.122)
-        val d4 = Distributor(4,"Balaji kirana shoppy D", 2,"1",18.1890,73.122)
-        val d5 = Distributor(5,"KK Shoppy D", 2,"1",18.1890,73.122)
+        val d1 = Distributor(1,"Sai stores D", 2,"1",18.1890,73.122)
+        val d2 = Distributor(2,"OM shoppe D", 2,"1",18.1890,73.122)
+        val d3 = Distributor(3,"Jay Ganesh genaral shoppy D", 2,"1",18.1890,73.122)
+        val d4 = Distributor(4,"Balaji kirana shoppy D", 3,"1",18.1890,73.122)
+        val d5 = Distributor(5,"KK Shoppy D", 3,"1",18.1890,73.122)
 
         var arrayListDistributor= ArrayList<Distributor>()
 
