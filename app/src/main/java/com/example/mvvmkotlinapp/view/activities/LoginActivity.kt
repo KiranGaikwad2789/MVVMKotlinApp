@@ -1,6 +1,7 @@
 package com.example.mvvmkotlinapp.view.activities
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.ManagePermissions
 import com.example.mvvmkotlinapp.common.UserSession
@@ -19,6 +24,8 @@ import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 import com.example.mvvmkotlinapp.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_register.*
 import org.jetbrains.anko.toast
+import org.json.JSONException
+import org.json.JSONObject
 
 
 class LoginActivity : AppCompatActivity() {
@@ -50,9 +57,53 @@ class LoginActivity : AppCompatActivity() {
                     userSession!!.setMobile(it.mobilenumber.toString())
                     userSession!!.setCurrentCity(it.city.toString())
 
-                    var intent=Intent(this@LoginActivity,HomePageActivity::class.java)
-                    startActivity(intent)
-                    finish()
+
+                    val url = "https://chatapp-72cf4.firebaseio.com/users.json"
+                    val pd = ProgressDialog(this@LoginActivity)
+                    pd.setMessage("Loading...")
+                    pd.show()
+
+                    val request =
+                        StringRequest(Request.Method.GET, url,
+                            Response.Listener { s ->
+                                if (s == "null") {
+                                    Toast.makeText(this@LoginActivity, "user not found", Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    try {
+                                        val obj = JSONObject(s)
+                                        if (!obj.has(bindingLogin.edtMobileNumber.text.toString())) {
+                                            Toast.makeText(
+                                                this@LoginActivity,
+                                                "user not found",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        } else if (obj.getJSONObject(bindingLogin.edtMobileNumber.text.toString()).getString("password") == bindingLogin.edtPassword.text.toString()) {
+                                            UserSession.username = bindingLogin.edtMobileNumber.text.toString()
+                                            UserSession.password = bindingLogin.edtPassword.text.toString()
+
+                                            startActivity(Intent(this@LoginActivity, HomePageActivity::class.java))
+                                            finish()
+                                        } else {
+                                            Toast.makeText(
+                                                this@LoginActivity,
+                                                "incorrect password",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    } catch (e: JSONException) {
+                                        e.printStackTrace()
+                                    }
+                                }
+                                pd.dismiss()
+                            }, Response.ErrorListener { volleyError ->
+                                println("" + volleyError)
+                                pd.dismiss()
+                            })
+
+                    val rQueue = Volley.newRequestQueue(this@LoginActivity)
+                    rQueue.add(request)
+
                 } else{
                     Toast.makeText(this , "Error occured: "+it , Toast.LENGTH_LONG).show()
                     loginViewModel!!.getUser.value = null
@@ -231,18 +282,18 @@ class LoginActivity : AppCompatActivity() {
 
 
         val ctc1 = Product(1,"Pasta Sauce", 1,1,1,1,96.00,"Parle-G","1",false,0)
-        val ctc2 = Product(2,"Salsa", 1,1,1,1,96.00,"Parle-G","1",false,0)
-        val ctc3 = Product(3,"Facial tissue", 1,1,1,1,240.00,"Parle-G","1",false,0)
+        val ctc2 = Product(2,"Salsa", 1,1,1,2,96.00,"Parle-G","1",false,0)
+        val ctc3 = Product(3,"Facial tissue", 1,1,2,2,240.00,"Parle-G","1",false,0)
 
-        val ctc4 = Product(4,"Peanut Buttor 125 ML", 2,1,1,1,224.00,"Parle-G","1",false,0)
-        val ctc5 = Product(5,"Shrikhand 125Ml", 2,1,1,1,224.00,"Parle-G","1",false,0)
+        val ctc4 = Product(4,"Peanut Buttor 125 ML", 2,2,3,3,224.00,"Parle-G","1",false,0)
+        val ctc5 = Product(5,"Shrikhand 125Ml", 2,2,3,3,224.00,"Parle-G","1",false,0)
 
 
-        val ctc6 = Product(6,"Lotion", 4,1,1,1,128.00,"Parle-G","1",false,0)
-        val ctc7 = Product(7,"Baby wash", 4,1,1,1,128.00,"Parle-G","1",false,0)
+        val ctc6 = Product(6,"Lotion", 4,3,4,3,128.00,"Parle-G","1",false,0)
+        val ctc7 = Product(7,"Baby wash", 4,3,4,4,128.00,"Parle-G","1",false,0)
 
-        val ctc8 = Product(8,"mini cone buttor scotch", 5,1,1,1,144.00,"Parle-G","1",false,0)
-        val ctc9 = Product(9,"Big cone black currant", 5,1,1,1,384.00,"Parle-G","1",false,0)
+        val ctc8 = Product(8,"mini cone buttor scotch", 5,4,5,4,144.00,"Parle-G","1",false,0)
+        val ctc9 = Product(9,"Big cone black currant", 5,5,6,5,384.00,"Parle-G","1",false,0)
 
         var arrayListProduct= ArrayList<Product>()
 

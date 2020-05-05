@@ -142,6 +142,10 @@ class ProductCartFragment : Fragment() {
                     productListViewModel.updateProductMasterProductID(arryListProductCart, it?.toInt(),status)
                     productListViewModel.updateSelectedProductsCountZero(arryListProductCart)
                     dialogInterface.dismiss()
+
+                    totalPrice=0.0
+                    totalProductQuantity=0
+
                     //productListViewModel.resultMasterProductOrder.value = null
                     activity!!.finish()
                 })
@@ -161,6 +165,9 @@ class ProductCartFragment : Fragment() {
 
 
     private fun setDataToAdapter(arryListCity: List<ProductOrderModel>) {
+
+        totalPrice=0.0
+        totalProductQuantity=0
 
         for(product in arryListCity){
 

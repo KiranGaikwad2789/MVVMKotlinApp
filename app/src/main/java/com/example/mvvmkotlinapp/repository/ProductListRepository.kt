@@ -32,9 +32,9 @@ class ProductListRepository (application: Application){
         masterProductOrderDao = database?.masterProductOrderDao()
     }
 
-    fun getProductCatList() = productCategoryDao?.getAllProductCategory()
+    fun getProductCatList(routeId:Int?,outletId:Int?,distId:Int?) = productCategoryDao?.getAllProductCategory(routeId,outletId,distId)
 
-    fun getProductList() = productDao?.getAllProducts()
+    fun getProductList(prodCatId:Int?,routeId:Int?,outletId:Int?,distId:Int?) = productDao?.getAllProducts(prodCatId,routeId,outletId,distId)
 
     fun getSelectedProductList() = productOrderDao?.getAllProductOrders()
 

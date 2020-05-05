@@ -1,6 +1,8 @@
 package com.example.mvvmkotlinapp.view.activities
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -17,10 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
 import com.example.mvvmkotlinapp.databinding.ActivityProductSelectBinding
+import com.example.mvvmkotlinapp.model.NewOrderModel
 import com.example.mvvmkotlinapp.repository.room.City
 import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
+import com.example.mvvmkotlinapp.utils.ModelPreferencesManager
 import com.example.mvvmkotlinapp.view.adapter.ProductCatListAdapter
-import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.NewOrderAddProductFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.ProductCartFragment
 import com.example.mvvmkotlinapp.viewmodel.ProductListViewModel
@@ -28,15 +31,21 @@ import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import kotlinx.android.synthetic.main.app_bar_product_list.*
 import kotlinx.android.synthetic.main.nav_header_product_list.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ProductListActivity : AppCompatActivity() {
 
+    companion object {
+        var cityArrayList: List<ProductCategory>? = ArrayList<ProductCategory>()
+        var array_sort: ArrayList<ProductCategory>? = ArrayList<ProductCategory>()
+    }
+    internal var textlength = 0
     lateinit var productListViewModel: ProductListViewModel
     lateinit var activityProductListBinding: ActivityProductSelectBinding
     private var adapter: ProductCatListAdapter? = null
     var productCatArrayList: ArrayList<ProductCategory>? = null
     var productCategory: ProductCategory? =null
-
+    var orderModel: NewOrderModel? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,43 +67,49 @@ class ProductListActivity : AppCompatActivity() {
         activityProductListBinding.navigationProduct.visibility=View.VISIBLE
 
         productCatArrayList = ArrayList<ProductCategory>()
+        orderModel = ModelPreferencesManager.get<NewOrderModel>("orderModel")
+
+        var delimiter = "| "
+        val routeNameSplit = orderModel?.routeName?.split(delimiter)
+        val outletNameSplit = orderModel?.outletName?.split(delimiter)
+        val distNameSplit = orderModel?.distributorName?.split(delimiter)
+
 
         activityProductListBinding.actionBar.fab.setOnClickListener { view ->
             activityProductListBinding.drawerLayout.openDrawer(activityProductListBinding.navView)
         }
 
         this?.let {
-            productListViewModel?.getProductCatList()?.observe(it, Observer<List<ProductCategory>> {
+            productListViewModel?.getProductCatList(routeNameSplit?.get(1)?.toInt(),
+                outletNameSplit?.get(1)?.toInt(),
+                distNameSplit?.get(1)?.toInt())?.observe(it, Observer<List<ProductCategory>> {
                 this.setDataToAdapter(it)
             })
         }
 
         loadFragment(ProductCartFragment())
 
-        /*activityProductListBinding.navView.edtSearchCategory!!.addTextChangedListener(object : TextWatcher {
+        /*activityProductListBinding.navView.edtSearchCategory!!.addTextChangedListener(object :
+            TextWatcher {
 
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 textlength = activityProductListBinding.navView.edtSearchCategory!!.text!!.length
-                CityListFragment.array_sort?.clear()
-                for (i in CityListFragment.cityArrayList!!.indices) {
-                    if (textlength <= CityListFragment.cityArrayList!![i].cityName!!.length) {
-                        Log.d("ertyyy", CityListFragment.cityArrayList!![i].cityName!!.toLowerCase().trim())
-                        if (CityListFragment.cityArrayList!![i].cityName!!.toLowerCase().trim().contains(
+                array_sort?.clear()
+                for (i in cityArrayList!!.indices) {
+                    if (textlength <= cityArrayList!![i].prod_cat_name!!.length) {
+                        Log.d("ertyyy", cityArrayList!![i].prod_cat_name!!.toLowerCase().trim())
+                        if (cityArrayList!![i].prod_cat_name!!.toLowerCase().trim().contains(
                                 activityProductListBinding.navView.edtSearchCategory!!.text.toString().toLowerCase().trim { it <= ' ' })
                         ) {
-                            CityListFragment.array_sort!!.add(CityListFragment.cityArrayList!![i])
+                            array_sort!!.add(cityArrayList!![i])
                         }
                     }
                 }
 
-                adapter = activity?.let { CityListAdapter(it, CityListFragment.array_sort) }
-                cityBinding.recyclerViewCityList!!.adapter = adapter
-                cityBinding.recyclerViewCityList!!.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                val dividerItemDecoration = DividerItemDecoration(cityBinding.recyclerViewCityList.getContext(), LinearLayoutManager.VERTICAL)
-                cityBinding.recyclerViewCityList.addItemDecoration(dividerItemDecoration)
+                array_sort?.let { setDataToAdapter(it) }
             }
         })*/
 
@@ -115,8 +130,8 @@ class ProductListActivity : AppCompatActivity() {
             override fun onItemClick(view: View, position: Int) {
 
                 productCategory= productCatArrayList!!.get(position);
-                Toast.makeText(this@ProductListActivity,""+ productCategory!!.prod_cat_name,Toast.LENGTH_SHORT).show()
-                loadFragment(NewOrderAddProductFragment())
+                Toast.makeText(this@ProductListActivity,""+ productCategory!!.prod_cat_id,Toast.LENGTH_SHORT).show()
+                loadFragment(NewOrderAddProductFragment(productCategory,orderModel))
             }
             override fun onItemLongClick(view: View?, position: Int) {
                 TODO("do nothing")

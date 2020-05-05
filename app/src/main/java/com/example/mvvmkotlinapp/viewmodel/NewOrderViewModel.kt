@@ -1,7 +1,6 @@
 package com.example.mvvmkotlinapp.viewmodel
 
 import android.app.Application
-import android.app.PendingIntent.getActivity
 import android.content.Intent
 import android.util.Log
 import android.widget.CompoundButton
@@ -11,10 +10,7 @@ import com.example.mvvmkotlinapp.model.NewOrderModel
 import com.example.mvvmkotlinapp.repository.CaptureOutletRepository
 import com.example.mvvmkotlinapp.repository.room.Outlet
 import com.example.mvvmkotlinapp.utils.ModelPreferencesManager
-import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.activities.ProductListActivity
-import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
-import com.example.mvvmkotlinapp.view.fragmets.homefragments.NewOrderAddProductFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.NewOrderFragment
 import io.reactivex.disposables.CompositeDisposable
 
@@ -38,6 +34,8 @@ class NewOrderViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun onNewOrderClicked(order:NewOrderModel){
+
+        Log.e("order: ", "" + order)
 
        /* var intent= Intent(context,ProductListActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

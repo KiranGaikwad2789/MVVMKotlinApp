@@ -5,6 +5,12 @@ import android.content.SharedPreferences
 
 class UserSession {
 
+    companion object{
+        var username = ""
+        var password = ""
+        var chatWith = ""
+    }
+
 
 
     var pref: SharedPreferences

@@ -6,12 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.mvvmkotlinapp.repository.room.tables.Product
+import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
 
 @Dao
 interface ProductDao {
 
-    @Query("SELECT * FROM Product")
-    fun getAllProducts(): LiveData<List<Product>>
+    @Query("SELECT * FROM Product WHERE prod_cat_id LIKE :prodCatId AND route_id LIKE :routeId AND outlet_id LIKE :outletId AND dist_id LIKE :distId")
+    fun getAllProducts(prodCatId:Int?,routeId:Int?,outletId:Int?,distId:Int?): LiveData<List<Product>>
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAllProducts(vararg category: Product)

@@ -27,9 +27,9 @@ class ProductListViewModel(application: Application) : AndroidViewModel(applicat
 
 
 
-    fun getProductCatList() = repository.getProductCatList()
+    fun getProductCatList(routeId:Int?,outletId:Int?,distId:Int?) = repository.getProductCatList(routeId,outletId,distId)
 
-    fun getProductList() = repository.getProductList()
+    fun getProductList(prodCatId:Int?,routeId:Int?,outletId:Int?,distId:Int?) = repository.getProductList(prodCatId,routeId,outletId,distId)
 
     fun getSelectedProductList() = repository.getSelectedProductList()
 
