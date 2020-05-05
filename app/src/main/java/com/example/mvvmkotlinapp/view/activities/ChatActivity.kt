@@ -56,8 +56,6 @@ class ChatActivity : AppCompatActivity() {
             if (messageText != "") {
                 val map: MutableMap<String, String> = HashMap()
 
-                //map["message"] = messageText
-                //map["user"] = UserSession.username
 
                 map["chatId"] =  UserSession.username + "_" + UserSession.chatWith
                 map["messageId"] = userSession?.getUserId() +""+ currentDate!!.orderDateFormater()
