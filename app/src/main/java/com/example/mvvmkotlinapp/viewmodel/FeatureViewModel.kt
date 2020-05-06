@@ -1,15 +1,10 @@
 package com.example.mvvmkotlinapp.viewmodel
 
-import android.app.Activity
 import android.app.Application
-import android.content.Intent
 import android.util.Log
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import com.example.mvvmkotlinapp.repository.room.Features
-import com.example.mvvmkotlinapp.view.activities.FirebaseChatActivity
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
-import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.*
 
 class FeatureViewModel(application: Application) : AndroidViewModel(application) {
@@ -69,8 +64,7 @@ class FeatureViewModel(application: Application) : AndroidViewModel(application)
             activity1?.commonMethodForFragment(CustomerSupportFragment(), true)
             //activity1!!.loadFragment(CustomerSupportFragment())
         }else if(features.featureId==14){
-            var intent=Intent(activity1,FirebaseChatActivity::class.java)
-            activity1?.startActivity(intent)
+            activity1?.commonMethodForFragment(FirebaseChatUserListFragment(), true)
         }
     }
 

@@ -5,14 +5,6 @@ import android.content.SharedPreferences
 
 class UserSession {
 
-    companion object{
-        var username = ""
-        var password = ""
-        var chatWith = ""
-    }
-
-
-
     var pref: SharedPreferences
     var editor: SharedPreferences.Editor? = null
     var _context: Context? = null
@@ -25,6 +17,7 @@ class UserSession {
     val KEY_EMAIL = "useremail"
     val KEY_MOBILE = "usermobile"
     val KEY_CITY = "city"
+    val KEY_CHATWITH = "chatWith"
 
     private val KEY_JWT_TOKEN = "jwtToken"
     private val KEY_SELECTED_CATEGORY_LIST = "selectedCategoryList"
@@ -89,5 +82,15 @@ class UserSession {
         setUsername(null)
         setMobile(null)
         setEmail(null)
+    }
+
+
+    fun setChatWith(username: String?) {
+        editor!!.putString(KEY_CHATWITH, username)
+        editor!!.commit()
+    }
+
+    fun getChatWith(): String? {
+        return pref!!.getString(KEY_CHATWITH, null)
     }
 }

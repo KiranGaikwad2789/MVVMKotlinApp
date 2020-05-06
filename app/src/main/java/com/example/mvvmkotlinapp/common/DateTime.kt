@@ -62,4 +62,21 @@ public class DateTime {
 
         return outputFormat.format(inputFormat.parse(selectedDate))
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    public fun chatDateForamt(selectedDate:String): String? {
+
+        var dateSplit=selectedDate.split(" ")
+        Log.e("date ",""+dateSplit[0])
+        Log.e("time ",""+dateSplit[1])
+
+        val parsedDate = LocalDate.parse(dateSplit[0], DateTimeFormatter.ISO_LOCAL_DATE)
+        val formattedDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).format(parsedDate)
+
+        val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val outputFormat: DateFormat = SimpleDateFormat("KK:mm a")
+        System.out.println(outputFormat.format(inputFormat.parse(selectedDate)))
+
+        return outputFormat.format(inputFormat.parse(selectedDate))
+    }
 }

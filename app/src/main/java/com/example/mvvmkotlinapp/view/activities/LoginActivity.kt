@@ -73,23 +73,18 @@ class LoginActivity : AppCompatActivity() {
                                     try {
                                         val obj = JSONObject(s)
                                         if (!obj.has(bindingLogin.edtMobileNumber.text.toString())) {
-                                            Toast.makeText(
-                                                this@LoginActivity,
-                                                "user not found",
-                                                Toast.LENGTH_LONG
-                                            ).show()
+
+                                            Toast.makeText(this@LoginActivity, "user not found", Toast.LENGTH_LONG).show()
+
                                         } else if (obj.getJSONObject(bindingLogin.edtMobileNumber.text.toString()).getString("password") == bindingLogin.edtPassword.text.toString()) {
-                                            UserSession.username = bindingLogin.edtMobileNumber.text.toString()
-                                            UserSession.password = bindingLogin.edtPassword.text.toString()
 
                                             startActivity(Intent(this@LoginActivity, HomePageActivity::class.java))
                                             finish()
+
                                         } else {
-                                            Toast.makeText(
-                                                this@LoginActivity,
-                                                "incorrect password",
-                                                Toast.LENGTH_LONG
-                                            ).show()
+
+                                            Toast.makeText(this@LoginActivity, "incorrect password", Toast.LENGTH_LONG).show()
+
                                         }
                                     } catch (e: JSONException) {
                                         e.printStackTrace()

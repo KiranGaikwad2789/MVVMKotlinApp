@@ -4,7 +4,9 @@ import com.example.mvvmkotlinapp.model.LoginInfo
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+
 
 interface APIInterface {
 
@@ -12,4 +14,9 @@ interface APIInterface {
     @POST("auth/login/")
     fun doLogin(@Field("username") username: String?, @Field("password") password: String?): Call<LoginInfo>?
 
+    @GET("users.json")
+    fun getChatUsersList(): Call<String>?
+
+    @GET("users.json")
+    fun getCliente(): Call<String?>?
 }
