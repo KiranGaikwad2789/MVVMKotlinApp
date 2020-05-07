@@ -107,10 +107,11 @@ class NewOrderFragment : Fragment() {
 
     private fun setRouteListAdapter(it: List<Route>?) {
         if (it != null) {
-            val adapter = RouteListAdapter(this, android.R.layout.simple_list_item_1, it)
+            val adapter =
+                activity?.let { it1 -> RouteListAdapter(it1, android.R.layout.simple_list_item_1, it) }
             newOrderDataBinding.autoCompleteRouteName.setAdapter(adapter)
             newOrderDataBinding.autoCompleteRouteName.threshold = 2
-            newOrderDataBinding.autoCompleteRouteName.setText(adapter.getItem(0).toString())
+            newOrderDataBinding.autoCompleteRouteName.setText(adapter?.getItem(0).toString())
         }
     }
 }
