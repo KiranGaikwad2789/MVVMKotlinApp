@@ -30,6 +30,7 @@ import com.example.mvvmkotlinapp.viewmodel.NewOrderViewModel
  */
 class NewOrderFragment : Fragment() {
 
+
     lateinit var newOrderViewModel: NewOrderViewModel
     lateinit var newOrderDataBinding : FragmentNewOrderBinding
 
@@ -45,6 +46,8 @@ class NewOrderFragment : Fragment() {
            outletName =  newOrderDataBinding.autoCompleteOutletName.text.toString(),
            distributorName =  newOrderDataBinding.autoCompleteDistName.text.toString())
         newOrderDataBinding.order=newOrderModel
+
+
 
         setObjectInitialize()
 
