@@ -46,12 +46,7 @@ class NewOrderFragment : Fragment() {
            distributorName =  newOrderDataBinding.autoCompleteDistName.text.toString())
         newOrderDataBinding.order=newOrderModel
 
-        (getActivity() as HomePageActivity?)?.visibleMenuItems(4)
-        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
-        (activity as DrawerLocker?)!!.setDrawerEnabled(true)
-
-        newOrderViewModel!!.anotherClass(this)
-
+        setObjectInitialize()
 
         activity?.let {
             newOrderViewModel?.getRouteList()?.observe(it, Observer<List<Route>> {
@@ -98,6 +93,13 @@ class NewOrderFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun setObjectInitialize() {
+        (getActivity() as HomePageActivity?)?.visibleMenuItems(4)
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+        (activity as DrawerLocker?)!!.setDrawerEnabled(true)
+        newOrderViewModel!!.anotherClass(this)
     }
 
     private fun setRouteListAdapter(it: List<Route>?) {
