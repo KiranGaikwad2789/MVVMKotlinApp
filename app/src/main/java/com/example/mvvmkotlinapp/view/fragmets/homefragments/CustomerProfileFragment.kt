@@ -57,7 +57,7 @@ class CustomerProfileFragment : Fragment() {
             captureOutletViewModel?.getOutletList()?.observe(it, Observer<List<Outlet>> {
                 Log.e("Outlet List ",""+ it!!.size)
                 if (it != null) {
-                    val adapter = OutletListAdapter(this!!.activity!!, android.R.layout.simple_list_item_1, it)
+                    val adapter = OutletListAdapter(activity!!, android.R.layout.simple_list_item_1, it)
                     customerProfileBinding.autoCompleteOutletName.setAdapter(adapter)
                     customerProfileBinding.autoCompleteOutletName.threshold = 2
                 }
@@ -65,15 +65,17 @@ class CustomerProfileFragment : Fragment() {
         }
 
 
-        captureOutletViewModel.nextFragmentNavigate.observe(this, Observer<NewOrderModel> { status ->
-            status?.let {
+        activity?.let {
+            captureOutletViewModel.nextFragmentNavigate.observe(it, Observer<NewOrderModel> { status ->
+                status?.let {
 
-                if (it != null) {
-                    (activity as HomePageActivity).commonMethodForFragment(CustomerProfileDetailsFragment(it),true)
-                    captureOutletViewModel.nextFragmentNavigate.value = null
+                    if (it != null) {
+                        (activity as HomePageActivity).commonMethodForFragment(CustomerProfileDetailsFragment(it),true)
+                        captureOutletViewModel.nextFragmentNavigate.value = null
+                    }
                 }
-            }
-        })
+            })
+        }
 
         return view
     }

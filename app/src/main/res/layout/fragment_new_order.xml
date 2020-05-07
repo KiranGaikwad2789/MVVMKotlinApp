@@ -14,37 +14,53 @@
             type="com.example.mvvmkotlinapp.viewmodel.NewOrderViewModel" />
     </data>
 
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_6sdp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_100sdp"
                 android:padding="@dimen/_6sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
 
+                <TextView
+                    android:id="@+id/txtlabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="Book New Order"
+                    android:textColor="@color/colorGrey"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout2"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    app:errorEnabled="true"
+                    android:layout_marginTop="32dp"
                     app:error="@{newOrderViewModel.errorRouteName}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:errorEnabled="true"
+                    app:layout_constraintTop_toBottomOf="@+id/txtlabel"
+                    tools:layout_editor_absoluteX="7dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/autoCompleteRouteName"
@@ -103,7 +119,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/dist"
-                        android:imeOptions="actionDone"
+                        android:imeOptions="actionGo"
                         android:paddingLeft="@dimen/_5sdp"
                         android:text="@={order.distributorName}"
                         android:layout_margin="@dimen/_5sdp" />
@@ -140,10 +156,36 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLogin" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabOutletDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/fablabel"
+                app:layout_constraintTop_toBottomOf="@+id/btnOrderPlace"
+                app:srcCompat="@android:drawable/ic_dialog_email">
+
+            </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+            <TextView
+                android:id="@+id/fablabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="Near By Outlets"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fabOutletDetails" />
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
 
 </layout>

@@ -11,6 +11,8 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmkotlinapp.R
@@ -44,6 +46,8 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
         customerProfileBinding.customerProfileViewModel=customerProfileViewModel
 
         var outletValNID= orderModel.outletName?.split(" | ")
+        var routeValNID= orderModel.routeName?.split(" | ")
+        Log.e("Order model ",orderModel.toString())
 
 
         customerProfileBinding.edtDateOfEstablished.setText(SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()))
@@ -73,7 +77,6 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
         activity?.let {
             customerProfileViewModel?.getOutletDetails(outletValNID!![1])?.observe(it, Observer<OutletDetails> {
                 if (it != null) {
-
                     Log.e("Outlet fragment details ",""+ it)
                     outletDetails=it
 
@@ -102,35 +105,36 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
                         outlet_primary_business =outletDetails?.outlet_primary_business,
                         outlet_status =outletDetails?.outlet_status)
 
-                    /*var outletDetails = OutletDetails(
+                    customerProfileBinding.outletDetails=outletDetails
+                }else{
+
+                    var outletDetails = OutletDetails(
                         uid = outletDetails?.uid,
-                        outlet_id = outletDetails?.outlet_id,
-                        outlet_name = outletDetails?.outlet_name,
-
-                        route_name = customerProfileBinding.edtRouteName.text.toString(),
-                        dist_name = customerProfileBinding.edtDistributorName.text.toString(),
-                        outlet_type = outletType,
-                        outlet_subtype = outletSubType,
-
-                        outlet_address =customerProfileBinding.edtOutletAddress.text.toString(),
-                        outlet_owner_name =customerProfileBinding.edtOwnerName.text.toString(),
-                        outlet_contact_number =customerProfileBinding.edtContactNumber.text.toString(),
-                        outlet_contact_alt_number =customerProfileBinding.edtContactAltNumber.text.toString(),
-                        outlet_email_id =customerProfileBinding.edtOutletEmailID.text.toString(),
-                        outlet_contact_person =customerProfileBinding.edtOutletContactPerson.text.toString(),
-                        outlet_sizeof_facility =customerProfileBinding.edtOutletSixeOfFacility.text.toString(),
-                        outlet_GST_number =customerProfileBinding.edtOutletGSTNumber.text.toString(),
-                        outlet_license_details =customerProfileBinding.edtOutletLicenseDetails.text.toString(),
-                        outlet_business_monthly =customerProfileBinding.edtAppxBusinessMonthly.text.toString(),
-                        outlet_day_footprint =customerProfileBinding.edtAppxDayFootprint.text.toString(),
-                        outlet_competitor_remarks =customerProfileBinding.edtCompetitorRemarks.text.toString(),
-                        outlet_date_of_established =customerProfileBinding.edtDateOfEstablished.text.toString(),
-                        outlet_business_segment =customerProfileBinding.edtBussinessSegment.text.toString(),
-                        outlet_primary_business =customerProfileBinding.edtPrimaryBussiness.text.toString(),
-                        outlet_status ="1")*/
-
+                        outlet_id = outletValNID!![1].toInt(),
+                        outlet_name = outletValNID!![0],
+                        route_name = routeValNID?.get(0),
+                        dist_name = outletDetails?.dist_name,
+                        outlet_type = outletDetails?.outlet_type,
+                        outlet_subtype = outletDetails?.outlet_subtype,
+                        outlet_address =outletDetails?.outlet_address,
+                        outlet_owner_name = outletDetails?.outlet_owner_name,
+                        outlet_contact_number = outletDetails?.outlet_contact_number,
+                        outlet_contact_alt_number = outletDetails?.outlet_contact_alt_number,
+                        outlet_email_id = outletDetails?.outlet_email_id,
+                        outlet_contact_person = outletDetails?.outlet_contact_person,
+                        outlet_sizeof_facility = outletDetails?.outlet_sizeof_facility,
+                        outlet_GST_number = outletDetails?.outlet_GST_number,
+                        outlet_license_details =outletDetails?.outlet_license_details,
+                        outlet_business_monthly =outletDetails?.outlet_business_monthly,
+                        outlet_day_footprint =outletDetails?.outlet_day_footprint,
+                        outlet_competitor_remarks =outletDetails?.outlet_competitor_remarks,
+                        outlet_date_of_established =outletDetails?.outlet_date_of_established,
+                        outlet_business_segment =outletDetails?.outlet_business_segment,
+                        outlet_primary_business =outletDetails?.outlet_primary_business,
+                        outlet_status =outletDetails?.outlet_status)
                     customerProfileBinding.outletDetails=outletDetails
                 }
+
             })
         }
 
@@ -138,6 +142,12 @@ class CustomerProfileDetailsFragment(var orderModel: NewOrderModel) : Fragment()
             status?.let {
                 if(it=="1"){
                     Toast.makeText(activity , "Outlet details updated Sucessfully" , Toast.LENGTH_LONG).show()
+
+                    val manager: FragmentManager = activity!!.supportFragmentManager
+                    val trans: FragmentTransaction = manager.beginTransaction()
+                    trans.remove(CustomerProfileDetailsFragment(orderModel))
+                    trans.commit()
+                    manager.popBackStack()
                 } else
                     Toast.makeText(activity , "Error occured: "+it , Toast.LENGTH_LONG).show()
                 customerProfileViewModel.updateStatus.postValue(null)

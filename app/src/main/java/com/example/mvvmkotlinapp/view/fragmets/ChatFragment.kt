@@ -18,6 +18,8 @@ import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentChatBinding
 import com.example.mvvmkotlinapp.model.ChatMessage
+import com.example.mvvmkotlinapp.utils.CustomProgressDialog
+import com.example.mvvmkotlinapp.utils.SkyggeProgressDialog
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.adapter.MessageAdapter
 import com.example.mvvmkotlinapp.viewmodel.FirebaseChatViewModel
@@ -38,13 +40,13 @@ class ChatFragment : Fragment() {
     lateinit var firebaseChatViewModel: FirebaseChatViewModel
     lateinit var binding: FragmentChatBinding
 
-    var reference1: Firebase? = null
-    var reference2: Firebase? = null
-    var databaseReference: DatabaseReference? = null
+    private var reference1: Firebase? = null
+    private var reference2: Firebase? = null
     private var currentDate: DateTime? =null
     private var userSession: UserSession? =null
-    val toReturn: ArrayList<ChatMessage> = ArrayList()
+    private val arryListMessageList: ArrayList<ChatMessage> = ArrayList()
     private var adapter: MessageAdapter? = null
+    private val skyggeProgressDialog = CustomProgressDialog()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -54,30 +56,16 @@ class ChatFragment : Fragment() {
         val view: View = binding.getRoot()
         binding.lifecycleOwner = this
         binding.firebaseChatViewModel=firebaseChatViewModel
-        (getActivity() as HomePageActivity?)?.visibleMenuItems(14)
 
-        currentDate= DateTime()
-        userSession=UserSession(activity)
-
-        //get reference to our db
-        databaseReference = FirebaseDatabase.getInstance().reference
-
-        adapter = activity?.let { MessageAdapter(toReturn, it) }
-        binding.recyclerViewMessageList.adapter = adapter
-        binding.recyclerViewMessageList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-
-        Firebase.setAndroidContext(activity)
-        reference1 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession?.getMobile().toString() + "_" + userSession!!.getChatWith())
-        reference2 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession!!.getChatWith().toString() + "_" + userSession?.getMobile())
+        getObjectsInitialize()
+        setMessageAdapter()
 
         binding.imgBtnSendMessage.setOnClickListener(View.OnClickListener {
 
             val messageText: String = binding.edtMessage.getText().toString()
-
             if (messageText != "") {
 
                 val map: MutableMap<String, String> = HashMap()
-
                 map["chatId"] =  userSession?.getMobile() + "_" + userSession!!.getChatWith()
                 map["messageId"] = userSession?.getUserId() +""+ currentDate!!.orderDateFormater()
                 map["senderId"] = userSession?.getMobile().toString()
@@ -93,47 +81,16 @@ class ChatFragment : Fragment() {
         })
 
 
-       /* val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                Log.e("dataSnapshot value ",""+dataSnapshot)
-
-                val toReturn: ArrayList<ChatMessage> = ArrayList();
-
-                for(data in dataSnapshot.children){
-
-                    val messageData = data.getValue<ChatMessage>(ChatMessage::class.java)
-                    Log.e("dataSnapshot children ",""+dataSnapshot.children)
-
-                    //unwrap
-                    val message = messageData?.let { it } ?: continue
-
-                    toReturn.add(message)
-                }
-                Log.e("toReturn value ",""+toReturn.toString())
-                setupAdapter(toReturn)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                //log error
-            }
-        }
-        databaseReference?.child("messages")?.addValueEventListener(postListener)*/
-
-
+        activity?.let { skyggeProgressDialog.show(it,"Please Wait...") }
         reference1?.addChildEventListener(object : EventListener, ChildEventListener {
-            override fun onCancelled(p0: FirebaseError?) {
-            }
+            override fun onCancelled(p0: FirebaseError?) {}
 
-            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
-            }
+            override fun onChildMoved(p0: DataSnapshot?, p1: String?) {}
 
-            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
-            }
+            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {}
 
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
 
-                //if(!TextUtils.isEmpty(p1)){
                     val map = p0?.getValue(Map::class.java)
 
                     val chatId = map?.get("chatId").toString()
@@ -145,69 +102,29 @@ class ChatFragment : Fragment() {
                     val messageType = map?.get("messageType").toString()
 
                     var chatMessage=ChatMessage(chatId,messageId,senderId,receiverId,message,timeStamp,messageType)
-                    toReturn.add(chatMessage)
+                    arryListMessageList.add(chatMessage)
                     adapter!!.notifyDataSetChanged()
-
-                    Log.e("toReturn data ",""+toReturn.toString())
-
-                    //setupAdapter(toReturn)
-                //}
+                    skyggeProgressDialog?.dialog?.dismiss()
             }
             override fun onChildRemoved(p0: DataSnapshot?) {
             }
-
-        }
-        )
-
-        // Inflate the layout for this fragment
+        })
         return view
     }
 
-    private fun setupAdapter(arryListMessage: ArrayList<ChatMessage>) {
-        Log.e("toReturn size ",""+arryListMessage.size)
-        val linearLayoutManager = LinearLayoutManager(activity)
-        binding.recyclerViewMessageList.layoutManager = linearLayoutManager
-        binding.recyclerViewMessageList.adapter = activity?.let {
-            MessageAdapter(arryListMessage,
-                it
-            )
-        }
-
-        //scroll to bottom
-        binding.recyclerViewMessageList.scrollToPosition(arryListMessage.size - 1)
-
+    private fun setMessageAdapter() {
+        adapter = activity?.let { MessageAdapter(arryListMessageList, it) }
+        binding.recyclerViewMessageList.adapter = adapter
+        binding.recyclerViewMessageList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
     }
 
-   /* fun addMessageBox(message: String?, type: Int) {
-        val textView = TextView(activity)
-        textView.text = message
+    private fun getObjectsInitialize() {
+        (getActivity() as HomePageActivity?)?.visibleMenuItems(14)
+        currentDate= DateTime()
+        userSession=UserSession(activity)
+        Firebase.setAndroidContext(activity)
+        reference1 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession?.getMobile().toString() + "_" + userSession!!.getChatWith())
+        reference2 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession!!.getChatWith().toString() + "_" + userSession?.getMobile())
 
-        *//*val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-            weight = 1.0f
-            gravity = Gravity.TOP
-        }*//*
-
-        val rlp = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
-        )
-
-        rlp.setMargins(0, 0, 0, 10)
-        textView.layoutParams = rlp
-
-        if (type == 1) {
-
-            textView.setBackgroundResource(R.drawable.rounded_corner1)
-            textView.gravity=Gravity.LEFT
-            rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-        } else {
-
-            textView.setBackgroundResource(R.drawable.rounded_corner2)
-            textView.gravity=Gravity.RIGHT
-            rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
-
-        }
-        binding.layout1.addView(textView)
-        binding.scrollView.fullScroll(View.FOCUS_DOWN)
-    }*/
+    }
 }

@@ -2,6 +2,7 @@ package com.example.mvvmkotlinapp. viewmodel
 
 import android.R
 import android.app.Application
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -139,11 +140,16 @@ class CaptureOutletViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun onNewOrderClicked(order:NewOrderModel){
-        Log.e("Outlet selected: ", ""+ order.outletName)
-        Log.e("spinner selected : ", ""+ strSpinnerName)
 
-        var newOrderModel = NewOrderModel(strSpinnerName,order.outletName,null)
-        nextFragmentNavigate.postValue(newOrderModel)
+        if (TextUtils.isEmpty(order.outletName) || TextUtils.isEmpty(strSpinnerName)){
+            Toast.makeText(getApplication(),"Select Outlet",Toast.LENGTH_SHORT).show()
+        }else{
+            Log.e("Outlet selected: ", ""+ order.outletName)
+            Log.e("spinner selected : ", ""+ strSpinnerName)
+
+            var newOrderModel = NewOrderModel(strSpinnerName,order.outletName,null)
+            nextFragmentNavigate.postValue(newOrderModel)
+        }
     }
 
     fun onOutletSaveClicked(outlet: Outlet){

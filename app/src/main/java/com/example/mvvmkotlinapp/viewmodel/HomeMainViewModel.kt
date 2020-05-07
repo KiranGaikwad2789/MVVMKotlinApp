@@ -31,7 +31,7 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
 
-            R.id.nav_home_page -> {
+            /*R.id.nav_home_page -> {
                 (activity1 as HomePageActivity).commonMethodForFragment(HomePageFragment(), false)
                 //activity1!!.loadFragment(HomePageFragment())
                 return true
@@ -53,7 +53,8 @@ class HomeMainViewModel(application: Application) : AndroidViewModel(application
             R.id.nav_fetch_data -> {
                 activity1?.let { AlertDialog.basicAlert(it, activity1!!.getString(R.string.fetchdata_title),activity1!!.getString(R.string.fetchdata_message),"1") }
                 return true
-            }
+            }*/
+
             R.id.nav_review_order -> {
                 (activity1 as HomePageActivity).commonMethodForFragment(ReviewOrderFragment(), true)
                 //activity1!!.loadFragment(ReviewOrderFragment())

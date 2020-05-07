@@ -36,9 +36,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
-                app:onNavigationItemSelected="@{homeModel::onNavigationItemSelected}"
-                app:headerLayout="@layout/nav_header_home_page"
-                app:menu="@menu/activity_home_page_drawer" />
+                app:headerLayout="@layout/nav_header_home_page" />
 
         </androidx.drawerlayout.widget.DrawerLayout>
 

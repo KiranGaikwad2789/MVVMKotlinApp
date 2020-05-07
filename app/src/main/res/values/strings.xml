@@ -68,9 +68,8 @@
 
 
     <string name="route">Enter Route</string>
-    <string name="outlet">Enter outlet name</string>
-
-    <string name="dist">Enter distributor name</string>
+    <string name="outlet">Search outlet from list</string>
+    <string name="dist">Enter distributor</string>
 
     <string name="shortdelivery_title">Alert</string>
     <string name="shortdelivery_message">Please input correct delivered quantity against the respective product and then click on confirm shortclose.</string>

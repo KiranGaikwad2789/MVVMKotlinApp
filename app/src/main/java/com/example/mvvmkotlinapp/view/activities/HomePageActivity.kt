@@ -1,8 +1,10 @@
 package com.example.mvvmkotlinapp.view.activities
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -17,8 +19,10 @@ import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.ActivityHomePageBinding
 import com.example.mvvmkotlinapp.interfaces.DrawerLocker
+import com.example.mvvmkotlinapp.utils.AlertDialog
+import com.example.mvvmkotlinapp.view.fragmets.AlarmSettingFragment
 import com.example.mvvmkotlinapp.view.fragmets.HomePageFragment
-import com.example.mvvmkotlinapp.view.fragmets.homefragments.OrderDeliveryFragment
+import com.example.mvvmkotlinapp.view.fragmets.MyProfileFragment
 import com.example.mvvmkotlinapp.viewmodel.HomeMainViewModel
 import com.google.android.material.bottomnavigation.LabelVisibilityMode.LABEL_VISIBILITY_LABELED
 import kotlinx.android.synthetic.main.app_bar_home_page.*
@@ -32,6 +36,7 @@ class HomePageActivity : AppCompatActivity(), DrawerLocker {
     private var userSession: UserSession? =null
     var toggle: ActionBarDrawerToggle? =null
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBindingView()
@@ -49,6 +54,7 @@ class HomePageActivity : AppCompatActivity(), DrawerLocker {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun initializeObjects() {
 
         setSupportActionBar(toolbar)
@@ -65,6 +71,12 @@ class HomePageActivity : AppCompatActivity(), DrawerLocker {
         val headerView = binding!!.navView.getHeaderView(0)
         headerView.txtUserName.text = userSession!!.getUsername()
         headerView.txtAppVersion.text = userSession!!.getEmail()
+
+        headerView.llHomePage.setOnClickListener { commonMethodForFragment(HomePageFragment(), false) }
+        headerView.llMyProfile.setOnClickListener { commonMethodForFragment(MyProfileFragment(), true) }
+        headerView.llAlarmSetting.setOnClickListener { commonMethodForFragment(AlarmSettingFragment(), true) }
+        headerView.llBackup.setOnClickListener { AlertDialog.basicAlert(this, getString(R.string.backup_title), getString(R.string.backup_message),"1") }
+        headerView.llFetchSettingData.setOnClickListener { AlertDialog.basicAlert(this, getString(R.string.fetchdata_title),getString(R.string.fetchdata_message),"1")  }
 
 
     }

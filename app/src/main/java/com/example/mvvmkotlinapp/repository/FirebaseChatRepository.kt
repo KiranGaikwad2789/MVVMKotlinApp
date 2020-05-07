@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.mvvmkotlinapp.interfaces.APIInterface
 import com.example.mvvmkotlinapp.repository.retrofit.RetrofitInstance
+import com.google.gson.JsonObject
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,7 +14,7 @@ import retrofit2.Response
 
 class FirebaseChatRepository(application: Application) {
 
-    fun getChatUsersList(): MutableLiveData<String>? {
+    /*fun getChatUsersList(): MutableLiveData<String>? {
         val data: MutableLiveData<String>? = MutableLiveData()
 
         RetrofitInstance.getClient()?.create(APIInterface::class.java)?.getChatUsersList()
@@ -29,24 +31,26 @@ class FirebaseChatRepository(application: Application) {
                 }
             })
         return data
-    }
+    }*/
 
-    fun getlist() : MutableLiveData<String>?{
-        val data: MutableLiveData<String>? = MutableLiveData()
+    fun getlist() : MutableLiveData<JsonObject>?{
 
-        val call: Call<String?>? = RetrofitInstance.getClient()?.create(APIInterface::class.java)?.getCliente()
-        call?.enqueue(object : Callback<String?> {
+        val data: MutableLiveData<JsonObject>? = MutableLiveData()
 
-            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+
+        val call: Call<JsonObject>? = RetrofitInstance.getClient()?.create(APIInterface::class.java)?.getCliente()
+        call?.enqueue(object : Callback<JsonObject?> {
+
+            override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
                 if (response.isSuccessful) { // your code to get data from the list
-                    data?.postValue(response?.body())
-                    Log.e("Retrofit response repository  ", response?.body())
+                    data?.postValue(response.body())
+                    Log.e("Retrofit response repository  ", response?.body().toString())
                 } else {
 
                 }
             }
 
-            override fun onFailure(call: Call<String?>, t: Throwable) {
+            override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
                 data?.postValue(null)
                 Log.e("Retrofit response error  ",t.message)
             }

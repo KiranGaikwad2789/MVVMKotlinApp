@@ -35,7 +35,7 @@
                 android:text="No users found!"
                 android:visibility="gone" />
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/usersList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
