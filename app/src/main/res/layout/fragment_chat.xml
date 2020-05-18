@@ -14,11 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include layout="@layout/toolbar"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMessageList"
             android:layout_above="@+id/mainActivityTextContainer"
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/_50sdp"
             android:layout_height="match_parent"/>
+
 
         <LinearLayout
             android:id="@+id/mainActivityTextContainer"
@@ -27,13 +31,14 @@
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
             android:layout_margin="@dimen/_5sdp"
+            android:elevation="@dimen/_10sdp"
             android:background="@drawable/drw_rounded_shape"
             android:weightSum="10">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordWrapper"
                 android:layout_width="0dp"
-                android:layout_weight="8"
+                android:layout_weight="7"
                 android:paddingLeft="@dimen/_5sdp"
                 android:layout_height="match_parent">
 
@@ -50,11 +55,21 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <ImageView
+                android:id="@+id/imgBtnAttachment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_2sdp"
+                android:src="@drawable/ic_attach_file" />
+
             <ImageView
                 android:id="@+id/imgBtnSendMessage"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="1.5"
                 android:src="@android:drawable/ic_menu_send" />
         </LinearLayout>
 

@@ -19,7 +19,9 @@
         app:layout_constraintStart_toStartOf="parent"
         android:background="@drawable/rounded_corner1"
         android:paddingLeft="@dimen/_5sdp"
+        android:visibility="gone"
         android:paddingRight="@dimen/_5sdp"
+        app:layout_constraintBottom_toTopOf="@+id/imgSenderImage"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -32,7 +34,7 @@
             android:layout_marginRight="1dp"
             android:layout_marginBottom="2dp"
             android:textSize="17sp"
-            android:textColor="@color/colorBlackTransparent"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="normal"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +52,7 @@
             android:paddingRight="@dimen/_5sdp"
             android:textSize="10sp"
             android:textStyle="normal"
-            android:textColor="@color/colorBlackTransparent"
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,15 +61,32 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ImageView
+        android:id="@+id/imgSenderImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_home_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutSenderID">
+
+    </ImageView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutReceiverID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corner2"
         android:paddingLeft="@dimen/_5sdp"
+        android:visibility="gone"
         android:paddingRight="@dimen/_5sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imgReceiverImage"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -76,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="17sp"
-            android:textColor="@color/colorBlackTransparent"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="normal"
             app:layout_constraintRight_toLeftOf="@+id/txtMessageReciverTime"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +111,7 @@
             android:paddingRight="@dimen/_5sdp"
             android:textSize="10sp"
             android:textStyle="normal"
-            android:textColor="@color/colorBlackTransparent"
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtMessageReciver" />
@@ -100,6 +119,21 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imgReceiverImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_home_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutReceiverID">
+
+    </ImageView>
 
 
 

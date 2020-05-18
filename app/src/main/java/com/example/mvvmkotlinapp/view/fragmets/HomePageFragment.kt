@@ -80,8 +80,8 @@ class HomePageFragment : Fragment() {
         userSession=UserSession(activity)
         homePageBinding.txtLocation.text= userSession!!.getCurrentCity()
 
-        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
-        (activity as DrawerLocker?)!!.setDrawerEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.show()
+        (activity as DrawerLocker).setDrawerEnabled(true)
 
     }
 
@@ -107,14 +107,14 @@ class HomePageFragment : Fragment() {
         if(s.equals("dialog")){
             val newFragment: CityListFragment? = CityListFragment.Companion.newInstance()
             if (newFragment != null) {
-                newFragment.show(activity!!.supportFragmentManager, "dialog")
+                activity?.supportFragmentManager?.let { newFragment.show(it, "dialog") }
             }
         }else{
-            val transaction = activity!!.supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.container, fragment)
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.container, fragment)
+            transaction?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
         }
 
     }

@@ -21,6 +21,7 @@ import com.example.mvvmkotlinapp.databinding.ActivityLoginBinding
 import com.example.mvvmkotlinapp.repository.room.*
 import com.example.mvvmkotlinapp.repository.room.tables.Product
 import com.example.mvvmkotlinapp.repository.room.tables.ProductCategory
+import com.example.mvvmkotlinapp.utils.DeviceID
 import com.example.mvvmkotlinapp.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_register.*
 import org.jetbrains.anko.toast
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
     private var loginViewModel: LoginViewModel? = null
     lateinit var bindingLogin: ActivityLoginBinding
     private var userSession: UserSession? = null
+    private var deviceID: DeviceID? =null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         initializeObjects()
         insertCityOnly()
         setUpPermissions()
-
+        deviceID= DeviceID()
         loginViewModel!!.getUser.observe(this, Observer { status ->
             status?.let {
                 if(it.success=="1"){
@@ -56,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
                     userSession!!.setEmail(it.email.toString())
                     userSession!!.setMobile(it.mobilenumber.toString())
                     userSession!!.setCurrentCity(it.city.toString())
+                    userSession!!.setIMEI(deviceID!!.getIMEI(application))
 
 
                     val url = "https://chatapp-72cf4.firebaseio.com/users.json"
@@ -72,18 +75,15 @@ class LoginActivity : AppCompatActivity() {
                                 } else {
                                     try {
                                         val obj = JSONObject(s)
-                                        if (!obj.has(bindingLogin.edtMobileNumber.text.toString())) {
+                                        if (!obj.has(deviceID!!.getIMEI(application))) {
 
                                             Toast.makeText(this@LoginActivity, "user not found", Toast.LENGTH_LONG).show()
 
-                                        } else if (obj.getJSONObject(bindingLogin.edtMobileNumber.text.toString()).getString("password") == bindingLogin.edtPassword.text.toString()) {
+                                       // } else if (obj.getJSONObject(bindingLogin.edtMobileNumber.text.toString()).getString("password") == bindingLogin.edtPassword.text.toString()) {
+                                        } else {
 
                                             startActivity(Intent(this@LoginActivity, HomePageActivity::class.java))
                                             finish()
-
-                                        } else {
-
-                                            Toast.makeText(this@LoginActivity, "incorrect password", Toast.LENGTH_LONG).show()
 
                                         }
                                     } catch (e: JSONException) {
@@ -143,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
         bindingLogin.lifecycleOwner=this
         bindingLogin.loginViewModel=loginViewModel
 
-        var user = User(username ="", mobilenumber =bindingLogin.edtMobileNumber.text.toString(), address ="", email ="", password =bindingLogin.edtPassword.text.toString())
+        var user = User(0,username ="", mobilenumber =bindingLogin.edtMobileNumber.text.toString(), address ="", email ="", password =bindingLogin.edtPassword.text.toString())
         bindingLogin.user=user
     }
 
@@ -323,7 +323,7 @@ class LoginActivity : AppCompatActivity() {
         val list = listOf<String>(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
 
         // Initialize a new instance of ManagePermissions class

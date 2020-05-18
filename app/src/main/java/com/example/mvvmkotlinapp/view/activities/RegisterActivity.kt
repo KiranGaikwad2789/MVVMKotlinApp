@@ -2,6 +2,7 @@ package com.example.mvvmkotlinapp.view.activities
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -63,17 +64,27 @@ class RegisterActivity() : AppCompatActivity() {
                     val request =
                         StringRequest(Request.Method.GET, url,
                             Response.Listener { s ->
-                                val reference =
-                                    Firebase("https://chatapp-72cf4.firebaseio.com/users")
+                                val reference = Firebase("https://chatapp-72cf4.firebaseio.com/users")
+                                Log.e("Response1 ",""+s)
                                 if (s == "null") {
-                                    reference.child(binding.edtMobileNumber.text.toString()).child("password").setValue(binding.edtPassword.text.toString())
+
+                                    reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+
+                                    //reference.child(deviceID!!.getIMEI(application)).child("username").setValue(binding.edtuserName.text.toString())
+
                                     Toast.makeText(this@RegisterActivity, "registration successful", Toast.LENGTH_LONG).show()
                                     finish()
                                 } else {
                                     try {
                                         val obj = JSONObject(s)
-                                        if (!obj.has(binding.edtMobileNumber.text.toString())) {
-                                            reference.child(binding.edtMobileNumber.text.toString()).child("password").setValue(binding.edtPassword.text.toString())
+                                        Log.e("Response2 ",""+obj)
+                                        if (!obj.has(deviceID!!.getIMEI(application))) {
+
+                                            reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+
+
+                                            //reference.child(deviceID!!.getIMEI(application)).child("username").setValue(binding.edtuserName.text.toString())
+
                                             Toast.makeText(
                                                 this@RegisterActivity,
                                                 "registration successful",
