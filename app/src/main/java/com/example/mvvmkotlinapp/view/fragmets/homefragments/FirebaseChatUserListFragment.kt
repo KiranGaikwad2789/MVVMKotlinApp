@@ -56,7 +56,7 @@ class FirebaseChatUserListFragment : Fragment() {
         activity?.let { skyggeProgressDialog.show(it,"Please Wait...") }
         activity?.let {
             firebaseChatViewModel?.getChatUsersList()?.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                if (it.toString()!=null){
+                if (it!=null){
                     setAdapter(it.toString())
                 }
             })

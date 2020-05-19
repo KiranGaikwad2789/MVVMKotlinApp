@@ -21,7 +21,7 @@
         android:paddingLeft="@dimen/_5sdp"
         android:visibility="gone"
         android:paddingRight="@dimen/_5sdp"
-        app:layout_constraintBottom_toTopOf="@+id/imgSenderImage"
+        app:layout_constraintBottom_toTopOf="@+id/layoutSenderDocs"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -61,6 +61,91 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutSenderDocs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/rounded_corner1"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/imgSenderImage"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/txtSendDocsFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="normal"
+            android:padding="@dimen/_5sdp"
+            android:drawableLeft="@drawable/ic_cloud_download"
+            android:drawablePadding="@dimen/_5sdp"
+            android:background="@color/colorLightGrey"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@+id/layoutSenderDocsType"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutSenderDocsType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtSendDocsFileName">
+
+            <TextView
+                android:id="@+id/txtSendDocsFileType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="2dp"
+                android:drawablePadding="@dimen/_5sdp"
+                android:gravity="left"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp"
+                android:textStyle="normal"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtSendDocsFileTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/txtSendDocsFileTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="8dp"
+                android:gravity="right"
+                android:paddingLeft="@dimen/_5sdp"
+                android:paddingRight="@dimen/_5sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="10sp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtSendDocsFileType"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/imgSenderImage"
         android:layout_width="wrap_content"
@@ -70,9 +155,8 @@
         android:visibility="gone"
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_home_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutSenderID">
+        app:layout_constraintTop_toBottomOf="@+id/layoutSenderDocs">
 
     </ImageView>
 
@@ -86,7 +170,7 @@
         android:paddingRight="@dimen/_5sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/imgReceiverImage"
+        app:layout_constraintBottom_toTopOf="@+id/layoutReceiverDocs"
         app:layout_constraintTop_toTopOf="parent">
 
 
@@ -120,6 +204,74 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutReceiverDocs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner2"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imgReceiverImage"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/txtReceiverDocsFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="normal"
+            android:background="@color/colorLightGrey"
+            android:padding="@dimen/_5sdp"
+            android:drawablePadding="@dimen/_5sdp"
+            android:drawableLeft="@drawable/ic_cloud_download"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/layoutReceiverDocsType" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutReceiverDocsType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtReceiverDocsFileName">
+
+            <TextView
+                android:id="@+id/txtReceiverDocsFileType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtReceiverDocsFileTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtReceiverDocsFileTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/_5sdp"
+                android:paddingRight="@dimen/_5sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="10sp"
+                android:gravity="right"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/txtReceiverDocsFileType" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/imgReceiverImage"
         android:layout_width="wrap_content"
@@ -129,9 +281,8 @@
         android:visibility="gone"
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_home_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutReceiverID">
+        app:layout_constraintTop_toBottomOf="@+id/layoutReceiverDocs">
 
     </ImageView>
 

@@ -384,7 +384,7 @@ class ChatFragment : Fragment() {
 
     private fun uploadDocuments() {
         val intent = Intent()
-        intent.type="application/pdf"
+        intent.type="application/*"
         intent.setAction(Intent.ACTION_GET_CONTENT)
         startActivityForResult(Intent.createChooser(intent, "Select PDF"), PDF)
     }
