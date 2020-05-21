@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+        android:id="@+id/bottom_sheet_layout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -7,9 +8,16 @@
         android:orientation="vertical"
         android:layout_height="wrap_content"
         android:elevation="@dimen/_10sdp"
-        android:background="@drawable/drw_rounded_shape"
+        android:background="@drawable/rounded_corner1"
         android:gravity="bottom"
+        android:layout_gravity="bottom"
         android:padding="@dimen/_5sdp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="56dp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_60sdp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         tools:ignore="MissingDefaultResource">
 
     <LinearLayout
@@ -47,6 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkGrey"
             android:text="Camera"/>
 
         <TextView
@@ -54,6 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkGrey"
             android:text="Gallery"/>
 
 
@@ -94,6 +106,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkGrey"
             android:text="Documents"/>
 
         <TextView
@@ -101,6 +115,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkGrey"
             android:text="Location"/>
 
 

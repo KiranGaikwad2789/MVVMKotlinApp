@@ -34,10 +34,9 @@ class ImagePicker {
         val imageFile: File = getTempFile(context)
         if (resultCode == Activity.RESULT_OK) {
             val selectedImage: Uri?
-            val isCamera =
-                imageReturnedIntent == null || imageReturnedIntent.data == null || imageReturnedIntent.data == Uri.fromFile(
-                    imageFile
-                )
+
+            val isCamera = imageReturnedIntent == null || imageReturnedIntent.data == null || imageReturnedIntent.data == Uri.fromFile(imageFile)
+
             selectedImage = if (isCamera) {
                 /** CAMERA  */
                 Uri.fromFile(imageFile)
@@ -53,6 +52,12 @@ class ImagePicker {
         return bm
     }
 
+    /*2020-05-20 11:15:25.507 24203-24203/com.example.mvvmkotlinapp I/Timeline: Timeline: Activity_launch_request time:208129941 intent:Intent { act=android.media.action.IMAGE_CAPTURE }
+    2020-05-20 11:15:39.166 24203-24203/com.example.mvvmkotlinapp E/FilePath Camera: null
+    2020-05-20 11:15:39.166 24203-24203/com.example.mvvmkotlinapp D/ImagePicker: getImageFromResult, resultCode: -1
+    2020-05-20 11:15:39.175 24203-24203/com.example.mvvmkotlinapp D/ImagePicker: selectedImage: file:///storage/emulated/0/Android/data/com.example.mvvmkotlinapp/cache/tempImage
+    2020-05-20 11:15:39.176 24203-24203/com.example.mvvmkotlinapp W/System.err: java.io.FileNotFoundException: open failed: ENOENT (No such file or directory)
+*/
 
     private fun decodeBitmap(context: Context, theUri: Uri?, sampleSize: Int): Bitmap? {
         val options = BitmapFactory.Options()
@@ -79,7 +84,7 @@ class ImagePicker {
      */
     private fun getImageResized(context: Context, selectedImage: Uri?): Bitmap? {
         var bm: Bitmap? = null
-        val sampleSizes = intArrayOf(5, 3, 2, 1)
+        val sampleSizes = intArrayOf(9, 7, 5, 3, 2, 1)
         var i = 0
         do {
             bm = decodeBitmap(context, selectedImage, sampleSizes[i])

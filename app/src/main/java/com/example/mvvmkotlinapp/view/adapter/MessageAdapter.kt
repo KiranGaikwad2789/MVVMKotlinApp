@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +17,16 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.common.UserSession
+import com.example.mvvmkotlinapp.model.ChatImageModel
 import com.example.mvvmkotlinapp.model.ChatMessage
+import com.example.mvvmkotlinapp.view.activities.HomePageActivity
+import com.example.mvvmkotlinapp.view.fragmets.ChatImageFrgament
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.storage.FileDownloadTask
@@ -28,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_message_item.view.*
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MessageAdapter (val messages: ArrayList<ChatMessage>,var context: Context) :
@@ -35,6 +43,8 @@ class MessageAdapter (val messages: ArrayList<ChatMessage>,var context: Context)
 
     private var userSession: UserSession? =null
     private var currentDate: DateTime? =null
+    private val mHandler = Handler()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         userSession=UserSession(context)
@@ -81,13 +91,24 @@ class MessageAdapter (val messages: ArrayList<ChatMessage>,var context: Context)
                 }
             } else  if (message.messageType.equals("IMAGE")) {
                 if (message.senderId.equals(userSession?.getIMEI())) {
-                    itemView.imgSenderImage.visibility=View.VISIBLE
+                    itemView.cardSenderImage.visibility=View.VISIBLE
                     Picasso.with(context).load(message.message).into(itemView.imgSenderImage)
+                    itemView.txtSendImageImagetime.text = currentDate?.chatDateForamt(message.timeStamp!!).toString()
                 } else {
-                    itemView.imgReceiverImage.visibility=View.VISIBLE
-                    Picasso.with(context).load(message.message)
-                        .into(itemView.imgReceiverImage)
+                    itemView.cardReceiverImage.visibility=View.VISIBLE
+                    Picasso.with(context).load(message.message).into(itemView.imgReceiverImage)
+                    itemView.txtReceiverImageTime.text = currentDate?.chatDateForamt(message.timeStamp!!).toString()
                 }
+
+                itemView.cardSenderImage.setOnClickListener {
+                    var chaImageModel= ChatImageModel(message.message?.toUri(),"IMAGESHOW","fileName")
+                    (context as HomePageActivity).commonMethodForFragment(ChatImageFrgament(chaImageModel),true)
+                }
+                itemView.cardReceiverImage.setOnClickListener {
+                    var chaImageModel= ChatImageModel(message.message?.toUri(),"IMAGESHOW","fileName")
+                    (context as HomePageActivity).commonMethodForFragment(ChatImageFrgament(chaImageModel),true)
+                }
+
             }else if (message.messageType.equals("PDF")) {
                 Log.e("Doc URL: ",""+message.message)
                 if (message.senderId.equals(userSession?.getIMEI())) {
@@ -105,27 +126,27 @@ class MessageAdapter (val messages: ArrayList<ChatMessage>,var context: Context)
                 }
 
                 itemView.txtSendDocsFileName.setOnClickListener {
-                    Toast.makeText(context,""+message.fileName,Toast.LENGTH_SHORT).show()
                     var file:File =  File(Environment.getExternalStorageDirectory(), "firebasestorage/"+message.fileName);
 
                     if(file.exists()){
-                        Log.e("File exists","Exists")
-
                         val myMime = MimeTypeMap.getSingleton()
                         val newIntent = Intent(Intent.ACTION_VIEW)
+                        newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         var fileExtOnly: String? = message.fileName?.substring(message.fileName!!.lastIndexOf(".")+1)
                         val mimeType = myMime.getMimeTypeFromExtension(fileExtOnly)
-                        newIntent.setDataAndType(Uri.fromFile(File(message.fileName)), mimeType)
-                        newIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+                        var apkURI:Uri = FileProvider.getUriForFile(
+                             context, context.getApplicationContext().getPackageName() + ".provider", file);
+                        newIntent.setDataAndType(apkURI, mimeType);
+                        newIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         try {
                             context.startActivity(newIntent)
                         } catch (e: ActivityNotFoundException) {
                             Toast.makeText(context, "No handler for this type of file.", Toast.LENGTH_LONG)
                                 .show()
                         }
-
                     } else{
-                        Log.e("File not exists","Not Exists")
+                        itemView.progressBar.visibility=View.VISIBLE
                         downloadFile(message.message,message.fileName,context)
                     }
                 }
@@ -134,16 +155,36 @@ class MessageAdapter (val messages: ArrayList<ChatMessage>,var context: Context)
 
         public fun downloadFile(url:String?,fileName:String?,context:Context) {
 
-
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.getReferenceFromUrl(url.toString())
+            var handler: Handler? = null
+            var progressStatus = 0
+            var isStarted = false
 
-            val pd = ProgressDialog(context)
-            pd.setTitle(""+fileName)
-            pd.setMessage("Downloading Please Wait!")
-            pd.isIndeterminate = true
-            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            pd.show()
+            handler = Handler(Handler.Callback {
+                if (isStarted) {
+                    progressStatus++
+                }
+                itemView.progressBar.progress = progressStatus
+                handler?.sendEmptyMessageDelayed(0, 100)
+
+                true
+            })
+
+
+            Thread(Runnable {
+                while (progressStatus < 100) {
+                    progressStatus += 1
+                    try {
+                        Thread.sleep(1000)
+                    } catch (e: InterruptedException) {
+                        e.printStackTrace()
+                    }
+                    handler?.post {
+                        itemView.progressBar.progress = progressStatus
+                    }
+                }
+            }).start()
 
             val rootPath = File(Environment.getExternalStorageDirectory(), "firebasestorage")
             if (!rootPath.exists()) {
@@ -154,59 +195,20 @@ class MessageAdapter (val messages: ArrayList<ChatMessage>,var context: Context)
             storageRef.getFile(localFile).addOnSuccessListener(object :
                 OnSuccessListener<FileDownloadTask.TaskSnapshot?> {
                 override fun onSuccess(taskSnapshot: FileDownloadTask.TaskSnapshot?) {
-                    Log.e(
-                        "firebase ",
-                        ";local tem file created  created $localFile"
-                    )
-                    if (localFile.canRead()) {
-                        pd.dismiss()
+                    Log.e("firebase ", ";local tem file created  created $localFile")
+                    handler?.post {
+                        itemView.progressBar.progress = 100
                     }
+                    handler?.removeCallbacks(null)
                     Toast.makeText(context, "Download Completed", Toast.LENGTH_SHORT).show()
                 }
             }).addOnFailureListener(object : OnFailureListener {
                 override fun onFailure(@NonNull exception: Exception) {
-                    Log.e(
-                        "firebase ",
-                        ";local tem file not created  created $exception"
-                    )
+                    Log.e("firebase ", ";local tem file not created  created $exception")
+                    handler?.removeCallbacks(null)
                     Toast.makeText(context, "Download Incompleted", Toast.LENGTH_LONG).show()
                 }
             })
-
-
-
-
-
-
-             //https://firebasestorage.googleapis.com/v0/b/chatapp-72cf4.appspot.com/o/images%2Fc31010d5-d4a2-49ea-b130-36e1947a34bb?alt=media&token=548c515f-e5c7-464b-a3b0-a3c8d0919740
-
-
-            /*val storage = FirebaseStorage.getInstance()
-            val storageRef = storage!!.getReferenceFromUrl("https://firebasestorage.googleapis.com/v0/b/chatapp-72cf4.appspot.com/o/images%2Fc31010d5-d4a2-49ea-b130-36e1947a34bb?alt=media&token=548c515f-e5c7-464b-a3b0-a3c8d0919740")
-            val islandRef = storageRef.child("images")
-            val rootPath = File(Environment.getExternalStorageDirectory(), "firebasestorage")
-            if (!rootPath.exists()) {
-                rootPath.mkdirs()
-            }
-            val localFile = File(rootPath, fileName)
-            islandRef.getFile(localFile)
-                .addOnSuccessListener(OnSuccessListener<FileDownloadTask.TaskSnapshot?> {
-                    Log.e(
-                        "firebase ",
-                        ";local tem file created  created " + localFile.toString()
-                    )
-                    //  updateDb(timestamp,localFile.toString(),position);
-                }).addOnFailureListener(OnFailureListener { exception ->
-                    Log.e(
-                        "firebase ",
-                        ";local tem file not created  created $exception"
-                    )
-                })*/
         }
-
-
     }
-
-
-
 }

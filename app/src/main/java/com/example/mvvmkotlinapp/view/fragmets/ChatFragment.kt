@@ -5,13 +5,10 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.drawable.ColorDrawable
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -27,17 +24,16 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mvvmkotlinapp.BuildConfig
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentChatBinding
 import com.example.mvvmkotlinapp.interfaces.DrawerLocker
+import com.example.mvvmkotlinapp.model.ChatImageModel
 import com.example.mvvmkotlinapp.model.ChatMessage
 import com.example.mvvmkotlinapp.utils.CustomProgressDialog
 import com.example.mvvmkotlinapp.utils.FileCompressor
@@ -51,10 +47,12 @@ import com.firebase.client.Firebase
 import com.firebase.client.FirebaseError
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import java.io.ByteArrayOutputStream
+import kotlinx.android.synthetic.main.dialog_chat_options.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -92,6 +90,7 @@ class ChatFragment : Fragment() {
     var storageReference: StorageReference? = null
 
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -104,6 +103,8 @@ class ChatFragment : Fragment() {
         getObjectsInitialize(view)
 
         setMessageAdapter()
+
+         var bottomSheetBehavior = BottomSheetBehavior.from(binding.llBottomSheet)
 
         binding.imgBtnSendMessage.setOnClickListener(View.OnClickListener {
 
@@ -126,8 +127,14 @@ class ChatFragment : Fragment() {
         })
 
         binding.imgBtnAttachment.setOnClickListener(View.OnClickListener {
+            /*binding.llBottomSheet.visibility=View.VISIBLE
+            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+            } else {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+            }*/
 
-            showProductQuantityDialog()
+            showChatOptionsDialog()
         })
 
         activity?.let { skyggeProgressDialog.show(it,"Please Wait...") }
@@ -164,6 +171,8 @@ class ChatFragment : Fragment() {
     }
 
     private fun setMessageAdapter() {
+        arryListMessageList.clear()
+        binding.recyclerViewMessageList.adapter = null
         adapter = activity?.let { MessageAdapter(arryListMessageList, it) }
         binding.recyclerViewMessageList.adapter = adapter
         binding.recyclerViewMessageList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -205,30 +214,29 @@ class ChatFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
+
             filePath = data.data
-            Log.e("FilePath Gallery ",""+filePath)
-            try {
-                var bmp = activity?.let { imagePicker?.getImageFromResult(it, resultCode, data) };//your compressed bitmap here
-                var filePath: Uri? = activity?.let { getImageUri(it, bmp) };
-                filePath?.let { uploadImage(it,"IMAGE","fileName") }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+            var bitmap = MediaStore.Images.Media.getBitmap(activity?.getContentResolver(), filePath)
+            var nh = ( bitmap.getHeight() * (512.0 / bitmap.getWidth())).toInt()
+            var resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, false);
+            var tempUri: Uri? = activity?.let { getImageUri(it, resizedBitmap) }
+            Log.e("FilePath Gallery ",""+tempUri)
+
+            var chaImageModel=ChatImageModel(tempUri,"IMAGE","fileName")
+            (activity as HomePageActivity).commonMethodForFragment(ChatImageFrgament(chaImageModel),true)
+
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
 
             var bitmap = data?.extras?.get("data") as Bitmap
-            var tempUri: Uri? = activity?.let { getImageUri(it, bitmap) }
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(activity?.getContentResolver(), tempUri)
-                bitmap = rotateImageIfRequired(bitmap, tempUri)
-                bitmap = getResizedBitmap(bitmap, 500)
-            } catch (e:IOException) {
-                e.printStackTrace();
-            }
+            var nh = ( bitmap.getHeight() * (512.0 / bitmap.getWidth())).toInt()
+            var resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, false);
+            var tempUri: Uri? = activity?.let { getImageUri(it, resizedBitmap) }
             Log.e("FilePath Camera ",""+tempUri)
-            tempUri?.let { uploadImage(it,"IMAGE","fileName") }
 
-        }else if (requestCode == PDF) {
+            var chaImageModel=ChatImageModel(tempUri,"IMAGE","fileName")
+            (activity as HomePageActivity).commonMethodForFragment(ChatImageFrgament(chaImageModel),true)
+
+        }else if (requestCode == PDF && resultCode == RESULT_OK && data != null && data.data != null) {
 
             filePath = data!!.data
             var filePathStr:String= filePath.toString()
@@ -241,46 +249,6 @@ class ChatFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-    }
-
-
-     public fun getResizedBitmap(image:Bitmap, maxSize:Int):Bitmap {
-        var width = image.getWidth();
-        var height = image.getHeight();
-
-        var bitmapRatio = width.toFloat() / height.toFloat();
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height =  (width / bitmapRatio).toInt()
-        } else {
-            height = maxSize;
-            width = (height * bitmapRatio).toInt()
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-
-
-    private fun rotateImageIfRequired(img:Bitmap , selectedImage:Uri? ):Bitmap {
-
-        var ei:ExifInterface = ExifInterface(selectedImage?.getPath());
-        var orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        when (orientation) {
-             ExifInterface.ORIENTATION_ROTATE_90->rotateImage(img, 90)
-
-            ExifInterface.ORIENTATION_ROTATE_180->rotateImage(img, 180)
-
-            ExifInterface.ORIENTATION_ROTATE_270->rotateImage(img, 270)
-        }
-        return img
-    }
-
-    private  fun rotateImage(img:Bitmap ,degree:Int):Bitmap {
-        var matrix = Matrix()
-        matrix.postRotate(degree.toFloat());
-        var rotatedImg:Bitmap = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-        return rotatedImg;
     }
 
     fun getImageUri(inContext: Context, inImage:Bitmap?):Uri {
@@ -350,34 +318,32 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun showProductQuantityDialog() {
+    private fun showChatOptionsDialog() {
 
-        val dialog = context?.let { Dialog(it, R.style.Theme_Dialog) }
+        val dialog = context?.let { BottomSheetDialog(it, R.style.Theme_Dialog) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-
-        //dialog?.setCancelable(false)
+        dialog?.setCancelable(true)
         dialog?.setContentView(R.layout.dialog_chat_options)
 
-        val imgCamera = dialog?.findViewById(R.id.imgCamera) as ImageView
-        val imgGallery = dialog?.findViewById(R.id.imgGallery) as ImageView
-        val imgDocuments = dialog?.findViewById(R.id.imgDocuments) as ImageView
-        val imgLocation = dialog?.findViewById(R.id.imgLocation) as ImageView
+        var imgCamera= dialog?.findViewById<ImageView>(R.id.imgCamera)
+        var imgGallery= dialog?.findViewById<ImageView>(R.id.imgGallery)
+        var imgDocuments= dialog?.findViewById<ImageView>(R.id.imgDocuments)
+        var imgLocation= dialog?.findViewById<ImageView>(R.id.imgLocation)
 
-
-        imgCamera.setOnClickListener {
-            dialog.dismiss()
+        imgCamera?.setOnClickListener {
+            dialog?.dismiss()
             dispatchTakePictureIntent()
         }
-        imgGallery.setOnClickListener {
-            dialog.dismiss()
+        imgGallery?.setOnClickListener {
+            dialog?.dismiss()
             chooseImage()
         }
-        imgDocuments.setOnClickListener {
-            dialog.dismiss()
+        imgDocuments?.setOnClickListener {
+            dialog?.dismiss()
             uploadDocuments()
         }
-        imgLocation.setOnClickListener {
+        imgLocation?.setOnClickListener {
         }
         dialog?.show()
     }

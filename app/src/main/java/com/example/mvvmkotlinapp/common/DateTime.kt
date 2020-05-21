@@ -50,8 +50,6 @@ public class DateTime {
     public fun getSelectedDateForamt(selectedDate:String): String? {
 
         var dateSplit=selectedDate.split(" ")
-        Log.e("date ",""+dateSplit[0])
-        Log.e("time ",""+dateSplit[1])
 
         val parsedDate = LocalDate.parse(dateSplit[0], DateTimeFormatter.ISO_LOCAL_DATE)
         val formattedDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).format(parsedDate)
@@ -67,8 +65,6 @@ public class DateTime {
     public fun chatDateForamt(selectedDate:String): String? {
 
         var dateSplit=selectedDate.split(" ")
-        Log.e("date ",""+dateSplit[0])
-        Log.e("time ",""+dateSplit[1])
 
         val parsedDate = LocalDate.parse(dateSplit[0], DateTimeFormatter.ISO_LOCAL_DATE)
         val formattedDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).format(parsedDate)

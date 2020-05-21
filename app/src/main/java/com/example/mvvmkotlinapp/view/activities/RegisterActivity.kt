@@ -1,7 +1,9 @@
 package com.example.mvvmkotlinapp.view.activities
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,11 +18,20 @@ import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.databinding.ContentRegisterBinding
 import com.example.mvvmkotlinapp.repository.room.User
 import com.example.mvvmkotlinapp.utils.DeviceID
+import com.example.mvvmkotlinapp.view.AESUtils
 import com.example.mvvmkotlinapp.viewmodel.RegisterViewModel
 import com.firebase.client.Firebase
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONException
 import org.json.JSONObject
+import java.security.Security
+import javax.crypto.Cipher
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.PBEKeySpec
+import javax.crypto.spec.SecretKeySpec
 
 
 class RegisterActivity() : AppCompatActivity() {
@@ -28,8 +39,10 @@ class RegisterActivity() : AppCompatActivity() {
     lateinit var registerModel: RegisterViewModel
     lateinit var binding: ContentRegisterBinding
     private var deviceID: DeviceID? =null
+    private var aesEncryptions: AESUtils? =null
 
 
+    @SuppressLint("StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,8 +55,28 @@ class RegisterActivity() : AppCompatActivity() {
         getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar()!!.setDisplayShowHomeEnabled(true);
         deviceID= DeviceID()
+        aesEncryptions= AESUtils()
+
+        Log.e("Encrypted data ",""+ aesEncryptions!!.decrypt("r4TmIeOVuCTOwYPT1FKDAw==\n"))
+        Log.e("Decrypted data ",""+ aesEncryptions!!.decrypt("Oh2NU+d08+htQPp0IAVQhg==\n"))
 
         Firebase.setAndroidContext(this)
+
+
+        FirebaseInstanceId.getInstance().instanceId
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.e("TAG", "getInstanceId failed ", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new Instance ID token
+                val token = task.result?.token
+
+                // Log and toast
+                val msg = getString(R.string.msg_token_fmt, token)
+                Log.e("getInstanceId ", token)
+             })
 
         var user = User(user_id = 0,username =binding.edtuserName.text.toString(), mobilenumber =binding.edtMobileNumber.text.toString(),
             address =binding.edtAddress.text.toString(), email =binding.edtEmail.text.toString(), password =binding.edtPassword.text.toString(),
@@ -68,7 +101,9 @@ class RegisterActivity() : AppCompatActivity() {
                                 Log.e("Response1 ",""+s)
                                 if (s == "null") {
 
-                                    reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+                                    reference.child(deviceID!!.getIMEI(application).toString()).setValue(User(user_id=it.toInt(),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+
+                                    //reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
 
                                     //reference.child(deviceID!!.getIMEI(application)).child("username").setValue(binding.edtuserName.text.toString())
 
@@ -80,16 +115,15 @@ class RegisterActivity() : AppCompatActivity() {
                                         Log.e("Response2 ",""+obj)
                                         if (!obj.has(deviceID!!.getIMEI(application))) {
 
-                                            reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+                                            reference.child(deviceID!!.getIMEI(application).toString()).setValue(User(user_id=it.toInt(),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+
+
+                                            //reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
 
 
                                             //reference.child(deviceID!!.getIMEI(application)).child("username").setValue(binding.edtuserName.text.toString())
 
-                                            Toast.makeText(
-                                                this@RegisterActivity,
-                                                "registration successful",
-                                                Toast.LENGTH_LONG
-                                            ).show()
+                                            Toast.makeText(this@RegisterActivity, "registration successful", Toast.LENGTH_LONG).show()
                                             finish()
                                         } else {
                                             Toast.makeText(
@@ -150,5 +184,4 @@ class RegisterActivity() : AppCompatActivity() {
         super.onBackPressed()
         return true
     }
-
 }

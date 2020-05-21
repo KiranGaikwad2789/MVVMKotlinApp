@@ -4,28 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="firebaseChatViewModel"
             type="com.example.mvvmkotlinapp.viewmodel.FirebaseChatViewModel" />
     </data>
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
 
-        <include layout="@layout/toolbar"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMessageList"
+        <ImageView
+            android:id="@+id/imgSelectedImagetoUpload"
             android:layout_above="@+id/mainActivityTextContainer"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/_50sdp"
-            android:layout_marginBottom="@dimen/_60sdp"
             android:layout_height="match_parent"/>
 
-        <include layout="@layout/dialog_chat_options"
-            android:id="@+id/llBottomSheet" />
 
         <LinearLayout
             android:id="@+id/mainActivityTextContainer"
@@ -33,23 +29,22 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/_5sdp"
             android:elevation="@dimen/_10sdp"
             android:layout_gravity="bottom"
-            android:background="@drawable/drw_rounded_shape"
+            android:visibility="gone"
             android:weightSum="10">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordWrapper"
                 android:layout_width="0dp"
-                android:layout_weight="7"
+                android:layout_weight="8"
                 android:paddingLeft="@dimen/_7sdp"
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtMessage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@color/transparent"
                     android:padding="@dimen/_7sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
@@ -61,16 +56,6 @@
 
 
             <ImageView
-                android:id="@+id/imgBtnAttachment"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/_2sdp"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_file_attach" />
-
-            <ImageView
                 android:id="@+id/imgBtnSendMessage"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -79,7 +64,6 @@
                 android:src="@drawable/ic_arrows_next" />
         </LinearLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+    </FrameLayout>
 
 </layout>
