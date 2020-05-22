@@ -38,6 +38,7 @@ import com.example.mvvmkotlinapp.model.ChatMessage
 import com.example.mvvmkotlinapp.utils.CustomProgressDialog
 import com.example.mvvmkotlinapp.utils.FileCompressor
 import com.example.mvvmkotlinapp.utils.ImagePicker
+import com.example.mvvmkotlinapp.view.AESUtils
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.adapter.MessageAdapter
 import com.example.mvvmkotlinapp.viewmodel.FirebaseChatViewModel
@@ -81,7 +82,7 @@ class ChatFragment : Fragment() {
     private var imagePicker: ImagePicker? =null
     private var mCompressor: FileCompressor? =null;
     private var mPhotoFile: File? =null
-
+    private var aesEncryptions: AESUtils? =null
 
     private var filePath: Uri? = null
 
@@ -104,7 +105,20 @@ class ChatFragment : Fragment() {
 
         setMessageAdapter()
 
-         var bottomSheetBehavior = BottomSheetBehavior.from(binding.llBottomSheet)
+        var msg = "123456";
+        var keyStr = "abcdef"
+        var ivStr = "ABCDEF"
+
+
+        var ansBase64 = aesEncryptions?.encryptStrAndToBase64(ivStr, keyStr, msg);
+        System.out.println("After Encrypt & To Base64: " + ansBase64);
+
+        var deansBase64 = ansBase64?.let { aesEncryptions?.decryptStrAndFromBase64(ivStr, keyStr, it) };
+        System.out.println("After Decrypt & From Base64: " + deansBase64)
+
+        //Log.e("Encrypt ",""+ (aesEncryptions?.encrypt("Kiran")))
+        //Log.e("Decrypt ",""+ (aesEncryptions?.decrypt(aesEncryptions?.encrypt("Kiran").toString())))
+
 
         binding.imgBtnSendMessage.setOnClickListener(View.OnClickListener {
 
@@ -112,14 +126,16 @@ class ChatFragment : Fragment() {
             if (messageText != "") {
 
                 val map: MutableMap<String, String> = HashMap()
-                map["chatId"] = userSession?.getMobile() + "_" + userSession!!.getChatWith()
-                map["messageId"] = userSession?.getUserId() + "" + currentDate!!.orderDateFormater()
-                map["senderId"] = userSession?.getIMEI().toString()
-                map["receiverId"] = userSession!!.getChatWith().toString()
-                map["message"] = messageText
-                map["fileName"] = messageText
-                map["timeStamp"] = currentDate!!.getDateTime()
-                map["messageType"] = "TEXT"
+
+                map["chatId"] = ""+aesEncryptions?.encrypt(userSession?.getMobile().toString()) + "_" + aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                map["messageId"] = ""+aesEncryptions?.encrypt(userSession?.getUserId().toString()) + "" + aesEncryptions?.encrypt(currentDate!!.orderDateFormater())
+                map["senderId"] = ""+aesEncryptions?.encrypt(userSession?.getIMEI().toString())
+                map["receiverId"] = ""+aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                map["message"] = ""+aesEncryptions?.encrypt(messageText)
+                map["fileName"] = ""+aesEncryptions?.encrypt(messageText)
+                map["timeStamp"] = ""+aesEncryptions?.encrypt(currentDate!!.getDateTime())
+                map["messageType"] = ""+aesEncryptions?.encrypt("TEXT")
+
                 reference1!!.push().setValue(map)
                 reference2!!.push().setValue(map)
                 binding.edtMessage.setText("")
@@ -127,13 +143,6 @@ class ChatFragment : Fragment() {
         })
 
         binding.imgBtnAttachment.setOnClickListener(View.OnClickListener {
-            /*binding.llBottomSheet.visibility=View.VISIBLE
-            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-            } else {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
-            }*/
-
             showChatOptionsDialog()
         })
 
@@ -144,14 +153,14 @@ class ChatFragment : Fragment() {
 
                 val map = p0?.getValue(Map::class.java)
 
-                val chatId = map?.get("chatId").toString()
-                val messageId = map?.get("messageId").toString()
-                val senderId = map?.get("senderId").toString()
-                val receiverId = map?.get("receiverId").toString()
-                val message = map?.get("message").toString()
-                val fileName = map?.get("fileName").toString()
-                val timeStamp = map?.get("timeStamp").toString()
-                val messageType = map?.get("messageType").toString()
+                val chatId = aesEncryptions?.decrypt(map?.get("chatId").toString())
+                val messageId = aesEncryptions?.decrypt(map?.get("messageId").toString())
+                val senderId = aesEncryptions?.decrypt(map?.get("senderId").toString())
+                val receiverId = aesEncryptions?.decrypt(map?.get("receiverId").toString())
+                val message = aesEncryptions?.decrypt(map?.get("message").toString())
+                val fileName = aesEncryptions?.decrypt(map?.get("fileName").toString())
+                val timeStamp = aesEncryptions?.decrypt(map?.get("timeStamp").toString())
+                val messageType = aesEncryptions?.decrypt(map?.get("messageType").toString())
 
                 var chatMessage=ChatMessage(chatId,messageId,senderId,receiverId,message,timeStamp,messageType,fileName)
                 arryListMessageList.add(chatMessage)
@@ -184,6 +193,7 @@ class ChatFragment : Fragment() {
         mCompressor= FileCompressor()
         userSession=UserSession(activity)
         Firebase.setAndroidContext(activity)
+        aesEncryptions= AESUtils()
 
         (activity as AppCompatActivity)?.supportActionBar?.hide()
         (activity as DrawerLocker).setDrawerEnabled(false)
@@ -295,18 +305,18 @@ class ChatFragment : Fragment() {
                     val downloadUri = task.result
 
                     val map: MutableMap<String, String> = HashMap()
-                    map["chatId"] =  userSession?.getMobile() + "_" + userSession!!.getChatWith()
-                    map["messageId"] = userSession?.getUserId() +""+ currentDate!!.orderDateFormater()
-                    map["senderId"] = userSession?.getIMEI().toString()
-                    map["receiverId"] = userSession!!.getChatWith().toString()
-                    map["message"] = downloadUri.toString()
-                    map["fileName"] = fileName           //FileName only
-                    map["timeStamp"] = currentDate!!.getDateTime()
-                    map["messageType"] = type
+
+                    map["chatId"] = ""+aesEncryptions?.encrypt(userSession?.getMobile().toString()) + "_" + aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                    map["messageId"] = ""+aesEncryptions?.encrypt(userSession?.getUserId().toString()) + "" + aesEncryptions?.encrypt(currentDate!!.orderDateFormater())
+                    map["senderId"] = ""+aesEncryptions?.encrypt(userSession?.getIMEI().toString())
+                    map["receiverId"] = ""+aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                    map["message"] = ""+aesEncryptions?.encrypt(downloadUri.toString())
+                    map["fileName"] = ""+aesEncryptions?.encrypt(fileName)
+                    map["timeStamp"] = ""+aesEncryptions?.encrypt(currentDate!!.getDateTime())
+                    map["messageType"] = ""+aesEncryptions?.encrypt(type)
                     reference1!!.push().setValue(map)
                     reference2!!.push().setValue(map)
                     progressDialog.dismiss()
-                    Toast.makeText(activity, "Uploaded", Toast.LENGTH_SHORT).show()
                 } else {
                     // Handle failures
                 }

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.databinding.ContentRegisterBinding
+import com.example.mvvmkotlinapp.model.FirebaseUser
 import com.example.mvvmkotlinapp.repository.room.User
 import com.example.mvvmkotlinapp.utils.DeviceID
 import com.example.mvvmkotlinapp.view.AESUtils
@@ -57,11 +58,7 @@ class RegisterActivity() : AppCompatActivity() {
         deviceID= DeviceID()
         aesEncryptions= AESUtils()
 
-        Log.e("Encrypted data ",""+ aesEncryptions!!.decrypt("r4TmIeOVuCTOwYPT1FKDAw==\n"))
-        Log.e("Decrypted data ",""+ aesEncryptions!!.decrypt("Oh2NU+d08+htQPp0IAVQhg==\n"))
-
         Firebase.setAndroidContext(this)
-
 
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -100,8 +97,10 @@ class RegisterActivity() : AppCompatActivity() {
                                 val reference = Firebase("https://chatapp-72cf4.firebaseio.com/users")
                                 Log.e("Response1 ",""+s)
                                 if (s == "null") {
-
-                                    reference.child(deviceID!!.getIMEI(application).toString()).setValue(User(user_id=it.toInt(),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+                                    var user_id= aesEncryptions!!.encrypt("user_id")
+                                    reference.child(deviceID!!.getIMEI(application).toString()).setValue(
+                                        FirebaseUser(user_id = aesEncryptions!!.encrypt(it.toString()),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()))
+                                    )
 
                                     //reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
 
@@ -115,11 +114,13 @@ class RegisterActivity() : AppCompatActivity() {
                                         Log.e("Response2 ",""+obj)
                                         if (!obj.has(deviceID!!.getIMEI(application))) {
 
-                                            reference.child(deviceID!!.getIMEI(application).toString()).setValue(User(user_id=it.toInt(),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
+                                            reference.child(deviceID!!.getIMEI(application).toString()).setValue(
+                                                FirebaseUser(user_id = aesEncryptions!!.encrypt(it.toString()),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()))
+                                            )
 
+                                            //reference.child(deviceID!!.getIMEI(application).toString()).setValue(User(user_id=it.toInt(),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
 
                                             //reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
-
 
                                             //reference.child(deviceID!!.getIMEI(application)).child("username").setValue(binding.edtuserName.text.toString())
 

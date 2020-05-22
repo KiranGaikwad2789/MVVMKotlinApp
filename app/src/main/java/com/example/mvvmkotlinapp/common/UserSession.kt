@@ -95,12 +95,12 @@ class UserSession {
         return pref!!.getString(KEY_CHATWITH, null)
     }
 
-    fun setIMEI(username: String?) {
-        editor!!.putString(KEY_IMEI, username)
-        editor!!.commit()
+    fun setIMEI(username: String) {
+        editor?.putString(KEY_IMEI, username)
+        editor?.commit()
     }
 
-    fun getIMEI(): String? {
-        return pref!!.getString(KEY_IMEI, null)
+    fun getIMEI(): String {
+        return pref.getString(KEY_IMEI, null).toString()
     }
 }

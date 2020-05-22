@@ -19,6 +19,7 @@ import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentChatImageFrgamentBinding
 import com.example.mvvmkotlinapp.model.ChatImageModel
 import com.example.mvvmkotlinapp.utils.CustomProgressDialog
+import com.example.mvvmkotlinapp.view.AESUtils
 import com.example.mvvmkotlinapp.viewmodel.FirebaseChatViewModel
 import com.firebase.client.Firebase
 import com.google.android.gms.tasks.Continuation
@@ -44,6 +45,8 @@ class ChatImageFrgament(var chaImageModel: ChatImageModel) : Fragment() {
     private var reference1: Firebase? = null
     private var reference2: Firebase? = null
     private val skyggeProgressDialog = CustomProgressDialog()
+    private var aesEncryptions: AESUtils? =null
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -59,6 +62,8 @@ class ChatImageFrgament(var chaImageModel: ChatImageModel) : Fragment() {
 
         userSession=UserSession(activity)
         currentDate= DateTime()
+        aesEncryptions= AESUtils()
+
 
         reference1 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession?.getIMEI().toString() + "_" + userSession!!.getChatWith())
         reference2 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession!!.getChatWith().toString() + "_" + userSession?.getIMEI())
@@ -103,14 +108,15 @@ class ChatImageFrgament(var chaImageModel: ChatImageModel) : Fragment() {
                     val downloadUri = task.result
 
                     val map: MutableMap<String, String> = HashMap()
-                    map["chatId"] =  userSession?.getMobile() + "_" + userSession!!.getChatWith()
-                    map["messageId"] = userSession?.getUserId() +""+ currentDate!!.orderDateFormater()
-                    map["senderId"] = userSession?.getIMEI().toString()
-                    map["receiverId"] = userSession!!.getChatWith().toString()
-                    map["message"] = downloadUri.toString()
-                    map["fileName"] = fileName        //FileName only
-                    map["timeStamp"] = currentDate!!.getDateTime()
-                    map["messageType"] = type
+
+                    map["chatId"] = ""+aesEncryptions?.encrypt(userSession?.getMobile().toString()) + "_" + aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                    map["messageId"] = ""+aesEncryptions?.encrypt(userSession?.getUserId().toString()) + "" + aesEncryptions?.encrypt(currentDate!!.orderDateFormater())
+                    map["senderId"] = ""+aesEncryptions?.encrypt(userSession?.getIMEI().toString())
+                    map["receiverId"] = ""+aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                    map["message"] = ""+aesEncryptions?.encrypt(downloadUri.toString())
+                    map["fileName"] = ""+aesEncryptions?.encrypt(fileName)
+                    map["timeStamp"] = ""+aesEncryptions?.encrypt(currentDate!!.getDateTime())
+                    map["messageType"] = ""+aesEncryptions?.encrypt(type)
                     reference1!!.push().setValue(map)
                     reference2!!.push().setValue(map)
                     skyggeProgressDialog?.dialog?.dismiss()

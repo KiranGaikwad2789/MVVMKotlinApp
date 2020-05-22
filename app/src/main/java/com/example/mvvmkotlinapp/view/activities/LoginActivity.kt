@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                     userSession!!.setEmail(it.email.toString())
                     userSession!!.setMobile(it.mobilenumber.toString())
                     userSession!!.setCurrentCity(it.city.toString())
-                    userSession!!.setIMEI(deviceID!!.getIMEI(application))
+                    userSession!!.setIMEI(deviceID!!.getIMEI(application).toString())
 
 
                     val url = "https://chatapp-72cf4.firebaseio.com/users.json"
