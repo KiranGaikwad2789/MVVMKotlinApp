@@ -27,7 +27,6 @@
     <string name="msg_token_fmt">530164018092</string>
 
 
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
@@ -95,6 +94,12 @@
 
     <string name="home_second">Home Second</string>
     <string name="title_activity_firebase_chat">Firebase Chat</string>
+
+    <string name="map_api_key">AIzaSyDMRvxB8uQsV6_1FQAXPHEteSrxi91bQlU</string>  // Change it with your google map api key.
+
+    <string name="need_location">Enable GPS SERVICE</string>
+    <string name="location_content">This app wants to change your device settings use GPS,Wi-Fi and cell networks for your location</string>
+    <string name="online_driver">Online</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.mvvmkotlinapp.view.fragmets
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.app.ProgressDialog
@@ -19,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -105,21 +107,6 @@ class ChatFragment : Fragment() {
 
         setMessageAdapter()
 
-        var msg = "123456";
-        var keyStr = "abcdef"
-        var ivStr = "ABCDEF"
-
-
-        var ansBase64 = aesEncryptions?.encryptStrAndToBase64(ivStr, keyStr, msg);
-        System.out.println("After Encrypt & To Base64: " + ansBase64);
-
-        var deansBase64 = ansBase64?.let { aesEncryptions?.decryptStrAndFromBase64(ivStr, keyStr, it) };
-        System.out.println("After Decrypt & From Base64: " + deansBase64)
-
-        //Log.e("Encrypt ",""+ (aesEncryptions?.encrypt("Kiran")))
-        //Log.e("Decrypt ",""+ (aesEncryptions?.decrypt(aesEncryptions?.encrypt("Kiran").toString())))
-
-
         binding.imgBtnSendMessage.setOnClickListener(View.OnClickListener {
 
             val messageText: String = binding.edtMessage.getText().toString()
@@ -139,6 +126,27 @@ class ChatFragment : Fragment() {
                 reference1!!.push().setValue(map)
                 reference2!!.push().setValue(map)
                 binding.edtMessage.setText("")
+                hideKeyboard()
+
+
+                /*var chatId= aesEncryptions?.encrypt("chatId")
+                var messageId= aesEncryptions?.encrypt("messageId")
+                var senderId= aesEncryptions?.encrypt("senderId")
+                var receiverId= aesEncryptions?.encrypt("receiverId")
+                var message= aesEncryptions?.encrypt("message")
+                var fileName= aesEncryptions?.encrypt("fileName")
+                var timeStamp= aesEncryptions?.encrypt("timeStamp")
+                var messageType= aesEncryptions?.encrypt("messageType")
+
+                map[chatId.toString()] = ""+aesEncryptions?.encrypt(userSession?.getMobile().toString()) + "_" + aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                map[messageId.toString()] = ""+aesEncryptions?.encrypt(userSession?.getUserId().toString()) + "" + aesEncryptions?.encrypt(currentDate!!.orderDateFormater())
+                map[senderId.toString()] = ""+aesEncryptions?.encrypt(userSession?.getIMEI().toString())
+                map[receiverId.toString()] = ""+aesEncryptions?.encrypt(userSession?.getChatWith().toString())
+                map[message.toString()] = ""+aesEncryptions?.encrypt(messageText)
+                map[fileName.toString()] = ""+aesEncryptions?.encrypt(messageText)
+                map[timeStamp.toString()] = ""+aesEncryptions?.encrypt(currentDate!!.getDateTime())
+                map[messageType.toString()] = ""+aesEncryptions?.encrypt("TEXT")*/
+
             }
         })
 
@@ -147,6 +155,7 @@ class ChatFragment : Fragment() {
         })
 
         activity?.let { skyggeProgressDialog.show(it,"Please Wait...") }
+
         reference1?.addChildEventListener(object : EventListener, ChildEventListener {
 
             override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
@@ -176,6 +185,7 @@ class ChatFragment : Fragment() {
 
             override fun onChildRemoved(p0: DataSnapshot?) {}
         })
+        skyggeProgressDialog?.dialog?.dismiss()
         return view
     }
 
@@ -203,7 +213,7 @@ class ChatFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).getSupportActionBar()?.setDisplayShowHomeEnabled(true)
-        toolbar.setTitle(""+userSession!!.getChatWith().toString())
+        toolbar.setTitle(""+userSession!!.getChatWithUser().toString())
 
         reference1 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession?.getIMEI().toString() + "_" + userSession!!.getChatWith())
         reference2 = Firebase("https://chatapp-72cf4.firebaseio.com/messages/" + userSession!!.getChatWith().toString() + "_" + userSession?.getIMEI())
@@ -228,7 +238,7 @@ class ChatFragment : Fragment() {
             filePath = data.data
             var bitmap = MediaStore.Images.Media.getBitmap(activity?.getContentResolver(), filePath)
             var nh = ( bitmap.getHeight() * (512.0 / bitmap.getWidth())).toInt()
-            var resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, false);
+            var resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
             var tempUri: Uri? = activity?.let { getImageUri(it, resizedBitmap) }
             Log.e("FilePath Gallery ",""+tempUri)
 
@@ -239,7 +249,7 @@ class ChatFragment : Fragment() {
 
             var bitmap = data?.extras?.get("data") as Bitmap
             var nh = ( bitmap.getHeight() * (512.0 / bitmap.getWidth())).toInt()
-            var resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, false);
+            var resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
             var tempUri: Uri? = activity?.let { getImageUri(it, resizedBitmap) }
             Log.e("FilePath Camera ",""+tempUri)
 
@@ -259,6 +269,22 @@ class ChatFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+    }
+
+
+
+
+    fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    fun Activity.hideKeyboard() {
+        hideKeyboard(currentFocus ?: View(this))
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     fun getImageUri(inContext: Context, inImage:Bitmap?):Uri {
@@ -286,9 +312,8 @@ class ChatFragment : Fragment() {
     private fun uploadImage(filePathData:Uri,type:String,fileName:String) {
 
         if(filePathData != null){
-            val progressDialog = ProgressDialog(activity)
-            progressDialog.setTitle("Uploading...")
-            progressDialog.show()
+
+            activity?.let { skyggeProgressDialog.show(it,"Please Wait...") }
 
             val ref = storageReference?.child("images/" + UUID.randomUUID().toString())
             val uploadTask = ref?.putFile(filePathData!!)
@@ -316,12 +341,13 @@ class ChatFragment : Fragment() {
                     map["messageType"] = ""+aesEncryptions?.encrypt(type)
                     reference1!!.push().setValue(map)
                     reference2!!.push().setValue(map)
-                    progressDialog.dismiss()
+                    skyggeProgressDialog?.dialog?.dismiss()
                 } else {
                     // Handle failures
+                    skyggeProgressDialog?.dialog?.dismiss()
                 }
             }?.addOnFailureListener{
-
+                skyggeProgressDialog?.dialog?.dismiss()
             }
         }else{
             Toast.makeText(activity, "Please Upload an Image", Toast.LENGTH_SHORT).show()
@@ -354,6 +380,7 @@ class ChatFragment : Fragment() {
             uploadDocuments()
         }
         imgLocation?.setOnClickListener {
+            (activity as HomePageActivity).commonMethodForFragment(ChatShareLocationFrgament(),true)
         }
         dialog?.show()
     }

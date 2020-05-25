@@ -8,7 +8,6 @@ import java.security.NoSuchAlgorithmException
 import java.security.spec.AlgorithmParameterSpec
 import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 
@@ -19,18 +18,17 @@ class AESUtils {
     val iv = "bVQzNFNhRkQ1Njc4UUFaWA==" // base64 decode => mT34SaFD5678QAZX
 
 
-    var msg = "123456";
     var keyStr = "abcdef"
-    var ivStr = "ABCDEF"
-
-    //cOyhMO2p8eWnrMfUABSL6g==     Kiran
 
     // Original
     fun encrypt(strToEncrypt: String) :  String?
     {
         try
         {
-            val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+            val bytes = encrypt(keyStr, keyStr, strToEncrypt.toByteArray(charset("UTF-8")))
+            return String(Base64.encode(bytes, Base64.DEFAULT), Charsets.UTF_8)
+
+            /*val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
 
             val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
             val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 500, 128)
@@ -39,7 +37,7 @@ class AESUtils {
 
             val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
-            return Base64.encodeToString(cipher.doFinal(strToEncrypt.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)
+            return Base64.encodeToString(cipher.doFinal(strToEncrypt.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)*/
         }
         catch (e: Exception)
         {
@@ -90,7 +88,10 @@ class AESUtils {
     fun decrypt(strToDecrypt : String) : String? {
         try
         {
-            val ivParameterSpec =  IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+            val bytes = decrypt(keyStr, keyStr, Base64.decode(strToDecrypt.toByteArray(charset("UTF-8")), Base64.DEFAULT))
+            return String(bytes!!, Charsets.UTF_8)
+
+           /* val ivParameterSpec =  IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
 
             val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
             val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 500, 128)
@@ -99,7 +100,7 @@ class AESUtils {
 
             val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
-            return  String(cipher.doFinal(Base64.decode(strToDecrypt, Base64.DEFAULT)))
+            return  String(cipher.doFinal(Base64.decode(strToDecrypt, Base64.DEFAULT)))*/
         }
         catch (e : Exception) {
             println("Error while decrypting: $e");
@@ -239,25 +240,14 @@ class AESUtils {
     }
 
     @Throws(java.lang.Exception::class)
-    fun encryptStrAndToBase64(ivStr: String?, keyStr: String, enStr: String): String? {
+    fun encryptStrAndToBase64(enStr: String): String? {
         val bytes = encrypt(keyStr, keyStr, enStr.toByteArray(charset("UTF-8")))
         return String(Base64.encode(bytes, Base64.DEFAULT), Charsets.UTF_8)
     }
 
     @Throws(java.lang.Exception::class)
-    fun decryptStrAndFromBase64(
-        ivStr: String?,
-        keyStr: String,
-        deStr: String
-    ): String? {
-        val bytes = decrypt(
-            keyStr,
-            keyStr,
-            Base64.decode(
-                deStr.toByteArray(charset("UTF-8")),
-                Base64.DEFAULT
-            )
-        )
+    fun decryptStrAndFromBase64(deStr: String): String? {
+        val bytes = decrypt(keyStr, keyStr, Base64.decode(deStr.toByteArray(charset("UTF-8")), Base64.DEFAULT))
         return String(bytes!!, Charsets.UTF_8)
     }
 }

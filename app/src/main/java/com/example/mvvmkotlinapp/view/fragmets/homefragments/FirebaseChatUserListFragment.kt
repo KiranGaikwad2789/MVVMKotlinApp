@@ -20,7 +20,9 @@ import com.example.mvvmkotlinapp.common.RecyclerItemClickListenr
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentFirebaseChatUserListBinding
 import com.example.mvvmkotlinapp.interfaces.DrawerLocker
+import com.example.mvvmkotlinapp.model.FirebaseUser
 import com.example.mvvmkotlinapp.utils.CustomProgressDialog
+import com.example.mvvmkotlinapp.view.AESUtils
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
 import com.example.mvvmkotlinapp.view.adapter.ChatUsersAdapter
 import com.example.mvvmkotlinapp.view.fragmets.ChatFragment
@@ -32,13 +34,18 @@ import java.util.*
 
 class FirebaseChatUserListFragment : Fragment() {
 
+
+    //https://github.com/topics/firebase-database?l=kotlin
+
     lateinit var firebaseChatViewModel: FirebaseChatViewModel
     lateinit var binding: FragmentFirebaseChatUserListBinding
 
-    private var arryListUsersList = ArrayList<String>()
+    private var arryListUsersList = ArrayList<FirebaseUser>()
     private var userSession: UserSession? =null
     private val skyggeProgressDialog = CustomProgressDialog()
     private var adapter: ChatUsersAdapter? =  null
+    private var aesEncryptions: AESUtils? =null
+
 
 
 
@@ -66,7 +73,9 @@ class FirebaseChatUserListFragment : Fragment() {
             RecyclerItemClickListenr(it, binding.usersList, object : RecyclerItemClickListenr.OnItemClickListener {
 
                 override fun onItemClick(view: View, position: Int) {
-                    userSession!!.setChatWith(arryListUsersList[position])
+                    userSession!!.setChatWith(aesEncryptions?.decrypt(arryListUsersList[position].imeinumber.toString()))
+                    Log.e("IMEI selected ",""+aesEncryptions?.decrypt(arryListUsersList[position].imeinumber.toString()))
+                    userSession!!.setChatWithUser(aesEncryptions?.decrypt(arryListUsersList[position].username.toString()))
                     (getActivity() as HomePageActivity?)?.commonMethodForFragment(ChatFragment(),true)
                 }
                 override fun onItemLongClick(view: View?, position: Int) {
@@ -86,6 +95,7 @@ class FirebaseChatUserListFragment : Fragment() {
         (activity as AppCompatActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).getSupportActionBar()?.setDisplayShowHomeEnabled(true)
         toolbar.setTitle("Chat")
+        aesEncryptions= AESUtils()
 
     }
 
@@ -101,10 +111,10 @@ class FirebaseChatUserListFragment : Fragment() {
                 key = i.next().toString()
                 var jsonarray_info:JSONObject= obj.getJSONObject(key)
                 Log.e("jsonarray_info ",""+jsonarray_info)
-                var mobilenumber: String =jsonarray_info.getString("mobilenumber")
 
                 if (!key.equals(userSession?.getIMEI())) {
-                    arryListUsersList.add(key)
+                    var user=FirebaseUser(jsonarray_info.getString("user_id"),jsonarray_info.getString("username"),jsonarray_info.getString("mobilenumber"),jsonarray_info.getString("imeinumber"))
+                    arryListUsersList.add(user)
                 }
             }
         } catch (e: JSONException) {

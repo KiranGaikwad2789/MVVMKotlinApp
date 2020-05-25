@@ -4,14 +4,15 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:padding="@dimen/_5sdp"
+    android:padding="@dimen/_7sdp"
     android:gravity="center">
 
     <ImageView
         android:maxLines="1"
-        android:layout_height="30dp"
-        android:layout_width="30dp"
-        android:src="@drawable/ic_face"
+        android:layout_height="35dp"
+        android:layout_width="35dp"
+        android:src="@drawable/ic_chat_user"
+        android:layout_marginLeft="@dimen/_5sdp"
         android:gravity="left">
     </ImageView>
 
@@ -19,7 +20,7 @@
         android:id="@+id/txtChatuserName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_13sdp"
         android:gravity="center|left"
         android:textSize="16sp"
         android:textStyle="normal"

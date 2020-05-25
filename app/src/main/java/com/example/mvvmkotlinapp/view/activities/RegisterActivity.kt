@@ -3,7 +3,6 @@ package com.example.mvvmkotlinapp.view.activities
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,12 +26,6 @@ import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.security.Security
-import javax.crypto.Cipher
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.PBEKeySpec
-import javax.crypto.spec.SecretKeySpec
 
 
 class RegisterActivity() : AppCompatActivity() {
@@ -99,7 +92,9 @@ class RegisterActivity() : AppCompatActivity() {
                                 if (s == "null") {
                                     var user_id= aesEncryptions!!.encrypt("user_id")
                                     reference.child(deviceID!!.getIMEI(application).toString()).setValue(
-                                        FirebaseUser(user_id = aesEncryptions!!.encrypt(it.toString()),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()))
+                                        FirebaseUser(user_id = aesEncryptions!!.encrypt(it.toString()),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()),imeinumber = aesEncryptions!!.encrypt(
+                                            deviceID!!.getIMEI(application).toString()
+                                        ))
                                     )
 
                                     //reference.child(deviceID!!.getIMEI(application)).setValue(User(user_id=it.toInt(),username = binding.edtuserName.text.toString(), mobilenumber = binding.edtMobileNumber.text.toString(), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))
@@ -115,7 +110,9 @@ class RegisterActivity() : AppCompatActivity() {
                                         if (!obj.has(deviceID!!.getIMEI(application))) {
 
                                             reference.child(deviceID!!.getIMEI(application).toString()).setValue(
-                                                FirebaseUser(user_id = aesEncryptions!!.encrypt(it.toString()),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()))
+                                                FirebaseUser(user_id = aesEncryptions!!.encrypt(it.toString()),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()),imeinumber = aesEncryptions!!.encrypt(
+                                                    deviceID!!.getIMEI(application).toString()
+                                                ))
                                             )
 
                                             //reference.child(deviceID!!.getIMEI(application).toString()).setValue(User(user_id=it.toInt(),username = aesEncryptions!!.encrypt(binding.edtuserName.text.toString()), mobilenumber = aesEncryptions!!.encrypt(binding.edtMobileNumber.text.toString()), address = null, email = null, password = null, city=null,IMEI=null,androidID=null))

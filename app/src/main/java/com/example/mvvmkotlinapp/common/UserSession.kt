@@ -18,6 +18,7 @@ class UserSession {
     val KEY_MOBILE = "usermobile"
     val KEY_CITY = "city"
     val KEY_CHATWITH = "chatWith"
+    val KEY_CHATWITH_USER = "chatWithUser"
     val KEY_IMEI = "imei"
 
     private val KEY_JWT_TOKEN = "jwtToken"
@@ -93,6 +94,15 @@ class UserSession {
 
     fun getChatWith(): String? {
         return pref!!.getString(KEY_CHATWITH, null)
+    }
+
+    fun setChatWithUser(username: String?) {
+        editor!!.putString(KEY_CHATWITH_USER, username)
+        editor!!.commit()
+    }
+
+    fun getChatWithUser(): String? {
+        return pref!!.getString(KEY_CHATWITH_USER, null)
     }
 
     fun setIMEI(username: String) {
