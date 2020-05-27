@@ -380,6 +380,7 @@ class ChatFragment : Fragment() {
             uploadDocuments()
         }
         imgLocation?.setOnClickListener {
+            dialog?.dismiss()
             (activity as HomePageActivity).commonMethodForFragment(ChatShareLocationFrgament(),true)
         }
         dialog?.show()

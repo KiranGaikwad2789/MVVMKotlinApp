@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.view.activities.HomePageActivity
+import com.example.mvvmkotlinapp.view.fragmets.ChatShareLocationFrgament
 import com.example.mvvmkotlinapp.view.fragmets.ChatUsersListFragment
 import com.example.mvvmkotlinapp.view.fragmets.homefragments.*
 
@@ -65,7 +66,7 @@ class FeatureViewModel(application: Application) : AndroidViewModel(application)
             activity1?.commonMethodForFragment(ChatUsersListFragment(), true)
             //activity1!!.loadFragment(CustomerSupportFragment())
         }else if(features.featureId==14){
-            activity1?.commonMethodForFragment(FirebaseChatUserListFragment(), true)
+            activity1?.commonMethodForFragment(ChatShareLocationFrgament(), true)
         }
     }
 
