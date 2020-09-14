@@ -1,5 +1,6 @@
 package com.example.mvvmkotlinapp.repository.room
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 
@@ -7,7 +8,7 @@ import androidx.room.*
 interface CurrentLocationDao {
 
     @Query("SELECT * FROM CurrentLocation")
-    fun getAllLocation(): List<CurrentLocation>
+    fun getAllLocation(): LiveData<List<CurrentLocation>>
 
     @Query("SELECT * FROM CurrentLocation WHERE uid IN (:userIds)")
     fun loadAllByIds(userIds: IntArray): List<CurrentLocation>
@@ -15,7 +16,10 @@ interface CurrentLocationDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg currentLocationDao: CurrentLocation)
 
-    @Delete
-    fun delete(user: CurrentLocation)
+    @Query("DELETE FROM CurrentLocation")
+    fun deleteTableAllEntry()
+
+    @Query("SELECT * FROM CurrentLocation ORDER BY uid DESC LIMIT 1")
+    fun getAllLocationList(): CurrentLocation
 
 }

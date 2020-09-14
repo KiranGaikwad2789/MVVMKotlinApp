@@ -47,6 +47,7 @@ class LoginActivity : AppCompatActivity() {
         insertCityOnly()
         setUpPermissions()
         deviceID= DeviceID()
+
         loginViewModel!!.getUser.observe(this, Observer { status ->
             status?.let {
                 if(it.success=="1"){
@@ -60,8 +61,11 @@ class LoginActivity : AppCompatActivity() {
                     userSession!!.setCurrentCity(it.city.toString())
                     userSession!!.setIMEI(deviceID!!.getIMEI(application).toString())
 
+                    startActivity(Intent(this@LoginActivity, HomePageActivity::class.java))
+                    finish()
 
-                    val url = "https://chatapp-72cf4.firebaseio.com/users.json"
+
+                    /*val url = "https://chatapp-72cf4.firebaseio.com/users.json"
                     val pd = ProgressDialog(this@LoginActivity)
                     pd.setMessage("Loading...")
                     pd.show()
@@ -97,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
                             })
 
                     val rQueue = Volley.newRequestQueue(this@LoginActivity)
-                    rQueue.add(request)
+                    rQueue.add(request)*/
 
                 } else{
                     Toast.makeText(this , "Error occured: "+it , Toast.LENGTH_LONG).show()

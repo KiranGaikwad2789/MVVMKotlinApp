@@ -12,6 +12,7 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -20,6 +21,7 @@ import com.example.mvvmkotlinapp.common.DateTime
 import com.example.mvvmkotlinapp.receiver.AlarmReceive
 import com.example.mvvmkotlinapp.repository.HomePageRepository
 import com.example.mvvmkotlinapp.repository.StartDutyRepository
+import com.example.mvvmkotlinapp.repository.room.AppDatabase
 import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
 import com.example.mvvmkotlinapp.services.LocationTrackingService
 import com.example.mvvmkotlinapp.view.fragmets.CityListFragment
@@ -28,6 +30,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class HomePageViewModel(application: Application) : AndroidViewModel(application){
@@ -40,6 +44,8 @@ class HomePageViewModel(application: Application) : AndroidViewModel(application
     private var pendingIntent: PendingIntent? =null
     private var txtDutyTime: TextView? =null
     private var txtCityLocation: TextView? =null
+    lateinit var database: AppDatabase
+
 
 
 
@@ -48,6 +54,7 @@ class HomePageViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun init(){
+        database= AppDatabase.getDatabase(context)
         alarmMgr = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(context, AlarmReceive::class.java)
         pendingIntent = PendingIntent.getBroadcast(context, 1, alarmIntent, 0)
@@ -142,6 +149,17 @@ class HomePageViewModel(application: Application) : AndroidViewModel(application
 
             val intent = Intent(context, LocationTrackingService::class.java)
             context?.stopService(intent)
+
+            doAsync {
+                var locationRecord=database.locationDao()!!.getAllLocationList()
+                Log.e("total distance: ",""+locationRecord.distance)
+                uiThread {
+                    showTotalDistanceDialog(locationRecord.distance)
+                }
+            }
+
+
+
         }
 
        /* var startDutyStatus: LiveData<StartDutyStatus>? = startDutyRepository.getStartDutyStatus()
@@ -159,6 +177,10 @@ class HomePageViewModel(application: Application) : AndroidViewModel(application
         }*/
     }
 
+    private fun showTotalDistanceDialog(distance: Double) {
+        activity1!!.showDialog(distance)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private var updateWidgetRunnable: Runnable = Runnable {
         run {
@@ -167,5 +189,9 @@ class HomePageViewModel(application: Application) : AndroidViewModel(application
             updateWidgetHandler.postDelayed(updateWidgetRunnable, UPDATE_INTERVAL)
         }
     }
+
+    fun deleteLocationTable()=repository.deleteLocationTable()
+
+    fun getAllLocation() = repository.getAllLocation()
 
 }

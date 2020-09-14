@@ -9,6 +9,8 @@ class HomePageRepository (application: Application){
 
     private var featureDao: FeatureDao? = null
     private var cityDao: CityDao? = null
+    private var currentLocationDao: CurrentLocationDao? = null
+
 
     var database: AppDatabase? =null
 
@@ -16,6 +18,7 @@ class HomePageRepository (application: Application){
         database = AppDatabase.getDatabase(application)
         featureDao = database?.featureDao()
         cityDao = database?.cityDao()
+        currentLocationDao = database?.locationDao()
     }
 
     //Feature list
@@ -32,5 +35,14 @@ class HomePageRepository (application: Application){
     }
 
     fun getCityList() = cityDao?.getCityList()
+
+    fun getAllLocation() = currentLocationDao?.getAllLocation()
+
+    fun deleteLocationTable(){
+        doAsync {
+            currentLocationDao!!.deleteTableAllEntry()
+        }
+    }
+
 
 }

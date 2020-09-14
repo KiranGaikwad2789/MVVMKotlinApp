@@ -63,7 +63,7 @@ class FeatureViewModel(application: Application) : AndroidViewModel(application)
             activity1?.commonMethodForFragment(ManageLeaveFragment(), true)
             //activity1!!.loadFragment(ManageLeaveFragment())
         }else if(features.featureId==13){
-            activity1?.commonMethodForFragment(ChatUsersListFragment(), true)
+            activity1?.commonMethodForFragment(FirebaseChatUserListFragment(), true)
             //activity1!!.loadFragment(CustomerSupportFragment())
         }else if(features.featureId==14){
             activity1?.commonMethodForFragment(ChatShareLocationFrgament(), true)

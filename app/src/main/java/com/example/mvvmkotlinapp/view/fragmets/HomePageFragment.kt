@@ -1,9 +1,5 @@
 package com.example.mvvmkotlinapp.view.fragmets
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -12,18 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mvvmkotlinapp.R
 import com.example.mvvmkotlinapp.common.UserSession
 import com.example.mvvmkotlinapp.databinding.FragmentHomePageBinding
 import com.example.mvvmkotlinapp.interfaces.DrawerLocker
+import com.example.mvvmkotlinapp.repository.room.CurrentLocation
 import com.example.mvvmkotlinapp.repository.room.Features
 import com.example.mvvmkotlinapp.repository.room.StartDutyStatus
 import com.example.mvvmkotlinapp.view.adapter.HomePageAdapter
@@ -72,6 +69,13 @@ class HomePageFragment : Fragment() {
             })
         }
 
+
+        activity?.let {
+            homePageViewModel?.getAllLocation()?.observe(it, Observer<List<CurrentLocation>> {
+                Log.e("CurrentLocation list: ",""+it)
+            })
+        }
+
         return view
     }
 
@@ -84,6 +88,9 @@ class HomePageFragment : Fragment() {
         (activity as DrawerLocker).setDrawerEnabled(true)
 
     }
+
+
+
 
 
     private fun setFeatureList(arryListFeatures: List<Features>?) {
@@ -117,6 +124,21 @@ class HomePageFragment : Fragment() {
             transaction?.commit()
         }
 
+    }
+
+    fun showDialog(distance: Double) {
+
+        val builder = activity?.let { AlertDialog.Builder(it) }
+        builder?.setTitle("Today's Total Distance.")
+        builder?.setMessage("Dear user your total distance from Start-Duty to End-Duty is "+distance+" KM.")
+        builder?.setCancelable(false)
+        builder?.setPositiveButton(android.R.string.yes) { dialog, which ->
+
+            //homePageViewModel?.deleteLocationTable()
+
+            dialog.dismiss()
+        }
+        builder?.show()
     }
 
 }

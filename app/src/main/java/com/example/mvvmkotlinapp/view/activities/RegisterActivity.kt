@@ -77,7 +77,15 @@ class RegisterActivity() : AppCompatActivity() {
             status?.let {
                 if(it=="1"){
 
-                    val pd = ProgressDialog(this@RegisterActivity)
+                    Toast.makeText(this@RegisterActivity, "registration successful", Toast.LENGTH_LONG).show()
+                    finish()
+
+
+
+
+
+
+                    /*val pd = ProgressDialog(this@RegisterActivity)
                     pd.setMessage("Loading...")
                     pd.show()
 
@@ -142,7 +150,7 @@ class RegisterActivity() : AppCompatActivity() {
                             })
 
                     val rQueue = Volley.newRequestQueue(this@RegisterActivity)
-                    rQueue.add(request)
+                    rQueue.add(request)*/
 
 
                     //Toast.makeText(this , "User registred Sucessfully" , Toast.LENGTH_LONG).show()

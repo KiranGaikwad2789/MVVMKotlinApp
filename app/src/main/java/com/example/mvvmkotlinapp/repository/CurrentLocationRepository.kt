@@ -16,10 +16,6 @@ class CurrentLocationRepository {
 
     private var myDataBase: AppDatabase? = null
 
-    private val TAG = "EmployeeRepository"
-    private var employees: ArrayList<CurrentLocation> = ArrayList()
-    private val mutableLiveData: MutableLiveData<List<CurrentLocation>> = MutableLiveData<List<CurrentLocation>>()
-
 
     companion object{
         var mInstance: CurrentLocationRepository? = null
@@ -38,29 +34,11 @@ class CurrentLocationRepository {
         }
     }
 
-    fun getAllLocation(context: Context?):List<CurrentLocation>{
-        return AppDatabase.getDatabase(context!!).locationDao().getAllLocation()
+    fun getAllLocation(context: Context?) {
+        myDataBase= AppDatabase.getDatabase(context!!)
+        doAsync {
+            myDataBase!!.locationDao().getAllLocation()
+        }
     }
 
-    /*fun getMutableLiveData(): MutableLiveData<List<CurrentLocation?>?>? {
-        val apiInterface: APIInterface = RetrofitInstance.getClient()!!.create(APIInterface::class.java)
-
-        val call: Call<CurrentLocation> = apiInterface.getEmployees()
-
-        call.enqueue(object : Callback<CurrentLocation?>() {
-
-            fun onResponse(call: Call<CurrentLocation?>?, response: Response<CurrentLocation?>) {
-                val employeeDBResponse: CurrentLocation = response.body()
-                if (employeeDBResponse != null && employeeDBResponse.getEmployee() != null) {
-                    employees = employeeDBResponse.getEmployee()
-                    mutableLiveData.setValue(employees)
-                }
-            }
-
-            fun onFailure(call: Call<CurrentLocation?>?, t: Throwable?) {
-
-            }
-        })
-        return mutableLiveData
-    }*/
 }

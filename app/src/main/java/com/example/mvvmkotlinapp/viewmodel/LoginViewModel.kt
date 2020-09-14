@@ -58,6 +58,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application){
 
 
     fun getUserRecord(user: User) {
+
         disposable.add(repository.getUserRecord(user)
                 ?.subscribeOn(Schedulers.newThread())
                 ?.observeOn(AndroidSchedulers.mainThread())
