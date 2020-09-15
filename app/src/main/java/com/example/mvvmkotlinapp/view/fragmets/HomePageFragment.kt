@@ -70,11 +70,11 @@ class HomePageFragment : Fragment() {
         }
 
 
-        activity?.let {
+        /*activity?.let {
             homePageViewModel?.getAllLocation()?.observe(it, Observer<List<CurrentLocation>> {
                 Log.e("CurrentLocation list: ",""+it)
             })
-        }
+        }*/
 
         return view
     }

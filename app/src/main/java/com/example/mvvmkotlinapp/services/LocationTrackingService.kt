@@ -27,6 +27,14 @@ import com.google.android.gms.location.*
 import org.jetbrains.anko.doAsync
 import java.text.DecimalFormat
 import java.util.*
+import com.example.mvvmkotlinapp.R
+import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 
 class LocationTrackingService : Service(),LocationListener {
@@ -38,7 +46,7 @@ class LocationTrackingService : Service(),LocationListener {
     }
 
     private var mTimer: Timer? = null
-    private var notify_interval: Long = 60000  //mTimer
+    private var notify_interval: Long = 120000  //mTimer
     private var context: Context? = null
     private val mHandler = Handler()
 
@@ -140,7 +148,7 @@ class LocationTrackingService : Service(),LocationListener {
 
             if (isGPSEnable) {
 
-                Log.e("isGPSEnable: ","isGPSEnable")
+                //Log.e("isGPSEnable: ","isGPSEnable")
 
                 location = null
 
@@ -165,12 +173,12 @@ class LocationTrackingService : Service(),LocationListener {
 
                     if (location != null) {
 
-                        getCurrentLocationAndStoreinDB(location!!)
+                        getCurrentLocationAndStoreinDB(location!!,"G")
                     }
                 }
             }else if (isNetworkEnable) {
 
-                Log.e("isNetworkEnable: ","isNetworkEnable")
+               // Log.e("isNetworkEnable: ","isNetworkEnable")
 
                 location = null
 
@@ -192,7 +200,7 @@ class LocationTrackingService : Service(),LocationListener {
 
                     if (location != null) {
 
-                        getCurrentLocationAndStoreinDB(location!!)
+                        getCurrentLocationAndStoreinDB(location!!,"N")
                     }
                 }
             }else{
@@ -211,7 +219,7 @@ class LocationTrackingService : Service(),LocationListener {
 
                                 if (location != null) {
 
-                                    //getCurrentLocationAndStoreinDB()
+                                    //getCurrentLocationAndStoreinDB(location!!,"L")
                                 }
                             }
                             // Few more things we can do here:
@@ -224,76 +232,35 @@ class LocationTrackingService : Service(),LocationListener {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private fun getCurrentLocationAndStoreinDB(location: Location) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getCurrentLocationAndStoreinDB(location: Location, location_type:String) {
 
         var isMockLocation=location.isFromMockProvider
 
         if(isMockLocation==false){
 
-            /*if (timerCount==0){
-                location.latitude=21.282379  //shria  21.282379,74.1544551
-                location.longitude=74.1544551
-            }else if (timerCount==1){
-                location.latitude=21.3692741  //nandurbar  21.3692741,74.2123104
-                location.longitude=74.2123104
-            }else if (timerCount==2){
-                location.latitude=21.1130  //nijampur
-                location.longitude=74.3309
-            }else if (timerCount==3){
-                location.latitude=20.9943975  //sakri  20.9943975,74.308734
-                location.longitude=74.308734
-            }else if (timerCount==4){
-                location.latitude=20.9042  //dhule
-                location.longitude=74.7749
-            }else if (timerCount==5){
-                location.latitude=20.9497  //pimplner
-                location.longitude=74.1219
-            }else if (timerCount==6){
-                location.latitude=20.9943975  //sakri  20.9943975,74.308734
-                location.longitude=74.308734
-            }else if (timerCount==7){
-                location.latitude=21.282379  //shria  21.282379,74.1544551
-                location.longitude=74.1544551
-            }*/
-
-
-            /*if (timerCount==0){
-                location.latitude=18.5679  //VimanNagar  21.3692741,74.2123104
-                location.longitude=73.9143
-            }else if (timerCount==1){
-                location.latitude=18.5362  //Koregaon  20.9943975,74.308734
-                location.longitude=73.8940
-            }else if (timerCount==2){
-                location.latitude=18.5462  //KalyaniNagar
-                location.longitude=73.9040
-            }else if (timerCount==3){
-                location.latitude=18.5538  //Kharadi  20.9943975,74.308734
-                location.longitude=73.9477
-            }else if (timerCount==4){
-                location.latitude=18.5089  //Hadapsar
-                location.longitude=73.9259
-            }else if (timerCount==5){
-                location.latitude=18.5740162  //Wagholi  18.5740162,73.9618582
-                location.longitude=73.9618582
-            }else if (timerCount==6){
-                location.latitude=18.555382  //Wadia  18.555382,73.8628655
-                location.longitude=73.8628655
-            }else if (timerCount==7){
-                location.latitude=18.5679  //VimanNagar  21.3692741,74.2123104
-                location.longitude=73.9143
-            }*/
-
-
             var locationRecord: CurrentLocation? =null
             var locationTotalDistance=0.0
+            var currentDistance=0.0
 
             doAsync {
 
                 locationRecord=database.locationDao()!!.getAllLocationList()
                 Log.e("locationRecord: ",""+locationRecord)
 
-                var currentDistance=0.0
+                val currentDateTime = LocalDateTime.parse(currentDate!!.getDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                Log.e("currentDateTime: ",""+currentDateTime)
+
+                val previousDateTime = LocalDateTime.parse(locationRecord!!.date_time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                Log.e("previousDateTime: ",""+previousDateTime)
+
+                var duration=Duration.between(previousDateTime,currentDateTime)
+                Log.e("duration: ",""+duration.toMinutes())
+
+
+
+
+
 
                 if (TextUtils.isEmpty(locationRecord.toString())){
 
@@ -303,38 +270,42 @@ class LocationTrackingService : Service(),LocationListener {
                     //need to insert
                 }else{
 
+                    //get current distance between last loc and current loc
                     currentDistance=haversine(locationRecord?.lattitude?.toDouble(), locationRecord?.longitude?.toDouble(),location.latitude,location.longitude)
-                    Log.e("currentDistance ",""+ currentDistance)
-                    Log.e("lastDistance ",""+ locationRecord?.distance!!.toDouble())
+                    //Log.e("currentDistance ",""+ currentDistance)
+                    //Log.e("lastDistance ",""+ locationRecord?.distance!!.toDouble())
 
-                    locationTotalDistance= locationRecord?.distance!!.toDouble() + currentDistance.toDouble()
-                    Log.e("locationTotalDistance ",""+ DecimalFormat("##.##").format(locationTotalDistance))
+                    //locationTotalDistance= locationRecord?.distance!!.toDouble() + currentDistance.toDouble()
+                    //Log.e("locationTotalDistance ",""+ DecimalFormat("##.##").format(locationTotalDistance))
 
-                    /*if (currentDistance<2){
+                    if (currentDistance<2){
                         locationTotalDistance= locationRecord?.distance!!.toDouble() + currentDistance.toDouble()
-                        Log.e("locationTotalDistance ",""+ DecimalFormat("##.##").format(locationTotalDistance))
+                        //Log.e("locationTotalDistance ",""+ DecimalFormat("##.##").format(locationTotalDistance))
 
                     }else{
-                    }*/
+                        Log.e("currentDistance ",""+ currentDistance)
+                    }
 
-                    var currentLocation=CurrentLocation(0,location.latitude,location.longitude,DecimalFormat("##.####").format(locationTotalDistance).toDouble())
+                    var currentLocation=CurrentLocation(0,location.latitude,location.longitude,DecimalFormat("##.####").format(locationTotalDistance).toDouble(),
+                        currentDate!!.getDateTime(),location_type)
                     CurrentLocationRepository.getmInstance()!!.insertLocation(context,currentLocation)
 
-                    Log.e("Before timerCount:",""+timerCount)
+                    //Log.e("Before timerCount:",""+timerCount)
                     timerCount=timerCount+1
-                    Log.e("After timerCount:",""+timerCount)
+                    //Log.e("After timerCount:",""+timerCount)
                 }
 
             }
 
             if (timerCount==0){
 
-                var currentLocation=CurrentLocation(0,location.latitude,location.longitude,DecimalFormat("##.####").format(locationTotalDistance).toDouble())
+                var currentLocation=CurrentLocation(0,location.latitude,location.longitude,DecimalFormat("##.####").format(locationTotalDistance).toDouble(),
+                    currentDate!!.getDateTime(),location_type)
                 CurrentLocationRepository.getmInstance()!!.insertLocation(context,currentLocation)
 
-                Log.e("Before timerCount:",""+timerCount)
+                //Log.e("Before timerCount:",""+timerCount)
                 timerCount=timerCount+1
-                Log.e("After timerCount:",""+timerCount)
+                //Log.e("After timerCount:",""+timerCount)
             }
 
         }else{
@@ -376,7 +347,7 @@ class LocationTrackingService : Service(),LocationListener {
         val notification = NotificationCompat.Builder(this, 1.toString())
             .setContentTitle("Skygge start duty on..")
             .setContentText(dateFormater)
-            //.setSmallIcon(R.drawable.ic_home_black_24dp)
+            .setSmallIcon(R.drawable.ic_home_black_24dp)
            // .setContentIntent(pendingIntent)
             .build()
         startForeground(1, notification)
@@ -401,27 +372,6 @@ class LocationTrackingService : Service(),LocationListener {
         val a = Math.pow(Math.sin(dlat / 2), 2.0) + Math.cos(rlat1) * Math.cos(rlat2) * Math.pow(Math.sin(dlon / 2), 2.0)
         val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
         return r * c
-    }
-
-
-    fun isMockLocationOn(
-        location: Location,
-        context: Context
-    ): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            location.isFromMockProvider
-        } else {
-            var mockLocation = "0"
-            try {
-                mockLocation = Settings.Secure.getString(
-                    context.contentResolver,
-                    Settings.Secure.ALLOW_MOCK_LOCATION
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            mockLocation != "0"
-        }
     }
 
 }

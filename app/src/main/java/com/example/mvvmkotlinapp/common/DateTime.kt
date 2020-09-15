@@ -9,6 +9,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.*
 
 
 public class DateTime {
@@ -74,5 +75,18 @@ public class DateTime {
         System.out.println(outputFormat.format(inputFormat.parse(selectedDate)))
 
         return outputFormat.format(inputFormat.parse(selectedDate))
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    public fun getDateDiff(currentDate:Date,previousDate:Date): String? {
+
+        val diff: Long = currentDate.getTime() - previousDate.getTime()
+        val seconds = diff / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+
+        return days.toString()+","+hours+","+minutes+seconds
     }
 }
